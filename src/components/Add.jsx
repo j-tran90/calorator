@@ -18,7 +18,6 @@ export default function Add({ sumEntry, updateTotal }) {
       .set({
         calories: parseFloat(newEntry),
         createdAt: timestamp,
-        uid,
       })
       .then(function () {
         document.getElementById("newEntry").reset();

@@ -12,13 +12,13 @@ export default function Dashboard() {
     <>
       <User />
       <h1>Total: {total}</h1>
-      {remain === null ? (
+      {!remain <= 0 ? (
+        <h2>Remaining: {remain}</h2>
+      ) : (
         <h2>
           <FaStar style={{ color: "yellow" }} /> Goal Reached{" "}
           <FaStar style={{ color: "yellow" }} />
         </h2>
-      ) : (
-        <h2>Remaining: {remain}</h2>
       )}
 
       <h3>Goal: {goal}</h3>
