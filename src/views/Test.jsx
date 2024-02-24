@@ -1,5 +1,5 @@
-import Entry from "../components/Entry";
+import TestCpnt from "../components/Test";
 
 export default function Test() {
-  return <Entry />;
+  return <TestCpnt />;
 }
