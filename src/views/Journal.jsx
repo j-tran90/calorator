@@ -1,16 +1,11 @@
-import { db, auth } from "../config/Firebase";
-import { collection, orderBy, query } from "firebase/firestore";
-import useCollectionData from "../hooks/useFetch";
 import Navigation from "../components/Navigation";
 import Add from "../components/Add";
+import useTracker from "../hooks/useTracker";
 
 export default function Entry() {
-  const { uid } = auth.currentUser;
-  const entryCollectionRef = collection(db, "journal/" + uid + "/entries");
-  const q = query(entryCollectionRef, orderBy("createdAt", "asc"));
-  const { data: entries, getData: getEntry } = useCollectionData(q);
+  const { entries, total, sumEntry } = useTracker();
 
-  //TODO: QUERY FOR CURRENT DAY
+  //TODO: FIX ADD BUTTON TO RE-RENDER
 
   console.log("entries:", entries);
 
@@ -19,8 +14,9 @@ export default function Entry() {
       <h1>Journal</h1>
       <Navigation />
       <div style={{ marginBottom: "50px" }}>
-        <Add getEntry={getEntry} />
+        <Add sumEntry={sumEntry} />
       </div>
+      <h2>Total: {total}</h2>
       {entries.map((entry) => {
         return (
           <div key={entry.id}>

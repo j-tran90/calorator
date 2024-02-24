@@ -45,11 +45,12 @@ export default function Add({ sumEntry, updateTotal }) {
         <input
           id="newEntry"
           type="number"
-          placeholder="enter calories"
+          placeholder="Enter Calories"
           onKeyUp={disableKey}
           onChange={(e) => {
             setNewEntry(e.target.value);
           }}
+          style={{ width: "100px", height: "30px" }}
           required
         ></input>
         <button id="button" type="submit" disabled>

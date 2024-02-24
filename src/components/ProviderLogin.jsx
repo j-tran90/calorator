@@ -16,21 +16,38 @@ export default function ProviderLogin() {
   return (
     <>
       <div className="text-center">
+        <button style={{ marginRight: "20px" }}>
+          <FcGoogle
+            type="button"
+            title="Google Sign In"
+            cursor="pointer"
+            onClick={googleLogin}
+            style={{ fontSize: "15px", marginRight: "10px" }}
+          />
+          Google
+        </button>
         <FcGoogle
           type="button"
           title="Google Sign In"
           cursor="pointer"
           onClick={googleLogin}
-          style={{ fontSize: "40px", paddingRight: "20px" }}
+          style={{ fontSize: "15px", marginRight: "10px" }}
         />
-        <Link as={Link} onClick={handleGuest}>
-          <img
-            src="https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg"
-            cursor="pointer"
-            title="Guest Sign In"
-            style={{ maxHeight: "40px", borderRadius: "50px" }}
-          />
-        </Link>
+        <button>
+          <Link as={Link} onClick={handleGuest}>
+            <img
+              src="https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg"
+              cursor="pointer"
+              title="Guest Sign In"
+              style={{
+                maxHeight: "15px",
+                marginRight: "10px",
+                borderRadius: "50px",
+              }}
+            />
+          </Link>
+          Guest
+        </button>
       </div>
     </>
   );
