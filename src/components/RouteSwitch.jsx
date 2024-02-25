@@ -51,7 +51,7 @@ const RouteSwitch = () => {
           {currentUser && currentUser.uid == "jsF1aU98CHY4Q0iI71YYcPqEESq2" ? (
             <Route path="/test" element={<Test />} />
           ) : (
-            <Route path="*" element={<Profile />} />
+            <Route path="/test" element={<h2>Not Authorized</h2>} />
           )}
 
           {/* Protected Routes */}

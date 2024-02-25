@@ -12,7 +12,7 @@ export default function User() {
             "https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg"
           }
           alt="..."
-          style={{ borderRadius: "50px", maxHeight: "100px" }}
+          style={{ borderRadius: "100px", minHeight: "150px", height: "150px" }}
         />
       </Link>
       <div> {currentUser.displayName || "User"}</div>
