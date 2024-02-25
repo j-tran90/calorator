@@ -13,7 +13,7 @@ export default function Navigation() {
         <Link as={Link} to="/journal" style={{ marginRight: "20px" }}>
           Journal
         </Link>
-        <Link as={Link} to="/test" style={{ marginRight: "20px" }}>
+        <Link as={Link} to="/test" style={{ marginRight: "" }}>
           Test
         </Link>
       </div>
