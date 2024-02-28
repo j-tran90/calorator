@@ -8,7 +8,7 @@ export default function UpdateProfile() {
   const [age, setAge] = useState(0);
   const [weight, setWeight] = useState(0);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const redirect = useNavigate();
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function UpdateProfile() {
         age: parseInt(age),
         weight: parseFloat(weight),
       });
-    navigate("/profile", { replace: true });
+    redirect("/profile", { replace: true });
   };
 
   return (

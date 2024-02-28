@@ -1,12 +1,10 @@
 import Add from "../components/Add";
 import User from "../components/User";
-import useGoals from "../hooks/useGoals";
 import useTracker from "../hooks/useTracker";
 import { FaStar } from "react-icons/fa";
 
 export default function Dashboard() {
-  const { goal } = useGoals();
-  const { total, remain, sumEntry, updateTotal } = useTracker(0);
+  const { total, remain, sumEntry, updateTotal, goal } = useTracker(0);
 
   return (
     <>

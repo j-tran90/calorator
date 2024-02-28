@@ -3,7 +3,7 @@ import Add from "../components/Add";
 import useTracker from "../hooks/useTracker";
 
 export default function Entry() {
-  const { entries, total, sumEntry } = useTracker();
+  const { entries, total, sumEntry, getEntries } = useTracker();
 
   //TODO: FIX ADD BUTTON TO RE-RENDER
 
@@ -14,7 +14,7 @@ export default function Entry() {
       <h1>Journal</h1>
       <Navigation />
       <div style={{ marginBottom: "50px" }}>
-        <Add sumEntry={sumEntry} />
+        <Add sumEntry={sumEntry} getEntries={getEntries} />
       </div>
       <h2>Total: {total}</h2>
       {entries.map((entry) => {

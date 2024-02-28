@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { auth, db, timestamp } from "../config/Firebase";
 import { FcCheckmark } from "react-icons/fc";
+import useTracker from "../hooks/useTracker";
 
-export default function Add({ sumEntry, updateTotal }) {
+export default function Add({ getEntries }) {
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
+  const { sumEntry, updateTotal } = useTracker(0);
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -27,6 +29,9 @@ export default function Add({ sumEntry, updateTotal }) {
       })
       .then(() => {
         updateTotal();
+      })
+      .then(() => {
+        getEntries();
       });
   };
 

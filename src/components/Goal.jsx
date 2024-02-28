@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../config/Firebase";
 import { FcCheckmark } from "react-icons/fc";
-import useGoals from "../hooks/useGoals";
+import useTracker from "../hooks/useTracker";
 
 export default function Goal() {
   const { uid } = auth.currentUser;
   const [calorieGoal, setCalorieGoal] = useState(0);
-  const { goal, getGoal } = useGoals(0);
+  const { goal, getGoal } = useTracker(0);
   //const [error, setError] = useState("");
   const redirect = useNavigate();
 

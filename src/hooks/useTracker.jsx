@@ -13,8 +13,8 @@ import useCollectionData from "./useFetch";
 
 export default function useTracker() {
   const { uid } = auth.currentUser;
-  const { goal } = useGoals();
-  const [remain, setRemain] = useState();
+  const { goal, getGoal } = useGoals(0);
+  const [remain, setRemain] = useState(0);
   const startOfToday = new Date();
   const endOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
@@ -25,7 +25,8 @@ export default function useTracker() {
     where("createdAt", ">=", startOfToday),
     where("createdAt", "<", endOfToday)
   );
-  const { data: entries } = useCollectionData(entryCollectionRef);
+  const { data: entries, getData: getEntries } =
+    useCollectionData(entryCollectionRef);
   const [total, setNewTotal] = useState();
 
   const sumEntry = async () => {
@@ -56,5 +57,14 @@ export default function useTracker() {
     console.log("useEffect updateTotal", remain);
   });
 
-  return { total, remain, sumEntry, updateTotal, entries };
+  return {
+    goal,
+    total,
+    remain,
+    sumEntry,
+    updateTotal,
+    entries,
+    getEntries,
+    getGoal,
+  };
 }
