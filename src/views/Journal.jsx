@@ -3,7 +3,7 @@ import Add from "../components/Add";
 import useTracker from "../hooks/useTracker";
 
 export default function Entry() {
-  const { entries, total, sumEntry, getEntries } = useTracker();
+  const { entries, total, sumEntry, getEntries } = useTracker(0);
 
   //TODO: FIX ADD BUTTON TO RE-RENDER
 

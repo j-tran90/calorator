@@ -64,7 +64,7 @@ export default function useTracker() {
     sumEntry,
     updateTotal,
     entries,
-    getEntries,
     getGoal,
+    getEntries,
   };
 }

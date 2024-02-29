@@ -8,7 +8,7 @@ import { IoEggSharp } from "react-icons/io5";
 import { GiBananaPeeled, GiButterToast, GiChickenOven } from "react-icons/gi";
 
 export default function Test() {
-  const { entries, total, updateTotal, sumEntry, getEntries } = useTracker(0);
+  const { entries, total, getEntries, sumEntry, updateTotal } = useTracker(0);
 
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
@@ -28,7 +28,11 @@ export default function Test() {
       })
       .then(() => {
         getEntries();
+      })
+      .then(() => {
+        updateTotal();
       });
+
     console.log("added", typeof newEntry, newEntry);
   };
 
