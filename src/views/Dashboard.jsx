@@ -1,4 +1,6 @@
 import Add from "../components/Add";
+import Navigation from "../components/Navigation";
+import Test from "../components/Test";
 import User from "../components/User";
 import useTracker from "../hooks/useTracker";
 import { FaStar } from "react-icons/fa";
@@ -9,6 +11,7 @@ export default function Dashboard() {
   return (
     <>
       <User />
+      <Navigation />
       <h1>Total: {total}</h1>
       {!remain <= 0 ? (
         <h2>Remaining: {remain}</h2>
@@ -21,6 +24,7 @@ export default function Dashboard() {
 
       <h3>Goal: {goal}</h3>
 
+      <Test sumEntry={sumEntry} updateTotal={updateTotal} />
       <Add sumEntry={sumEntry} updateTotal={updateTotal} />
     </>
   );

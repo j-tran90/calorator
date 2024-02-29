@@ -13,9 +13,9 @@ export default function Entry() {
     <>
       <h1>Journal</h1>
       <Navigation />
-      <div style={{ marginBottom: "50px" }}>
+      {/* <div style={{ marginBottom: "50px" }}>
         <Add sumEntry={sumEntry} getEntries={getEntries} />
-      </div>
+      </div> */}
       <h2>Total: {total}</h2>
       {entries.map((entry) => {
         return (

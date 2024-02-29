@@ -7,9 +7,8 @@ import { FaAppleAlt } from "react-icons/fa";
 import { IoEggSharp } from "react-icons/io5";
 import { GiBananaPeeled, GiButterToast, GiChickenOven } from "react-icons/gi";
 
-export default function Test() {
-  const { entries, total, getEntries, sumEntry, updateTotal } = useTracker(0);
-
+export default function Test({ sumEntry, updateTotal }) {
+  const { entries, total, getEntries } = useTracker(0);
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
 
@@ -26,9 +25,9 @@ export default function Test() {
       .then(() => {
         sumEntry();
       })
-      .then(() => {
-        getEntries();
-      })
+      // .then(() => {
+      //   getEntries();
+      // })
       .then(() => {
         updateTotal();
       });
@@ -38,8 +37,8 @@ export default function Test() {
 
   return (
     <>
-      <Navigation />
-      <h2> Total: {total}</h2>
+      {/* <Navigation />
+      <h2> Total: {total}</h2> */}
       <div>
         <button
           value="95"
@@ -124,7 +123,7 @@ export default function Test() {
         </button>
       </div>
       <br />
-      {entries.map((entry) => {
+      {/* {entries.map((entry) => {
         return (
           <div key={entry.id}>
             {JSON.stringify(
@@ -139,7 +138,7 @@ export default function Test() {
             : {entry.calories}
           </div>
         );
-      })}
+      })} */}
     </>
   );
 }
