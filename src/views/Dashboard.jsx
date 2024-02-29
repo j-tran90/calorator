@@ -12,17 +12,17 @@ export default function Dashboard() {
     <>
       <User />
       <Navigation />
-      <h1>Total: {total}</h1>
+      <h2>Total: {total}</h2>
       {!remain <= 0 ? (
-        <h2>Remaining: {remain}</h2>
+        <h3>Remaining: {remain}</h3>
       ) : (
-        <h2>
+        <h3>
           <FaStar style={{ color: "yellow" }} /> Goal Reached{" "}
           <FaStar style={{ color: "yellow" }} />
-        </h2>
+        </h3>
       )}
 
-      <h3>Goal: {goal}</h3>
+      <h5>Goal: {goal}</h5>
 
       <Test sumEntry={sumEntry} updateTotal={updateTotal} />
       <Add sumEntry={sumEntry} updateTotal={updateTotal} />

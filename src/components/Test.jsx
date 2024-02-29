@@ -46,7 +46,11 @@ export default function Test({ sumEntry, updateTotal }) {
           type="submit"
           onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
           onClick={handleAdd}
-          style={{ fontSize: "10px", marginRight: "10px" }}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
         >
           <FaAppleAlt
             style={{ color: "maroon", fontSize: "30px", background: "none" }}
@@ -59,7 +63,11 @@ export default function Test({ sumEntry, updateTotal }) {
           type="submit"
           onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
           onClick={handleAdd}
-          style={{ fontSize: "10px", marginRight: "10px" }}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
         >
           <IoEggSharp
             style={{
@@ -76,7 +84,11 @@ export default function Test({ sumEntry, updateTotal }) {
           type="submit"
           onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
           onClick={handleAdd}
-          style={{ fontSize: "10px", marginRight: "10px" }}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
         >
           <GiBananaPeeled
             style={{
@@ -93,7 +105,11 @@ export default function Test({ sumEntry, updateTotal }) {
           type="submit"
           onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
           onClick={handleAdd}
-          style={{ fontSize: "10px", marginRight: "10px" }}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
         >
           <GiButterToast
             style={{
@@ -110,7 +126,11 @@ export default function Test({ sumEntry, updateTotal }) {
           type="submit"
           onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
           onClick={handleAdd}
-          style={{ fontSize: "10px", marginRight: "10px" }}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
         >
           <GiChickenOven
             style={{
