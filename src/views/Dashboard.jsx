@@ -6,13 +6,15 @@ import useTracker from "../hooks/useTracker";
 import { FaStar } from "react-icons/fa";
 
 export default function Dashboard() {
-  const { total, remain, sumEntry, updateTotal, goal } = useTracker(0);
+  const { total, remain, sumEntry, updateTotal, goal, percent } = useTracker(0);
 
   return (
     <>
       <User />
       <Navigation />
-      <h2>Total: {total}</h2>
+      <h2>
+        Total: {total} ({percent}%)
+      </h2>
       {!remain <= 0 ? (
         <h3>Remaining: {remain}</h3>
       ) : (

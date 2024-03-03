@@ -20,7 +20,7 @@ export default function User() {
           }}
         />
       </Link>
-      <div> {currentUser.displayName || "User"}</div>
+      {/* <div> {currentUser.displayName || "User"}</div> */}
     </>
   );
 }

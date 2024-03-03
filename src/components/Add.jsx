@@ -20,7 +20,8 @@ export default function Add({ sumEntry, updateTotal }) {
         createdAt: timestamp,
       })
       .then(function () {
-        document.getElementById("newEntry").reset();
+        document.getElementById("updateForm").value = "";
+        document.getElementById("button").style.visibility = "hidden";
       })
       .then(() => {
         sumEntry();
@@ -30,11 +31,11 @@ export default function Add({ sumEntry, updateTotal }) {
       });
   };
 
-  const disableKey = () => {
-    if (document.getElementById("newEntry").value === "") {
-      document.getElementById("button").disabled = true;
+  const disableButton = () => {
+    if (document.getElementById("updateForm").value === "" || NaN || null) {
+      document.getElementById("button").style.visibility = "hidden";
     } else {
-      document.getElementById("button").disabled = false;
+      document.getElementById("button").style.visibility = "";
     }
   };
 
@@ -42,17 +43,21 @@ export default function Add({ sumEntry, updateTotal }) {
     <>
       <form id="newEntry" onSubmit={handleAdd}>
         <input
-          id="newEntry"
+          id="updateForm"
           type="number"
           placeholder="Enter Calories"
-          onKeyUp={disableKey}
+          onKeyUp={disableButton}
           onChange={(e) => {
             setNewEntry(e.target.value);
           }}
-          style={{ width: "100px", height: "30px" }}
+          style={{ width: "100px" }}
           required
         ></input>
-        <button id="button" type="submit" disabled>
+        <button
+          id="button"
+          type="submit"
+          style={{ background: "none", visibility: "hidden" }}
+        >
           <FcCheckmark />
         </button>
       </form>

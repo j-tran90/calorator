@@ -32,10 +32,10 @@ export default function Goal() {
   };
 
   const disableButton = () => {
-    if (document.getElementById("updateForm").value === " " || NaN || null) {
-      document.getElementById("button").disabled = true;
+    if (document.getElementById("updateForm").value === "" || NaN || null) {
+      document.getElementById("button").style.visibility = "hidden";
     } else {
-      document.getElementById("button").disabled = false;
+      document.getElementById("button").style.visibility = "";
     }
   };
 
@@ -49,14 +49,19 @@ export default function Goal() {
             required
             id="calorieGoal"
             type="number"
-            placeholder="Enter Calorie Goal"
+            placeholder="Enter Calorie"
             onKeyUp={disableButton}
+            style={{ width: "100px" }}
             onChange={(e) => {
               setCalorieGoal(e.target.value);
             }}
           ></input>
         </div>
-        <button id="button" type="submit" disabled>
+        <button
+          id="button"
+          type="submit"
+          style={{ background: "none", visibility: "hidden" }}
+        >
           Set <FcCheckmark />
         </button>
       </form>

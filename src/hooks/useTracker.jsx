@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { db, auth } from "../config/Firebase";
 import {
   collection,
+  deleteDoc,
+  doc,
   getAggregateFromServer,
   orderBy,
   query,
@@ -27,7 +29,8 @@ export default function useTracker() {
   );
   const { data: entries, getData: getEntries } =
     useCollectionData(entryCollectionRef);
-  const [total, setNewTotal] = useState();
+  const [total, setNewTotal] = useState(0);
+  const [percent, setPercent] = useState(0);
 
   const sumEntry = async () => {
     const snapshot = await getAggregateFromServer(entryCollectionRef, {
@@ -43,12 +46,12 @@ export default function useTracker() {
     console.log("useEffect sumEntry", total);
   }, []);
 
-  const updateTotal = async () => {
-    const checkProgress = goal - total;
-    if (checkProgress < 0) {
-      await setRemain(null);
+  const updateTotal = () => {
+    if (goal - total < 0) {
+      setRemain(0);
     } else {
-      await setRemain(goal - total);
+      setRemain(goal - total);
+      setPercent(parseInt((total / goal) * 100));
     }
   };
 
@@ -56,6 +59,12 @@ export default function useTracker() {
     updateTotal();
     console.log("useEffect updateTotal", remain);
   });
+
+  const handleDelete = async (id) => {
+    await deleteDoc(doc(db, "journal/" + uid + "/entries", id));
+    getEntries();
+    sumEntry();
+  };
 
   return {
     goal,
@@ -66,5 +75,7 @@ export default function useTracker() {
     entries,
     getGoal,
     getEntries,
+    percent,
+    handleDelete,
   };
 }
