@@ -8,10 +8,11 @@ import { IoIosIceCream } from "react-icons/io";
 import { GiSodaCan } from "react-icons/gi";
 import { auth, db, timestamp } from "../config/Firebase";
 
-export default function FoodButtons({ sumEntry, updateTotal, updateCircle }) {
+export default function FoodButtons({ sumEntry, updateTotal }) {
   const { uid } = auth.currentUser;
-  const [newEntry, setNewEntry] = useState(0);
-
+  const [newEntry, setNewEntry] = useState({
+    calorie: 0,
+  });
   const handleAdd = async () => {
     await db
       .collection("journal")
