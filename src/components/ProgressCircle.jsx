@@ -1,6 +1,6 @@
 import "../stylesheets/ProgressCircle.css";
 
-const ProgressCircle = ({ percent }) => {
+export default function ProgressCircle({ percent }) {
   const cx = 80;
   const cy = 80;
   const r = 70;
@@ -39,6 +39,4 @@ const ProgressCircle = ({ percent }) => {
       </div>
     </>
   );
-};
-
-export default ProgressCircle;
+}
