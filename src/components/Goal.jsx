@@ -47,10 +47,10 @@ export default function Goal() {
       <form id="" onSubmit={handleUpdate}>
         <div>
           <input
-            required12312
+            required
             id="updateForm"
             type="number"
-            min="1"
+            min="499"
             max="9999"
             onKeyDown={(evt) =>
               ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
