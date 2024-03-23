@@ -20,8 +20,9 @@ export default function Goal() {
       .set({
         calorieGoal: parseFloat(calorieGoal),
       })
-      .then(function () {
-        document.getElementById("updateForm").reset();
+      .then(() => {
+        document.getElementById("updateForm").value = "";
+        document.getElementById("button").style.visibility = "hidden";
       })
       .then(() => {
         redirect("/profile", { replace: true });
@@ -43,12 +44,17 @@ export default function Goal() {
     <>
       <h2>Goals</h2>
       <div className="column">Caloric: {goal}</div>
-      <form id="updateForm" onSubmit={handleUpdate}>
+      <form id="" onSubmit={handleUpdate}>
         <div>
           <input
-            required
-            id="calorieGoal"
+            required12312
+            id="updateForm"
             type="number"
+            min="1"
+            max="9999"
+            onKeyDown={(evt) =>
+              ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
+            }
             placeholder="Enter Calorie"
             onKeyUp={disableButton}
             style={{ width: "100px" }}
@@ -60,7 +66,12 @@ export default function Goal() {
         <button
           id="button"
           type="submit"
-          style={{ background: "none", visibility: "hidden", color: "#555" }}
+          style={{
+            background: "none",
+            visibility: "hidden",
+            color: "#222",
+            marginTop: "5px",
+          }}
         >
           Set <FcCheckmark />
         </button>

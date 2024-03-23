@@ -3,10 +3,14 @@ import { useState } from "react";
 import { FaAppleAlt } from "react-icons/fa";
 import { IoEggSharp } from "react-icons/io5";
 import { GiBananaPeeled, GiButterToast, GiChickenOven } from "react-icons/gi";
+import { GiSteak } from "react-icons/gi";
 import { LuSalad } from "react-icons/lu";
 import { IoIosIceCream } from "react-icons/io";
 import { GiSodaCan } from "react-icons/gi";
 import { auth, db, timestamp } from "../config/Firebase";
+import { SiBurgerking } from "react-icons/si";
+import { GiFrenchFries } from "react-icons/gi";
+import { GiFullPizza } from "react-icons/gi";
 
 export default function FoodButtons({ sumEntry, updateTotal }) {
   const { uid } = auth.currentUser;
@@ -50,7 +54,7 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           }}
         >
           <FaAppleAlt
-            style={{ color: "maroon", fontSize: "30px", background: "none" }}
+            style={{ color: "#73ff00", fontSize: "30px", background: "none" }}
           />
           <div>+95</div>
         </button>
@@ -143,6 +147,28 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           <div>+335</div>
         </button>
         <button
+          value="679"
+          id="steak"
+          title="Steak"
+          type="submit"
+          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onClick={handleAdd}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
+        >
+          <GiSteak
+            style={{
+              color: "#b8430d",
+              fontSize: "30px",
+              background: "none",
+            }}
+          />
+          <div>+679</div>
+        </button>
+        <button
           value="45"
           id="salad"
           title="Salad"
@@ -207,6 +233,72 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
             }}
           />
           <div>+150</div>
+        </button>
+        <button
+          value="660"
+          id="whopper"
+          title="Whopper"
+          type="submit"
+          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onClick={handleAdd}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
+        >
+          <SiBurgerking
+            style={{
+              color: "red",
+              fontSize: "30px",
+              background: "none",
+            }}
+          />
+          <div>+660</div>
+        </button>
+        <button
+          value="380"
+          id="fries"
+          title="Fries"
+          type="submit"
+          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onClick={handleAdd}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
+        >
+          <GiFrenchFries
+            style={{
+              color: "#ffe600",
+              fontSize: "30px",
+              background: "none",
+            }}
+          />
+          <div>+380</div>
+        </button>
+        <button
+          value="2000"
+          id="fullpizza"
+          title="Full Pizza"
+          type="submit"
+          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onClick={handleAdd}
+          style={{
+            fontSize: "10px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
+        >
+          <GiFullPizza
+            style={{
+              color: "#cea00a",
+              fontSize: "30px",
+              background: "none",
+            }}
+          />
+          <div>+2000</div>
         </button>
       </div>
     </>

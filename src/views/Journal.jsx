@@ -1,9 +1,9 @@
 import Navigation from "../components/Navigation";
-import Add from "../components/Add";
+import User from "../components/User";
 import useTracker from "../hooks/useTracker";
 import { auth, db } from "../config/Firebase";
 import { useState } from "react";
-import { FcCancel } from "react-icons/fc";
+import { RiDeleteBack2Fill } from "react-icons/ri";
 
 export default function Entry() {
   const { entries, total, sumEntry, getEntries, handleDelete } = useTracker(0);
@@ -34,8 +34,6 @@ export default function Entry() {
     return `${month} ${date}, ${year}`;
   }
 
-  //TODO: FIX ADD BUTTON TO RE-RENDER
-
   console.log("entries:", entries);
 
   const handleEdit = async (id) => {
@@ -49,22 +47,17 @@ export default function Entry() {
       });
   };
 
-  console.log(date);
-
   return (
     <>
-      <h1>Journal</h1>
-
+      <User />
       <Navigation />
+      <h1>{currentDate}</h1>
+      <h2 className="card">Total Calories: {total}</h2>
 
-      {/* <div style={{ marginBottom: "50px" }}>
-        <Add sumEntry={sumEntry} getEntries={getEntries} />
-      </div> */}
-      <h2 className="card">Total: {total}</h2>
-      <h3> {currentDate}</h3>
-      {entries.map((entry) => {
+      {entries.map((entry, count) => {
         return (
           <div key={entry.id}>
+            <strong>{count + 1}. </strong>
             {JSON.stringify(
               entry.createdAt.toDate().toLocaleTimeString(navigator.language, {
                 // weekday: "short",
@@ -73,12 +66,15 @@ export default function Entry() {
                 hour: "2-digit",
                 minute: "2-digit",
               })
-            ).replace(/['"]+/g, "")}
+            )
+              .replace(/['"]+/g, "", "^0+", "")
+              .replace(/^(?:0+(?=[1-9])|0+(?=0$))/gm, "")}
             : {entry.calories}
-            <FcCancel
+            <RiDeleteBack2Fill
               style={{
                 marginLeft: "20px",
                 marginBottom: "-3px",
+                color: "red",
               }}
               onClick={() => {
                 handleDelete(entry.id);
