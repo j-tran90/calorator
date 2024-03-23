@@ -19,7 +19,7 @@ export default function Add({ sumEntry, updateTotal }) {
         calories: parseFloat(newEntry),
         createdAt: timestamp,
       })
-      .then(function () {
+      .then(() => {
         document.getElementById("updateForm").value = "";
         document.getElementById("button").style.visibility = "hidden";
       })
@@ -44,6 +44,7 @@ export default function Add({ sumEntry, updateTotal }) {
       <div className="">
         <form id="newEntry" onSubmit={handleAdd}>
           <input
+            required
             id="updateForm"
             type="number"
             min="1"
@@ -57,7 +58,6 @@ export default function Add({ sumEntry, updateTotal }) {
               setNewEntry(e.target.value);
             }}
             style={{ width: "100px" }}
-            required
           ></input>
           <button
             id="button"
