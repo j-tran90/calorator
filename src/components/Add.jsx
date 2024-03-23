@@ -41,26 +41,33 @@ export default function Add({ sumEntry, updateTotal }) {
 
   return (
     <>
-      <form id="newEntry" onSubmit={handleAdd}>
-        <input
-          id="updateForm"
-          type="number"
-          placeholder="Enter Calories"
-          onKeyUp={disableButton}
-          onChange={(e) => {
-            setNewEntry(e.target.value);
-          }}
-          style={{ width: "100px" }}
-          required
-        ></input>
-        <button
-          id="button"
-          type="submit"
-          style={{ background: "none", visibility: "hidden" }}
-        >
-          <FcCheckmark />
-        </button>
-      </form>
+      <div className="">
+        <form id="newEntry" onSubmit={handleAdd}>
+          <input
+            id="updateForm"
+            type="number"
+            min="1"
+            max="9999"
+            onKeyDown={(evt) =>
+              ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
+            }
+            placeholder="Enter Calories"
+            onKeyUp={disableButton}
+            onChange={(e) => {
+              setNewEntry(e.target.value);
+            }}
+            style={{ width: "100px" }}
+            required
+          ></input>
+          <button
+            id="button"
+            type="submit"
+            style={{ background: "none", visibility: "hidden" }}
+          >
+            <FcCheckmark style={{ fontSize: "30px", marginBottom: "-10px" }} />
+          </button>
+        </form>
+      </div>
     </>
   );
 }

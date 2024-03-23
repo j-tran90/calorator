@@ -60,7 +60,7 @@ export default function Goal() {
         <button
           id="button"
           type="submit"
-          style={{ background: "none", visibility: "hidden" }}
+          style={{ background: "none", visibility: "hidden", color: "#555" }}
         >
           Set <FcCheckmark />
         </button>

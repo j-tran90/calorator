@@ -36,28 +36,32 @@ export default function Profile() {
     <>
       <User />
       <Navigation />
-      <hr />
-      <div className="column">Email: {currentUser.email || "N/A"}</div>
-      <div className="column">
-        Name: {currentUser.displayName || "Guest User"}
+      <div className="card">
+        {" "}
+        <div className="column">Email: {currentUser.email || "N/A"}</div>
+        <div className="column">
+          Name: {currentUser.displayName || "Guest User"}
+        </div>
+        {profile.map((showProfile) => {
+          return (
+            <div key={showProfile.id}>
+              <div className="column">Weight: {showProfile.weight} lbs</div>
+              <div className="column">Age: {showProfile.age}</div>
+            </div>
+          );
+        })}
+        <hr />
+        <Goal />
       </div>
-      {profile.map((showProfile) => {
-        return (
-          <div key={showProfile.id}>
-            <div className="column">Weight: {showProfile.weight} lbs</div>
-            <div className="column">Age: {showProfile.age}</div>
-          </div>
-        );
-      })}
-      <hr />
-      <Goal />
-      <hr />
-      <button onClick={handleLogout} style={{ marginRight: "20px" }}>
-        Logout <FcLock />
-      </button>
-      <button onClick={deleteAccount} style={{ color: "red" }}>
-        Delete Account <FcHighPriority />
-      </button>
+
+      <div>
+        <button onClick={handleLogout} style={{ marginRight: "20px" }}>
+          Logout <FcLock />
+        </button>
+        <button onClick={deleteAccount} style={{ color: "red" }}>
+          Delete Account <FcHighPriority />
+        </button>
+      </div>
     </>
   );
 }

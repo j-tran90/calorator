@@ -4,8 +4,10 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
+  color: #555;
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,6 +41,10 @@ h1 {
   line-height: 1.1;
 }
 
+svg {
+  color: #555;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -69,4 +75,20 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.card {
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+input {
+  background-color: #fff;
+  border: 1px solid #2bbb7f;
+  border-radius: 5px;
+  padding: 10px;
+  color: #555;
+  margin-top: 20px;
 }

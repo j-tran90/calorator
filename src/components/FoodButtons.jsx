@@ -1,7 +1,4 @@
-import Navigation from "./Navigation";
-import useTracker from "../hooks/useTracker";
 import { useState } from "react";
-import { auth, db, timestamp } from "../config/Firebase";
 
 import { FaAppleAlt } from "react-icons/fa";
 import { IoEggSharp } from "react-icons/io5";
@@ -9,10 +6,9 @@ import { GiBananaPeeled, GiButterToast, GiChickenOven } from "react-icons/gi";
 import { LuSalad } from "react-icons/lu";
 import { IoIosIceCream } from "react-icons/io";
 import { GiSodaCan } from "react-icons/gi";
-import ProgressCircle from "./ProgressCircle";
+import { auth, db, timestamp } from "../config/Firebase";
 
-export default function Test({ sumEntry, updateTotal }) {
-  const { entries, total, getEntries } = useTracker(0);
+export default function FoodButtons({ sumEntry, updateTotal, updateCircle }) {
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
 
@@ -29,9 +25,6 @@ export default function Test({ sumEntry, updateTotal }) {
       .then(() => {
         sumEntry();
       })
-      // .then(() => {
-      //   getEntries();
-      // })
       .then(() => {
         updateTotal();
       });
@@ -41,10 +34,7 @@ export default function Test({ sumEntry, updateTotal }) {
 
   return (
     <>
-      {/* <Navigation />
-      <h2> Total: {total}</h2> */}
-      <ProgressCircle />
-      {/* <div>
+      <div>
         <button
           value="95"
           id="apple"
@@ -217,24 +207,7 @@ export default function Test({ sumEntry, updateTotal }) {
           />
           <div>+150</div>
         </button>
-      </div> */}
-      <br />
-      {/* {entries.map((entry) => {
-        return (
-          <div key={entry.id}>
-            {JSON.stringify(
-              entry.createdAt.toDate().toLocaleTimeString(navigator.language, {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            ).replace(/['"]+/g, "")}
-            : {entry.calories}
-          </div>
-        );
-      })} */}
+      </div>
     </>
   );
 }

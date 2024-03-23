@@ -38,7 +38,6 @@ export default function useTracker() {
     });
     const total = snapshot.data().totalCalories;
     setNewTotal(total);
-    return;
   };
 
   useEffect(() => {
@@ -47,17 +46,22 @@ export default function useTracker() {
   }, []);
 
   const updateTotal = () => {
-    if (goal - total < 0) {
+    const remain = goal - total;
+    const percent = parseInt((total / goal) * 100);
+    if (remain === goal) {
+      setRemain(0);
+    } else if (total > goal || total == goal) {
+      setPercent(100);
       setRemain(0);
     } else {
-      setRemain(goal - total);
-      setPercent(parseInt((total / goal) * 100));
+      setRemain(remain);
+      setPercent(percent);
     }
   };
 
   useEffect(() => {
     updateTotal();
-    console.log("useEffect updateTotal", remain);
+    console.log("useEffect updateTotal", remain, percent);
   });
 
   const handleDelete = async (id) => {

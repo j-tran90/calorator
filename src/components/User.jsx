@@ -14,8 +14,8 @@ export default function User() {
           alt="..."
           style={{
             borderRadius: "100px",
-            minHeight: "100px",
-            height: "100px",
+            minHeight: "50px",
+            height: "50px",
             color: "white",
           }}
         />
