@@ -37,7 +37,6 @@ export default function Profile() {
       <User />
       <Navigation />
       <div className="card">
-        {" "}
         <div className="column">Email: {currentUser.email || "N/A"}</div>
         <div className="column">
           Name: {currentUser.displayName || "Guest User"}
@@ -51,6 +50,7 @@ export default function Profile() {
           );
         })}
         <hr />
+        <h2>Goals</h2>
         <Goal />
       </div>
 

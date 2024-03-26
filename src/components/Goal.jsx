@@ -42,7 +42,6 @@ export default function Goal() {
 
   return (
     <>
-      <h2>Goals</h2>
       <div className="column">Caloric: {goal}</div>
       <form id="" onSubmit={handleUpdate}>
         <div>

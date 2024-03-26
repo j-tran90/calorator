@@ -86,9 +86,48 @@ button:focus-visible {
 
 input {
   background-color: #fff;
-  border: 1px solid #2bbb7f;
+  border: 1px solid #4fc483;
   border-radius: 5px;
   padding: 10px;
   color: #555;
   margin-top: 20px;
+}
+
+.accordion {
+  background-color: #4fc483;
+  border: 1px solid #4fc483;
+  color: #fff;
+  cursor: pointer;
+  padding: 18px;
+  border-radius: 10px;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  margin-top: 20px;
+}
+
+.active,
+.accordion:hover {
+  background-color: #239968;
+  color: #fff;
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  overflow: hidden;
+  transition: 0.2s ease-out;
+}
+
+table {
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  place-items: center;
+  width: 350px;
+}
+
+#table-head {
+  font-weight: bold;
 }

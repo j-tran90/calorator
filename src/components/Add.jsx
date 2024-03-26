@@ -62,7 +62,11 @@ export default function Add({ sumEntry, updateTotal }) {
           <button
             id="button"
             type="submit"
-            style={{ background: "none", visibility: "hidden" }}
+            style={{
+              background: "none",
+              visibility: "hidden",
+              marginLeft: "5px",
+            }}
           >
             <FcCheckmark style={{ fontSize: "30px", marginBottom: "-10px" }} />
           </button>
