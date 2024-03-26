@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Accordion from "../components/Accordion";
 import Add from "../components/Add";
 import FoodButtons from "../components/FoodButtons";
 import Navigation from "../components/Navigation";
