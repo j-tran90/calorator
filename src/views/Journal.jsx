@@ -51,38 +51,57 @@ export default function Entry() {
     <>
       <User />
       <Navigation />
-      <h1>{currentDate}</h1>
+      <h2>{currentDate}</h2>
       <h2 className="card">Total Calories: {total}</h2>
+      <table>
+        <tr id="table-head">
+          <td>Entry</td>
+          <td>Time</td>
+          <td>Food</td>
+          <td>Calories</td>
+        </tr>
 
-      {entries.map((entry, count) => {
-        return (
-          <div key={entry.id}>
-            <strong>{count + 1}. </strong>
-            {JSON.stringify(
-              entry.createdAt.toDate().toLocaleTimeString(navigator.language, {
-                // weekday: "short",
-                // month: "short",
-                // day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            )
-              .replace(/['"]+/g, "", "^0+", "")
-              .replace(/^(?:0+(?=[1-9])|0+(?=0$))/gm, "")}
-            : {entry.calories}
-            <RiDeleteBack2Fill
-              style={{
-                marginLeft: "20px",
-                marginBottom: "-3px",
-                color: "red",
-              }}
-              onClick={() => {
-                handleDelete(entry.id);
-              }}
-            />
-          </div>
-        );
-      })}
+        {entries.map((entry, count) => {
+          return (
+            <>
+              <tr key={entry.id}>
+                <td>{count + 1}.</td>
+                <td>
+                  {" "}
+                  {JSON.stringify(
+                    entry.createdAt
+                      .toDate()
+                      .toLocaleTimeString(navigator.language, {
+                        // weekday: "short",
+                        // month: "short",
+                        // day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                  )
+                    .replace(/['"]+/g, "", "^0+", "")
+                    .replace(/^(?:0+(?=[1-9])|0+(?=0$))/gm, "")}
+                </td>
+                <td></td>
+                <td> {entry.calories}</td>
+                <td>
+                  {" "}
+                  <RiDeleteBack2Fill
+                    style={{
+                      marginLeft: "20px",
+                      marginBottom: "-3px",
+                      color: "red",
+                    }}
+                    onClick={() => {
+                      handleDelete(entry.id);
+                    }}
+                  />
+                </td>
+              </tr>
+            </>
+          );
+        })}
+      </table>
     </>
   );
 }
