@@ -58,7 +58,11 @@ export default function Profile() {
         <button onClick={handleLogout} style={{ marginRight: "20px" }}>
           Logout <FcLock />
         </button>
-        <button onClick={deleteAccount} style={{ color: "red" }}>
+        <button
+          onClick={deleteAccount}
+          style={{ color: "#999", backgroundColor: "#555" }}
+          disabled
+        >
           Delete Account <FcHighPriority />
         </button>
       </div>

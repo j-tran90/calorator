@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import ProviderLogin from "../components/ProviderLogin";
+import Title from "../components/Title";
 
 export default function Register() {
   const nameRef = useRef();
@@ -36,6 +37,7 @@ export default function Register() {
 
   return (
     <>
+      <Title />
       <h1>Register</h1>
 
       <form onSubmit={handleSubmit}>
@@ -99,7 +101,7 @@ export default function Register() {
           </div>
 
           <div className="text-center mt-4">
-            <button className="" disabled={loading} type="submit">
+            <button className="button" disabled={loading} type="submit">
               Submit
             </button>
           </div>

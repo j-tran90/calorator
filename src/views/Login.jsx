@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import ProviderLogin from "../components/ProviderLogin";
+import Title from "../components/Title";
 
 export default function Login() {
   const emailRef = useRef();
@@ -28,6 +29,7 @@ export default function Login() {
 
   return (
     <>
+      <Title />
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <div style={{ color: "red" }}>{error && error}</div>

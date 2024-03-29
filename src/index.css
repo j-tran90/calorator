@@ -90,7 +90,9 @@ input {
   border-radius: 5px;
   padding: 10px;
   color: #555;
-  margin-top: 20px;
+  margin-left: 2.5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 .accordion {

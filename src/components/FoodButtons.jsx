@@ -14,9 +14,9 @@ import { GiFullPizza } from "react-icons/gi";
 
 export default function FoodButtons({ sumEntry, updateTotal }) {
   const { uid } = auth.currentUser;
-  const [newEntry, setNewEntry] = useState({
-    calorie: 0,
-  });
+  const [newEntry, setNewEntry] = useState(0);
+  const [newFood, setNewFood] = useState("");
+
   const handleAdd = async () => {
     await db
       .collection("journal")
@@ -25,6 +25,7 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
       .doc()
       .set({
         calories: parseFloat(newEntry),
+        food: newFood,
         createdAt: timestamp,
       })
       .then(() => {
@@ -45,7 +46,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="apple"
           title="Apple"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -63,7 +69,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="eggs"
           title="1 Egg"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -85,7 +96,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="banana"
           title="Banana"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -107,7 +123,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="pbtoast"
           title="Peanut Butter Toast"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -129,7 +150,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="chicken"
           title="Chicken"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -151,7 +177,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="steak"
           title="Steak"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -173,7 +204,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="salad"
           title="Salad"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -195,7 +231,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="icecream"
           title="Ice Cream"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -217,7 +258,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="coke"
           title="Coke"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -239,7 +285,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="whopper"
           title="Whopper"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -261,7 +312,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="fries"
           title="Fries"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",
@@ -283,7 +339,12 @@ export default function FoodButtons({ sumEntry, updateTotal }) {
           id="fullpizza"
           title="Full Pizza"
           type="submit"
-          onMouseDown={(e) => setNewEntry(e.currentTarget.value)}
+          onMouseDown={(e) =>
+            setNewEntry(
+              e.currentTarget.value,
+              setNewFood(e.currentTarget.title)
+            )
+          }
           onClick={handleAdd}
           style={{
             fontSize: "10px",

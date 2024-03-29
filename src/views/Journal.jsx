@@ -6,7 +6,8 @@ import { useState } from "react";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 
 export default function Entry() {
-  const { entries, total, sumEntry, getEntries, handleDelete } = useTracker(0);
+  const { entries, total, goal, sumEntry, getEntries, handleDelete } =
+    useTracker(0);
   const { uid } = auth.currentUser;
   const [editEntry, setEditEntry] = useState(0);
   const date = new Date();
@@ -52,7 +53,9 @@ export default function Entry() {
       <User />
       <Navigation />
       <h2>{currentDate}</h2>
-      <h2 className="card">Total Calories: {total}</h2>
+      <h2 className="card">
+        Progress: {total}/{goal}
+      </h2>
       <table>
         <tr id="table-head">
           <td>Entry</td>
@@ -67,7 +70,6 @@ export default function Entry() {
               <tr key={entry.id}>
                 <td>{count + 1}.</td>
                 <td>
-                  {" "}
                   {JSON.stringify(
                     entry.createdAt
                       .toDate()
@@ -82,10 +84,13 @@ export default function Entry() {
                     .replace(/['"]+/g, "", "^0+", "")
                     .replace(/^(?:0+(?=[1-9])|0+(?=0$))/gm, "")}
                 </td>
-                <td></td>
-                <td> {entry.calories}</td>
                 <td>
-                  {" "}
+                  {entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
+                    value.toUpperCase()
+                  )}
+                </td>
+                <td>{entry.calories}</td>
+                <td>
                   <RiDeleteBack2Fill
                     style={{
                       marginLeft: "20px",
