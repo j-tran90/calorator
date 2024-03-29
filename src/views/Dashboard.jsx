@@ -30,7 +30,7 @@ export default function Dashboard() {
           </div>
         </div>
         {isActive && (
-          <div style={{ marginTop: "10px" }}>
+          <div style={{ marginTop: "20px" }}>
             <FoodButtons sumEntry={sumEntry} updateTotal={updateTotal} />
           </div>
         )}

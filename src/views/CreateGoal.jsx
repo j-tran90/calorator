@@ -7,8 +7,8 @@ export default function CreateGoal() {
   return (
     <>
       <User />
-      <h2>Hi, {currentUser.displayName || "Guest"}! </h2>
-      <h2>Get started with your goals</h2>
+      <h2>Welcome, {currentUser.displayName || "Guest"}! </h2>
+      <h2>Set your goals to get started</h2>
       <Goal />
     </>
   );

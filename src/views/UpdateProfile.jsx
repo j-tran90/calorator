@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../config/Firebase";
 import User from "../components/User";
+import Navigation from "../components/Navigation";
 
 export default function UpdateProfile() {
   const { uid } = auth.currentUser;
@@ -26,9 +27,11 @@ export default function UpdateProfile() {
   return (
     <>
       <User />
-      <hr />
+      <Navigation />
+
       <form id="updateForm" onSubmit={handleUpdate}>
         <input
+          required
           id="age"
           type="number"
           placeholder="enter age"
@@ -38,6 +41,7 @@ export default function UpdateProfile() {
         ></input>
         <div>
           <input
+            required
             id="weight"
             type="number"
             placeholder="enter current weight"
