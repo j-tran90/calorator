@@ -10,17 +10,16 @@ export default function Home() {
       <Link as={Link} to="/register">
         <button style={{ marginRight: "20px", background: "none" }}>
           <FaUserPen style={{ fontSize: "50px" }} />
-          <div style={{ fontSize: "15px", color: "#000" }}>Sign Up</div>
+          <div style={{ fontSize: "15px" }}>Sign Up</div>
         </button>
       </Link>
       <Link as={Link} to="/login">
         <button style={{ background: "none" }}>
           <FaUserCheck style={{ fontSize: "50px" }} />
-          <div style={{ fontSize: "15px", color: "#000" }}>Login</div>
+          <div style={{ fontSize: "15px" }}>Login</div>
         </button>
       </Link>
       <br />
-
       <ProviderLogin />
     </>
   );

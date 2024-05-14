@@ -9,7 +9,7 @@ import { FcHighPriority, FcLock } from "react-icons/fc";
 
 import useCollectionData from "../hooks/useFetch";
 import Navigation from "../components/Navigation";
-import DarkModeComponent from "../components/DarkMode";
+import DarkModeComponent, { DarkModeToggle } from "../contexts/DarkModeContext";
 
 export default function Profile() {
   const { currentUser, logout, deleteAccount } = useAuth();
@@ -101,11 +101,9 @@ export default function Profile() {
         </div>
         {isSettings && (
           <div style={{ marginTop: "20px" }}>
-            <DarkModeComponent.DarkModeProvider>
-              <div>
-                <DarkModeComponent.DarkModeToggle />
-              </div>
-            </DarkModeComponent.DarkModeProvider>
+            <div>
+              <DarkModeToggle />
+            </div>
           </div>
         )}
       </div>

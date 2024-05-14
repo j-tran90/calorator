@@ -25,7 +25,7 @@ export default function Dashboard() {
       <div className="accordion">
         <div className="" onClick={() => setIsActive(!isActive)}>
           <div>
-            Food Buttons{" "}
+            Food Buttons
             <span style={{ float: "right" }}>{isActive ? "-" : "+"}</span>
           </div>
         </div>

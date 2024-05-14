@@ -24,7 +24,7 @@ export default function ProviderLogin() {
             onClick={googleLogin}
             style={{ fontSize: "50px" }}
           />
-          <div style={{ fontSize: "15px", color: "#000" }}>Google</div>
+          <div style={{ fontSize: "15px" }}>Google</div>
         </button>
 
         <button style={{ marginRight: "0px", background: "none" }}>
@@ -39,7 +39,7 @@ export default function ProviderLogin() {
               }}
             />
           </Link>
-          <div style={{ fontSize: "15px", color: "#000" }}>Guest</div>
+          <div style={{ fontSize: "15px" }}>Guest</div>
         </button>
       </div>
     </>
