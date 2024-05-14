@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { db, auth } from "../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
 import Goal from "../components/Goal";
 import User from "../components/User";
 import { FcHighPriority, FcLock } from "react-icons/fc";
-import { AiFillEdit } from "react-icons/ai";
+
 import useCollectionData from "../hooks/useFetch";
 import Navigation from "../components/Navigation";
+import DarkModeComponent from "../components/DarkMode";
 
 export default function Profile() {
   const { currentUser, logout, deleteAccount } = useAuth();
@@ -23,6 +24,7 @@ export default function Profile() {
   const redirect = useNavigate();
   const [isGoal, setIsGoal] = useState(false);
   const [isAccount, setIsAccount] = useState(false);
+  const [isSettings, setIsSettings] = useState(false);
 
   async function handleLogout() {
     setError(error);
@@ -74,13 +76,36 @@ export default function Profile() {
       <div className="accordion">
         <div className="" id="account" onClick={() => setIsAccount(!isAccount)}>
           <div>
-            Account{" "}
+            Account
             <span style={{ float: "right" }}>{isAccount ? "-" : "+"}</span>
           </div>
         </div>
         {isAccount && (
           <div style={{ marginTop: "20px" }}>
-            <div className="column">Email: {currentUser.email || "N/A"}</div>
+            <div style={{ textAlign: "left" }}>
+              <div>Email: {currentUser.email || "N/A"}</div>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="accordion">
+        <div
+          className=""
+          id="settings"
+          onClick={() => setIsSettings(!isSettings)}
+        >
+          <div>
+            Settings
+            <span style={{ float: "right" }}>{isSettings ? "-" : "+"}</span>
+          </div>
+        </div>
+        {isSettings && (
+          <div style={{ marginTop: "20px" }}>
+            <DarkModeComponent.DarkModeProvider>
+              <div>
+                <DarkModeComponent.DarkModeToggle />
+              </div>
+            </DarkModeComponent.DarkModeProvider>
           </div>
         )}
       </div>
