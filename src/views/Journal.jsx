@@ -16,6 +16,7 @@ import {
 import { db, auth } from "../config/Firebase";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import useTracker from "../hooks/useTracker";
+import User from "../components/User";
 
 export default function Journal() {
   const { goal, total } = useTracker(0);
@@ -75,10 +76,11 @@ export default function Journal() {
 
   return (
     <>
+      <User />
       <Navigation />
       <h3>
         <button onClick={handleTodayButtonClick}>
-          Go to Today: {total}/{goal}
+          Today: {total}/{goal}
         </button>
       </h3>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -132,10 +134,12 @@ export default function Journal() {
                 <tr key={entry.id}>
                   <td>{index + 1}.</td>
                   <td>
-                    {currentDate.toLocaleTimeString(navigator.language, {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {currentDate
+                      .toLocaleTimeString(navigator.language, {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                      .replace(/^0+/, "")}
                   </td>
                   <td>
                     {entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>

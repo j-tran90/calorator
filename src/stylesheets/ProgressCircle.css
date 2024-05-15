@@ -36,6 +36,24 @@
     0.5px 0.5px 0px rgba(0, 0, 0, 0.15), 0px 12px 10px -10px rgba(0, 0, 0, 0.05);
 }
 
+.dark-mode .outer {
+  height: 160px;
+  width: 160px;
+  border-radius: 50%;
+  padding: 20px;
+  box-shadow: 4px 4px 6px -1px rgba(255, 255, 255, 0.2),
+    -6px -6px 10px -1px rgba(15, 15, 15, 0.7);
+  box-sizing: border-box;
+}
+
+.dark-mode .progress-cpmnt .inner {
+  box-shadow: inset 4px 4px 6px -1px rgba(255, 255, 255, 0.2),
+    inset -4px -4px 6px -1px rgba(0, 0, 0, 0.7),
+    -0.5px -0.5px 0px rgba(0, 0, 0, 1),
+    0.5px 0.5px 0px rgba(255, 255, 255, 0.15),
+    0px 12px 10px -10px rgba(255, 255, 255, 0.05);
+}
+
 #number {
   font-weight: 600;
   font-size: 25px;
