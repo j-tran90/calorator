@@ -70,6 +70,10 @@ svg {
   color: #555;
 }
 
+circle {
+  fill: inherit;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -80,8 +84,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-  margin-right: 5px;
-  margin-left: 5px;
+  margin: 5px;
 }
 button:hover {
   border-color: #2bbb7f;
@@ -120,6 +123,14 @@ input {
   margin-left: 2.5px;
   margin-right: 5px;
   margin-bottom: 5px;
+}
+
+.div,
+.form-group {
+  max-width: 259px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .accordion {

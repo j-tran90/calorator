@@ -10,13 +10,13 @@ import {
   sum,
   where,
 } from "firebase/firestore";
-import useGoals from "./useGoals";
+import useFetchGoals from "./useFetchGoals";
 import useCollectionData from "./useFetch";
 
 export default function useTracker() {
   const { uid } = auth.currentUser;
-  const { goal, getGoal } = useGoals(0);
-  const [remain, setRemain] = useState(0);
+  const { calorieTarget, getDailyCalorieTarget } = useFetchGoals(0);
+  const [remainingCalories, setRemainingCalories] = useState(0);
   const startOfToday = new Date();
   const endOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
@@ -46,22 +46,22 @@ export default function useTracker() {
   }, []);
 
   const updateTotal = () => {
-    const remain = goal - total;
-    const percent = parseInt((total / goal) * 100);
-    if (remain === goal) {
-      setRemain(0);
-    } else if (total > goal || total == goal) {
+    const remainingCalories = calorieTarget - total;
+    const percent = parseInt((total / calorieTarget) * 100);
+    if (remainingCalories === calorieTarget) {
+      setRemainingCalories(0);
+    } else if (total > calorieTarget || total == calorieTarget) {
       setPercent(100);
-      setRemain(0);
+      setRemainingCalories(0);
     } else {
-      setRemain(remain);
+      setRemainingCalories(remainingCalories);
       setPercent(percent);
     }
   };
 
   useEffect(() => {
     updateTotal();
-    console.log("useEffect updateTotal", remain, percent);
+    console.log("useEffect updateTotal", remainingCalories, percent);
   });
 
   const handleDelete = async (id) => {
@@ -71,13 +71,13 @@ export default function useTracker() {
   };
 
   return {
-    goal,
+    calorieTarget,
     total,
-    remain,
+    remainingCalories,
     sumEntry,
     updateTotal,
     entries,
-    getGoal,
+    getDailyCalorieTarget,
     getEntries,
     percent,
     handleDelete,

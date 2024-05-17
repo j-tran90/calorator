@@ -59,7 +59,8 @@
   font-size: 25px;
 }
 
-circle {
+circle,
+#circle-value {
   fill: none;
   stroke: url(#GradientColor);
   stroke-width: 20px;

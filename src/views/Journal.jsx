@@ -19,7 +19,7 @@ import useTracker from "../hooks/useTracker";
 import User from "../components/User";
 
 export default function Journal() {
-  const { goal, total } = useTracker(0);
+  const { calorieTarget, total } = useTracker(0);
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [data, setData] = useState([]);
@@ -80,7 +80,7 @@ export default function Journal() {
       <Navigation />
       <h3>
         <button onClick={handleTodayButtonClick}>
-          Today: {total}/{goal}
+          Today: {total}/{calorieTarget}
         </button>
       </h3>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

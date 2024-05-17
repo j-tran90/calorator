@@ -3,23 +3,22 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
-import Goal from "../components/Goal";
 import User from "../components/User";
-import { FcHighPriority, FcLock } from "react-icons/fc";
-
 import useCollectionData from "../hooks/useFetch";
 import Navigation from "../components/Navigation";
-import DarkModeComponent, { DarkModeToggle } from "../contexts/DarkModeContext";
+import { DarkModeToggle } from "../contexts/DarkModeContext";
+import Targets from "../components/Targets";
 
 export default function Profile() {
   const { currentUser, logout, deleteAccount } = useAuth();
   const { uid } = auth.currentUser;
-  const userCollectionRef = collection(db, "users/");
-  const querySnapshot = query(
-    userCollectionRef,
+  const userProfileRef = collection(db, "userProfile/");
+  const queryUserProfile = query(
+    userProfileRef,
     where(documentId(), "==", uid)
   );
-  const { data: profile } = useCollectionData(querySnapshot);
+  const { data: profile } = useCollectionData(queryUserProfile);
+
   const [error, setError] = useState("");
   const redirect = useNavigate();
   const [isGoal, setIsGoal] = useState(false);
@@ -52,8 +51,10 @@ export default function Profile() {
               <div key={showProfile.id}>
                 <div className="column">
                   <div className="column">Age: {showProfile.age}</div>
-                  Current Weight: {showProfile.weight} lbs
+                  <div>Gender: {showProfile.gender}</div>
+                  Current Weight: {showProfile.currentWeight} lbs
                 </div>
+                <div>Height: {showProfile.height}</div>
               </div>
             );
           })}
@@ -63,12 +64,13 @@ export default function Profile() {
       <div className="accordion">
         <div className="" id="goal" onClick={() => setIsGoal(!isGoal)}>
           <div>
-            Goals <span style={{ float: "right" }}>{isGoal ? "-" : "+"}</span>
+            Targets <span style={{ float: "right" }}>{isGoal ? "-" : "+"}</span>
           </div>
         </div>
         {isGoal && (
           <div style={{ marginTop: "20px" }}>
-            <Goal />
+            {" "}
+            <Targets />
           </div>
         )}
       </div>
@@ -110,7 +112,7 @@ export default function Profile() {
 
       <div>
         <button title="Logout" onClick={handleLogout}>
-          Logout <FcLock />
+          Logout
         </button>
         <button
           title="Disabled"
@@ -118,7 +120,7 @@ export default function Profile() {
           style={{ color: "#999", backgroundColor: "#555" }}
           disabled
         >
-          Delete Account <FcHighPriority />
+          Delete Account
         </button>
       </div>
     </>

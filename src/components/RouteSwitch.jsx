@@ -5,7 +5,6 @@ import Home from "../views/Home";
 import Register from "../views/Register";
 import Login from "../views/Login";
 import Profile from "../views/Profile";
-import UpdateProfile from "../views/UpdateProfile";
 import CreateGoal from "../views/CreateGoal";
 import Test from "../views/Test";
 import Dashboard from "../views/Dashboard";
@@ -63,14 +62,7 @@ const RouteSwitch = () => {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/updateprofile"
-            element={
-              <PrivateRoute>
-                <UpdateProfile />
-              </PrivateRoute>
-            }
-          />
+
           <Route
             path="/creategoal"
             element={

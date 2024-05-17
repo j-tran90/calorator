@@ -16,7 +16,9 @@ export default function ProviderLogin() {
   return (
     <>
       <div className="text-center">
-        <button style={{ marginRight: "20px", background: "none" }}>
+        <button
+          style={{ marginRight: "20px", background: "none", color: "#000" }}
+        >
           <FcGoogle
             type="button"
             title="Google Sign In"
@@ -27,7 +29,9 @@ export default function ProviderLogin() {
           <div style={{ fontSize: "15px" }}>Google</div>
         </button>
 
-        <button style={{ marginRight: "0px", background: "none" }}>
+        <button
+          style={{ marginRight: "0px", background: "none", color: "#000" }}
+        >
           <Link as={Link} onClick={handleGuest}>
             <img
               src="https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg"
