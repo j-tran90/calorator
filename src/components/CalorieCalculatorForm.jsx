@@ -67,14 +67,8 @@ function CalorieCalculatorForm({ onNext, onValidationChange }) {
     console.log("Data captured:", formData);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && isFormValid) {
-      handleSubmit(e);
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="calorie-calculator-form" onSubmit={handleSubmit}>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
           label="Age"
@@ -82,7 +76,6 @@ function CalorieCalculatorForm({ onNext, onValidationChange }) {
           name="age"
           value={formData.age}
           onChange={handleChange}
-          onKeyDown={handleKeyDown}
           fullWidth
           error={errors.age}
         />
@@ -94,7 +87,6 @@ function CalorieCalculatorForm({ onNext, onValidationChange }) {
           name="height"
           value={formData.height}
           onChange={handleChange}
-          onKeyDown={handleKeyDown}
           fullWidth
           error={errors.height}
         />
@@ -106,7 +98,6 @@ function CalorieCalculatorForm({ onNext, onValidationChange }) {
           name="weight"
           value={formData.weight}
           onChange={handleChange}
-          onKeyDown={handleKeyDown}
           fullWidth
           error={errors.weight}
         />

@@ -17,6 +17,7 @@ export default function User() {
             minHeight: "50px",
             height: "50px",
             color: "white",
+            marginBottom: "20px",
           }}
         />
       </Link>

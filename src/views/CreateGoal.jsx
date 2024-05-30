@@ -4,6 +4,7 @@ import WeightGoalForm from "../components/WeightGoalForm";
 import CalorieCalculatorForm from "../components/CalorieCalculatorForm";
 import Results from "../components/Results";
 import SendDataToDB from "../hooks/useSendDataToDB";
+import User from "../components/User";
 
 function CreateGoal() {
   const [activeStep, setActiveStep] = useState(0);
@@ -99,7 +100,11 @@ function CreateGoal() {
 
   const handleNext = () => {
     if (isFormValid) {
-      setActiveStep((prevStep) => prevStep + 1);
+      const form =
+        activeStep === 0
+          ? document.getElementById("weight-goal-form")
+          : document.getElementById("calorie-calculator-form");
+      form.requestSubmit();
     }
   };
 
@@ -114,6 +119,7 @@ function CreateGoal() {
 
   return (
     <div>
+      <User />
       <Stepper
         activeStep={activeStep}
         alternativeLabel

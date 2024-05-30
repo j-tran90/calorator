@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { TextField, Box } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 function WeightGoalForm({ onSubmit, onValidationChange }) {
   const [weightTarget, setWeightTarget] = useState("");
-  const [targetDate, setTargetDate] = useState("");
+  const [targetDate, setTargetDate] = useState(dayjs());
   const [errors, setErrors] = useState({ weightTarget: "", targetDate: "" });
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     const validateFields = () => {
       const newErrors = {};
-      const currentDate = new Date(); // Get current system date
+      const currentDate = new Date();
 
       if (!weightTarget.trim()) {
         newErrors.weightTarget = "Weight Target is required";
@@ -23,24 +27,11 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
         }
       }
 
-      if (!targetDate.trim()) {
+      if (!targetDate) {
         newErrors.targetDate = "Target Date is required";
-      } else {
-        // Regular expression for mm-dd-yyyy or d-m-yyyy format
-        const dateRegex = /^(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])-\d{4}$/;
-        if (!dateRegex.test(targetDate)) {
-          newErrors.targetDate = "Invalid date format (mm-dd-yyyy or d-m-yyyy)";
-        } else {
-          // Parsing the date based on the matched format
-          const [month, day, year] = targetDate.split(/-|\//); // Split by either '-' or '/'
-          const enteredDate = new Date(
-            `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`
-          );
-          if (enteredDate <= currentDate) {
-            newErrors.targetDate =
-              "Target Date must be higher than the current date";
-          }
-        }
+      } else if (targetDate <= currentDate) {
+        newErrors.targetDate =
+          "Target Date must be higher than the current date";
       }
 
       return newErrors;
@@ -54,50 +45,35 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
   }, [weightTarget, targetDate, onValidationChange]);
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
-
-    // Convert weight target to pounds and parse it as a number
+    e.preventDefault();
     const weightInPounds = parseFloat(weightTarget);
-
-    // Parse the target date input into a valid Date object
-    const [month, day, year] = targetDate.split("-");
-    const parsedDate = new Date(`${year}-${month}-${day}`);
-
-    // Call onSubmit function with form data
-    onSubmit({ weightTarget: weightInPounds, targetDate: parsedDate });
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent default behavior
-      if (isFormValid) {
-        handleSubmit(e);
-      }
-    }
+    targetDate.toDate();
+    onSubmit({ weightTarget: weightInPounds, targetDate });
+    console.log("weight", weightInPounds, targetDate);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="weight-goal-form" onSubmit={handleSubmit}>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
           label="Weight Target (lbs)"
           type="number"
           value={weightTarget}
           onChange={(e) => setWeightTarget(e.target.value)}
-          onKeyDown={handleKeyDown}
           fullWidth
+          error={!!errors.weightTarget}
+          helperText={errors.weightTarget}
         />
       </Box>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
-        <TextField
-          label="Target Date (mm-dd-yyyy)"
-          value={targetDate}
-          onChange={(e) => setTargetDate(e.target.value)}
-          onKeyDown={handleKeyDown}
-          fullWidth
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Target Date"
+            value={targetDate}
+            onChange={(newDate) => setTargetDate(newDate)}
+          />
+        </LocalizationProvider>
       </Box>
-      <button type="submit" style={{ display: "none" }} />
     </form>
   );
 }
