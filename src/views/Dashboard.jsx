@@ -9,6 +9,7 @@ import User from "../components/User";
 import useTracker from "../hooks/useTracker";
 import { Link } from "react-router-dom";
 import useFetchGoals from "../hooks/useFetchGoals";
+import ProgressLegend from "../components/ProgressLegend";
 
 export default function Dashboard() {
   const {
@@ -20,7 +21,7 @@ export default function Dashboard() {
     percent,
   } = useTracker(0);
   const [isActive, setIsActive] = useState(false);
-  const { proteinTarget } = useFetchGoals(0);
+  const { proteinTarget, remainingDays } = useFetchGoals(0);
 
   const navigate = useNavigate();
 
@@ -69,15 +70,19 @@ export default function Dashboard() {
     <>
       <User />
       <Navigation />
+      <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
-      <h3>
+      <ProgressLegend total={total} remainingCalories={remainingCalories} />
+
+      {/* <h3>
         <Link to="/journal">Total: {total}</Link> | Remaining:{" "}
         {remainingCalories}
-      </h3>
+      </h3> */}
 
       <h6>
         Calorie: {calorieTarget} | Protein: {proteinTarget}g
       </h6>
+
       <Add sumEntry={sumEntry} updateTotal={updateTotal} />
       <div className="accordion">
         <div className="" onClick={() => setIsActive(!isActive)}>

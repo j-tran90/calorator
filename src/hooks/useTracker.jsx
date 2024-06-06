@@ -42,7 +42,6 @@ export default function useTracker() {
 
   useEffect(() => {
     sumEntry();
-    console.log("useEffect sumEntry", total);
   }, []);
 
   const updateTotal = () => {
@@ -61,7 +60,6 @@ export default function useTracker() {
 
   useEffect(() => {
     updateTotal();
-    console.log("useEffect updateTotal", remainingCalories, percent);
   });
 
   const handleDelete = async (id) => {

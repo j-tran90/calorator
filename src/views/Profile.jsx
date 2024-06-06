@@ -54,7 +54,7 @@ export default function Profile() {
                   <div>Gender: {showProfile.gender}</div>
                   Current Weight: {showProfile.currentWeight} lbs
                 </div>
-                <div>Height: {showProfile.height}</div>
+                <div>Height: {showProfile.height} cm</div>
               </div>
             );
           })}
