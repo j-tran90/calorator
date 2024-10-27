@@ -1,4 +1,4 @@
-import Navigation from "./Navigation";
+import NavBar from "./NavBar";
 import useTracker from "../hooks/useTracker";
 import { useState } from "react";
 import { auth, db, timestamp } from "../config/Firebase";

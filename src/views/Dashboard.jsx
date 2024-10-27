@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { db, auth } from "../config/Firebase";
 import Add from "../components/Add";
 import FoodButtons from "../components/FoodButtons";
-import Navigation from "../components/Navigation";
 import ProgressCircle from "../components/ProgressCircle";
 import User from "../components/User";
 import useTracker from "../hooks/useTracker";
-import { Link } from "react-router-dom";
 import useFetchGoals from "../hooks/useFetchGoals";
 import ProgressLegend from "../components/ProgressLegend";
 
@@ -69,7 +67,6 @@ export default function Dashboard() {
   return (
     <>
       <User />
-      <Navigation />
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />
@@ -84,8 +81,8 @@ export default function Dashboard() {
       </h6>
 
       <Add sumEntry={sumEntry} updateTotal={updateTotal} />
-      <div className="accordion">
-        <div className="" onClick={() => setIsActive(!isActive)}>
+      <div className='accordion'>
+        <div className='' onClick={() => setIsActive(!isActive)}>
           <div>
             Food Buttons
             <span style={{ float: "right" }}>{isActive ? "-" : "+"}</span>
