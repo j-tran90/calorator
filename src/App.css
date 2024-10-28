@@ -5,38 +5,125 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* * {
+  border: 1px solid red;
+} */
+
+a {
+  font-weight: 500;
+  color: #2bbb7f;
+  text-decoration: inherit;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+a:hover {
+  color: #186645;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body {
+  margin: 0;
+  display: flex;
+  /* place-items: center; */
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+svg {
+  color: #555;
 }
+
+circle {
+  fill: inherit;
+}
+
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 200;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  margin: 5px;
+}
+button:hover {
+  border-color: #2bbb7f;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 
 .card {
-  padding: 2em;
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+input {
+  background-color: #fff;
+  border: 1px solid #4fc483;
+  border-radius: 5px;
+  padding: 10px;
+  color: #555;
+  margin-left: 2.5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
+
+.div,
+.form-group {
+  max-width: 259px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.accordion {
+  background-color: #4fc483;
+  border: 1px solid #4fc483;
+  color: #fff;
+  cursor: pointer;
+  padding: 18px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.active,
+.accordion:hover {
+  background-color: #239968;
+  color: #fff;
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  overflow: hidden;
+  transition: 0.2s ease-out;
+}
+
+table {
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  place-items: center;
+  width: 350px;
+}
+
+#table-head {
+  font-weight: bold;
+}
+
+.progress-container {
+  margin-top: 10px;
+}
+

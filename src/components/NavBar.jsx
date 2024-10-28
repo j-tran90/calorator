@@ -40,14 +40,24 @@ function ResponsiveDrawer(props) {
   };
 
   const drawer = (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center", // Center vertically
+        alignItems: "center", // Center horizontally
+      }}
+    >
       <User />
-      <Divider />
-      <List sx={{ flexGrow: 1 }}>
+      <Divider sx={{ width: "100%" }} />
+
+      <List sx={{ flexGrow: 1, width: "100%" }}>
         <NavLinks onLinkClick={handleDrawerClose} />
       </List>
-      <Divider />
-      <Box sx={{ mt: "auto" }}>
+      <Divider sx={{ width: "100%" }} />
+
+      <Box sx={{ mt: "auto", width: "100%" }}>
         <List>
           {/* Additional Links */}
           <ListItem disablePadding>
