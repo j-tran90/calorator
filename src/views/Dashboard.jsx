@@ -7,6 +7,7 @@ import ProgressCircle from "../components/ProgressCircle";
 import useTracker from "../hooks/useTracker";
 import useFetchGoals from "../hooks/useFetchGoals";
 import ProgressLegend from "../components/ProgressLegend";
+import SearchBar from "../components/SearchBar";
 
 export default function Dashboard() {
   const {
@@ -19,8 +20,12 @@ export default function Dashboard() {
   } = useTracker(0);
   const [isActive, setIsActive] = useState(false);
   const { proteinTarget, remainingDays } = useFetchGoals(0);
-
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    navigate("/searchresults", { state: { query } }); // Navigate to results page with the query
+  };
 
   useEffect(() => {
     const checkUserData = async () => {
@@ -65,6 +70,10 @@ export default function Dashboard() {
 
   return (
     <>
+      <SearchBar
+        placeholder='Search for food...'
+        onSearch={handleSearch} // Pass the handleSearch function
+      />
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />

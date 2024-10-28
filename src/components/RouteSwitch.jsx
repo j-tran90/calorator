@@ -9,6 +9,7 @@ import CreateGoal from "../views/CreateGoal";
 import Test from "../views/Test";
 import Dashboard from "../views/Dashboard";
 import Journal from "../views/Journal";
+import SearchResults from "../views/SearchResults";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
@@ -16,6 +17,7 @@ const RouteSwitch = () => {
   return (
     <>
       <Routes>
+      <Route path="/searchresults" element={<SearchResults />} /> 
         {!currentUser ? (
           <Route path='/login' element={<Login />} />
         ) : (

@@ -99,7 +99,6 @@ function ResponsiveDrawer(props) {
             >
               <MenuIcon />
             </IconButton>
-            <SearchBar />
           </Stack>
         </Toolbar>
       </AppBar>
