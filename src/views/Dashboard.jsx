@@ -4,7 +4,6 @@ import { db, auth } from "../config/Firebase";
 import Add from "../components/Add";
 import FoodButtons from "../components/FoodButtons";
 import ProgressCircle from "../components/ProgressCircle";
-import User from "../components/User";
 import useTracker from "../hooks/useTracker";
 import useFetchGoals from "../hooks/useFetchGoals";
 import ProgressLegend from "../components/ProgressLegend";
@@ -66,7 +65,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <User />
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />

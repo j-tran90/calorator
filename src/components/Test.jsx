@@ -41,7 +41,7 @@ export default function Test({ sumEntry, updateTotal }) {
 
   return (
     <>
-      {/* <Navigation />
+      {/* 
       <h2> Total: {total}</h2> */}
       <ProgressCircle />
       {/* <div>

@@ -77,7 +77,6 @@ export default function Journal() {
   return (
     <>
       <User />
-      <Navigation />
       <h3>
         <button onClick={handleTodayButtonClick}>
           Today: {total}/{calorieTarget}

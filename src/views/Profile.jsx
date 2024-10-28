@@ -39,7 +39,6 @@ export default function Profile() {
   return (
     <>
       <User />
-      <Navigation />
       <div className='card'>
         <div style={{ textAlign: "left" }}>
           <div className='column'>
