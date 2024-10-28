@@ -1,4 +1,4 @@
-import Navigation from "../components/Navigation";
+import Navigation from "../components/NavBar";
 import React, { useState, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -76,8 +76,6 @@ export default function Journal() {
 
   return (
     <>
-      <User />
-      <Navigation />
       <h3>
         <button onClick={handleTodayButtonClick}>
           Today: {total}/{calorieTarget}
@@ -85,19 +83,19 @@ export default function Journal() {
       </h3>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          label="Start Date"
+          label='Start Date'
           value={startDate}
           onChange={(date) => handleStartDateChange(date)}
         />
         <DatePicker
-          label="End Date"
+          label='End Date'
           value={endDate}
           onChange={(date) => handleEndDateChange(date)}
         />
       </LocalizationProvider>
       <table>
         <tbody>
-          <tr id="table-head">
+          <tr id='table-head'>
             <td>Entry</td>
             <td>Time</td>
             <td>Food</td>
@@ -116,7 +114,7 @@ export default function Journal() {
                 {isNewDay && (
                   <tr>
                     <td
-                      colSpan="4"
+                      colSpan='4'
                       style={{
                         textAlign: "center",
                         fontWeight: "bold",

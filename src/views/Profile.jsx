@@ -5,7 +5,7 @@ import { db, auth } from "../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
 import User from "../components/User";
 import useCollectionData from "../hooks/useFetch";
-import Navigation from "../components/Navigation";
+import Navigation from "../components/NavBar";
 import { DarkModeToggle } from "../contexts/DarkModeContext";
 import Targets from "../components/Targets";
 
@@ -38,19 +38,17 @@ export default function Profile() {
 
   return (
     <>
-      <User />
-      <Navigation />
-      <div className="card">
+      <div className='card'>
         <div style={{ textAlign: "left" }}>
-          <div className="column">
+          <div className='column'>
             Name: {currentUser.displayName || "Guest User"}
           </div>
 
           {profile.map((showProfile) => {
             return (
               <div key={showProfile.id}>
-                <div className="column">
-                  <div className="column">Age: {showProfile.age}</div>
+                <div className='column'>
+                  <div className='column'>Age: {showProfile.age}</div>
                   <div>Gender: {showProfile.gender}</div>
                   Current Weight: {showProfile.currentWeight} lbs
                 </div>
@@ -61,8 +59,8 @@ export default function Profile() {
         </div>
       </div>
 
-      <div className="accordion">
-        <div className="" id="goal" onClick={() => setIsGoal(!isGoal)}>
+      <div className='accordion'>
+        <div className='' id='goal' onClick={() => setIsGoal(!isGoal)}>
           <div>
             Targets <span style={{ float: "right" }}>{isGoal ? "-" : "+"}</span>
           </div>
@@ -75,8 +73,8 @@ export default function Profile() {
         )}
       </div>
 
-      <div className="accordion">
-        <div className="" id="account" onClick={() => setIsAccount(!isAccount)}>
+      <div className='accordion'>
+        <div className='' id='account' onClick={() => setIsAccount(!isAccount)}>
           <div>
             Account
             <span style={{ float: "right" }}>{isAccount ? "-" : "+"}</span>
@@ -90,10 +88,10 @@ export default function Profile() {
           </div>
         )}
       </div>
-      <div className="accordion">
+      <div className='accordion'>
         <div
-          className=""
-          id="settings"
+          className=''
+          id='settings'
           onClick={() => setIsSettings(!isSettings)}
         >
           <div>
@@ -111,11 +109,11 @@ export default function Profile() {
       </div>
 
       <div>
-        <button title="Logout" onClick={handleLogout}>
+        <button title='Logout' onClick={handleLogout}>
           Logout
         </button>
         <button
-          title="Disabled"
+          title='Disabled'
           onClick={deleteAccount}
           style={{ color: "#999", backgroundColor: "#555" }}
           disabled
