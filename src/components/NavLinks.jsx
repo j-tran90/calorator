@@ -1,20 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 
-export default function NavLinks() {
-  const navLinks = [
-    { path: "/", label: "Home" },
-    { path: "/dashboard", label: "Dashboard" },
-    { path: "/profile", label: "Profile" },
-    { path: "/journal", label: "Journal" },
+const NavLinks = ({ onLinkClick }) => {
+  const links = [
+    { to: "/dashboard", text: "Dashboard" },
+    { to: "/profile", text: "Profile" },
+    { to: "/journal", text: "Journal" },
   ];
+
   return (
     <>
-      {navLinks.map((link) => (
-        <li key={link.path}>
-          <Link to={link.path}>{link.label}</Link>
-        </li>
+      {links.map((link) => (
+        <ListItem key={link.text} disablePadding>
+          <ListItemButton
+            component={Link}
+            to={link.to}
+            onClick={() => {
+              onLinkClick();
+            }}
+          >
+            <ListItemText primary={link.text} />
+          </ListItemButton>
+        </ListItem>
       ))}
     </>
   );
-}
+};
+
+export default NavLinks;

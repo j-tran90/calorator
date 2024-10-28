@@ -17,7 +17,7 @@ export default function User() {
             minHeight: "50px",
             height: "50px",
             color: "white",
-            padding: "2px"
+            marginTop: "5px"
     
           }}
         />

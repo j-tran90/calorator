@@ -38,7 +38,6 @@ export default function Profile() {
 
   return (
     <>
-      <User />
       <div className='card'>
         <div style={{ textAlign: "left" }}>
           <div className='column'>
