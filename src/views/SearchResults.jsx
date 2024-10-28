@@ -17,7 +17,7 @@ const SearchResults = () => {
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // State for rows per page
   const [totalResults, setTotalResults] = useState(0);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const SearchResults = () => {
       const apiKey = import.meta.env.VITE_FOOD_API_KEY;
       try {
         const response = await fetch(
-          `https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&pageSize=${rowsPerPage}&pageNumber=${
+          `https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&dataType=Foundation&pageSize=${rowsPerPage}&pageNumber=${
             page + 1
           }&api_key=${apiKey}`
         );
@@ -47,10 +47,11 @@ const SearchResults = () => {
 
   const getNutrientValue = (nutrients, nutrientNames) => {
     if (!Array.isArray(nutrients)) return "N/A";
-    const nutrient = nutrients.find((n) =>
-      nutrientNames.includes(n.nutrientName)
+    const nutrient = nutrients.find(
+      (n) =>
+        nutrientNames.includes(n.nutrientName) ||
+        nutrientNames.includes(n.unitName)
     );
-    // Here, if we find the nutrient, we return its value along with the unit
     return nutrient && nutrient.value
       ? `${nutrient.value} ${nutrient.unitName}`
       : "N/A";
@@ -58,6 +59,11 @@ const SearchResults = () => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10)); // Update rows per page
+    setPage(0); // Reset to first page
   };
 
   return (
@@ -85,17 +91,20 @@ const SearchResults = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {results.map((food) => (
-                  <TableRow key={food.fdcId}>
-                    <TableCell>{food.description}</TableCell>
-                    <TableCell>
-                      {getNutrientValue(food.nutrients, ["Energy"])}
-                    </TableCell>
-                    <TableCell>
-                      {getNutrientValue(food.nutrients, ["Protein"])}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {results.map((food) => {
+                  console.log(food.nutrients); // Log the nutrients to see their structure
+                  return (
+                    <TableRow key={food.fdcId}>
+                      <TableCell>{food.description}</TableCell>
+                      <TableCell>
+                        {getNutrientValue(food.nutrients, ["Energy", "KCAL"])}
+                      </TableCell>
+                      <TableCell>
+                        {getNutrientValue(food.nutrients, ["Protein"])}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
@@ -105,6 +114,8 @@ const SearchResults = () => {
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage} // Handle rows per page change
+            rowsPerPageOptions={[5, 10, 25]} // Options for rows per page
           />
         </>
       )}
