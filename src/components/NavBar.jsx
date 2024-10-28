@@ -13,6 +13,9 @@ import User from "../components/User";
 import NavLinks from "./NavLinks";
 import { Stack } from "@mui/material";
 import SearchBar from "./SearchBar";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 
 const drawerWidth = 240;
 
@@ -37,16 +40,25 @@ function ResponsiveDrawer(props) {
   };
 
   const drawer = (
-    <div>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <User />
       <Divider />
-      <List>
+      <List sx={{ flexGrow: 1 }}>
         <NavLinks onLinkClick={handleDrawerClose} />
       </List>
       <Divider />
+      <Box sx={{ mt: "auto" }}>
+        <List>
+          {/* Additional Links */}
+          <ListItem disablePadding>
+            <ListItemButton to='/settings' onClick={handleDrawerClose}>
+              <ListItemText primary='Settings' />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
     </div>
   );
-
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -55,12 +67,13 @@ function ResponsiveDrawer(props) {
       <CssBaseline />
       <AppBar
         position='fixed'
+        elevation={0}
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar style={{ backgroundColor: "#fff" }}>
+        <Toolbar sx={{ backgroundColor: "#fff", boxShadow: "none" }}>
           <Stack
             direction='row'
             justifyContent='space-between'
