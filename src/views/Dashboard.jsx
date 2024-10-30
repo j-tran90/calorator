@@ -74,6 +74,7 @@ export default function Dashboard() {
         placeholder='Search for food...'
         onSearch={handleSearch} // Pass the handleSearch function
       />
+
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />

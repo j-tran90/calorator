@@ -1,34 +1,28 @@
-// SearchBar.jsx
-
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const SearchBar = ({ placeholder, onSearch, onSelect }) => {
+const SearchBar = ({ placeholder }) => {
   const [value, setValue] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSearch = (event) => {
-    if (event.key === "Enter" && onSearch) {
-      onSearch(value);
+    if (event.key === "Enter") {
+      console.log("Searching for:", value); // Debugging log for search term
+      navigate("/searchresults", { state: { query: value } }); // Navigate to search results
     }
   };
 
   const handleClear = () => {
     setValue("");
-    if (onSearch) onSearch("");
-  };
-
-  const handleSelect = (item) => {
-    setValue(item);
-    if (onSearch) onSearch(item);
-    if (onSelect) onSelect(item); // Call onSelect prop to handle the selected item
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: "relative" }}>
       <TextField
         variant='outlined'
         placeholder={placeholder}
@@ -63,11 +57,6 @@ const SearchBar = ({ placeholder, onSearch, onSelect }) => {
           },
         }}
       />
-      {value && (
-        <ul style={{ position: 'absolute', background: '#fff', zIndex: 1, margin: 0, padding: '0', listStyle: 'none', border: '1px solid #ccc', borderRadius: '4px' }}>
-          {value && <li onClick={() => handleSelect(value)}>Select "{value}"</li>}
-        </ul>
-      )}
     </div>
   );
 };

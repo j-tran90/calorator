@@ -6,7 +6,6 @@ import Register from "../views/Register";
 import Login from "../views/Login";
 import Profile from "../views/Profile";
 import CreateGoal from "../views/CreateGoal";
-import Test from "../views/Test";
 import Dashboard from "../views/Dashboard";
 import Journal from "../views/Journal";
 import SearchResults from "../views/SearchResults";
@@ -17,7 +16,7 @@ const RouteSwitch = () => {
   return (
     <>
       <Routes>
-      <Route path="/searchresults" element={<SearchResults />} /> 
+        <Route path='/searchresults' element={<SearchResults />} />
         {!currentUser ? (
           <Route path='/login' element={<Login />} />
         ) : (
@@ -46,12 +45,6 @@ const RouteSwitch = () => {
           <Route path='/home' element={<Home />} />
         ) : (
           <Route path='/home' element={<Dashboard />} />
-        )}
-
-        {currentUser && currentUser.uid == "jsF1aU98CHY4Q0iI71YYcPqEESq2" ? (
-          <Route path='/test' element={<Test />} />
-        ) : (
-          <Route path='/test' element={<h2>Not Authorized</h2>} />
         )}
 
         {/* Protected Routes */}

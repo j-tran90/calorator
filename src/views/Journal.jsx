@@ -16,16 +16,17 @@ import {
 import { db, auth } from "../config/Firebase";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import useTracker from "../hooks/useTracker";
-import User from "../components/User";
 
 export default function Journal() {
   const { calorieTarget, total } = useTracker(0);
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [data, setData] = useState([]);
-  const { uid } = auth.currentUser;
+  const uid = auth.currentUser?.uid; // Safely access uid
 
   useEffect(() => {
+    if (!uid) return; // Prevent fetching if uid is not available
+
     const fetchData = async () => {
       const startOfStartDate = startDate.startOf("day").toDate();
       const endOfEndDate = endDate.endOf("day").toDate();
@@ -100,27 +101,30 @@ export default function Journal() {
             <td>Time</td>
             <td>Food</td>
             <td>Calories</td>
+            <td>Action</td>
           </tr>
           {data.map((entry, index) => {
-            const currentDate = entry.createdAt.toDate();
+            // Check if createdAt is defined
+            const createdAt = entry.createdAt ? entry.createdAt.toDate() : null;
+            if (!createdAt) return null; // Skip rendering if createdAt is not available
+
             const previousEntry =
               index > 0 ? data[index - 1].createdAt.toDate() : null;
             const isNewDay =
-              !previousEntry ||
-              currentDate.getDate() !== previousEntry.getDate();
+              !previousEntry || createdAt.getDate() !== previousEntry.getDate();
 
             return (
               <React.Fragment key={entry.id}>
                 {isNewDay && (
                   <tr>
                     <td
-                      colSpan='4'
+                      colSpan='5'
                       style={{
                         textAlign: "center",
                         fontWeight: "bold",
                       }}
                     >
-                      {currentDate.toLocaleDateString(navigator.language, {
+                      {createdAt.toLocaleDateString(navigator.language, {
                         weekday: "long",
                         year: "numeric",
                         month: "long",
@@ -132,7 +136,7 @@ export default function Journal() {
                 <tr key={entry.id}>
                   <td>{index + 1}.</td>
                   <td>
-                    {currentDate
+                    {createdAt
                       .toLocaleTimeString(navigator.language, {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -140,9 +144,12 @@ export default function Journal() {
                       .replace(/^0+/, "")}
                   </td>
                   <td>
-                    {entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
-                      value.toUpperCase()
-                    )}
+                    {entry.food
+                      ? entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
+                          value.toUpperCase()
+                        )
+                      : "N/A" // Handle case when food is undefined
+                    }
                   </td>
                   <td>{entry.calories}</td>
                   <td>

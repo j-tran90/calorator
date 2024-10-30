@@ -7,7 +7,8 @@ export default function useAdd({ sumEntry, updateTotal }) {
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
 
-  const handleAdd = async (entry) => {
+  const handleAdd = async (entry, food) => {
+    // Add food as a parameter
     setNewEntry(entry);
     await db
       .collection("journal")
@@ -17,13 +18,11 @@ export default function useAdd({ sumEntry, updateTotal }) {
       .set({
         calories: parseFloat(newEntry),
         createdAt: timestamp,
+        food: food, // Store food name in Firestore
       })
       .then(() => {
         sumEntry();
       })
-      // .then(() => {
-      //   getEntries();
-      // })
       .then(() => {
         updateTotal();
       });
