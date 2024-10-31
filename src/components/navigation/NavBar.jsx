@@ -9,12 +9,13 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import User from "..//User";
+import User from "..//User"; // Ensure this path is correct
 import NavLinks from "./NavLinks";
 import { Stack } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
 
 const drawerWidth = 240;
 
@@ -22,6 +23,8 @@ function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+
+  const { currentUser } = useAuth(); // Access currentUser from AuthContext
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -44,21 +47,27 @@ function ResponsiveDrawer(props) {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // Center vertically
-        alignItems: "center", // Center horizontally
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center", // Center text if any
       }}
     >
-      <User />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <User /> {/* Ensure this renders your user image */}
+      </div>
       <Divider sx={{ width: "100%" }} />
-
       <List sx={{ flexGrow: 1, width: "100%" }}>
         <NavLinks onLinkClick={handleDrawerClose} />
       </List>
       <Divider sx={{ width: "100%" }} />
-
       <Box sx={{ mt: "auto", width: "100%" }}>
         <List>
-          {/* Additional Links */}
           <ListItem disablePadding>
             <ListItemButton to='/settings' onClick={handleDrawerClose}>
               <ListItemText primary='Settings' />
@@ -68,6 +77,12 @@ function ResponsiveDrawer(props) {
       </Box>
     </div>
   );
+
+  // Return null if the user is not logged in
+  if (!currentUser) {
+    return null; // Don't render the drawer if not logged in
+  }
+
   const container =
     window !== undefined ? () => window().document.body : undefined;
 

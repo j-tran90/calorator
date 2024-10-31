@@ -4,6 +4,16 @@ import { FaUserCheck } from "react-icons/fa6";
 import { FaUserPen } from "react-icons/fa6";
 
 export default function Home() {
+  const SimpleTest = () => {
+    const { currentUser } = useAuth();
+    return (
+      <div>
+        <h1>Simple Test</h1>
+        {currentUser ? <p>User is logged in</p> : <p>No user logged in</p>}
+      </div>
+    );
+  };
+
   return (
     <>
       <h1 style={{ color: "#2bbb7f" }}>Calorator</h1>

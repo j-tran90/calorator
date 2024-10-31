@@ -15,7 +15,7 @@ export function useAuth() {
 }
 
 export default function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(null); // Initialize with null
   const [loading, setLoading] = useState(true);
   const provider = new GoogleAuthProvider();
 
@@ -43,7 +43,6 @@ export default function AuthProvider({ children }) {
 
   const googleLogin = () => {
     const googleAuth = getAuth();
-
     signInWithPopup(googleAuth, provider);
   };
 
@@ -63,12 +62,13 @@ export default function AuthProvider({ children }) {
     deleteUser(user || currentUser)
       .then(() => {})
       .catch((error) => {
-        ("Deletion Failed");
+        console.log("Deletion Failed", error);
       });
   }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log("Auth state changed:", user); // Log user object
       setCurrentUser(user);
       setLoading(false);
     });
@@ -88,7 +88,8 @@ export default function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {!loading && children}{" "}
+      {/* Ensure children are rendered only when loading is false */}
     </AuthContext.Provider>
   );
 }

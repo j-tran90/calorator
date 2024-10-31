@@ -1,8 +1,7 @@
-// src/components/navigation/RouteSwitch.js
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import PrivateRoute from "./PrivateRoute";
-import Home from "../pages/Home"; // You can keep Home for other purposes later
+import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
@@ -10,32 +9,40 @@ import CreateGoal from "../pages/CreateGoal";
 import Dashboard from "../pages/Dashboard";
 import Journal from "../pages/Journal";
 import SearchResults from "../pages/SearchResults";
-import MainLayout from "../layout/MainLayout"; // Import the MainLayout
+import MainLayout from "../layouts/MainLayout";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
 
   return (
     <Routes>
-      <Route path='/searchresults' element={<SearchResults />} />
+      {/* Public routes without MainLayout */}
+      <Route
+        path='/'
+        element={currentUser ? <Navigate to='/dashboard' replace /> : <Home />}
+      />
+      <Route
+        path='/login'
+        element={currentUser ? <Navigate to='/dashboard' replace /> : <Login />}
+      />
+      <Route
+        path='/register'
+        element={
+          currentUser ? <Navigate to='/dashboard' replace /> : <Register />
+        }
+      />
 
-      {/* Root path for Login and Register */}
-      {!currentUser ? (
+      {/* Routes wrapped with MainLayout */}
+      <Route element={<MainLayout />}>
         <Route
-          path='/'
+          path='/dashboard'
           element={
-            <>
-              <Login />
-              <Register />
-            </>
+            currentUser ? <Dashboard /> : <Navigate to='/login' replace />
           }
         />
-      ) : (
-        <Route path='/' element={<Dashboard />} />
-      )}
+        <Route path='/searchresults' element={<SearchResults />} />
 
-      {/* Protected Routes with NavBar */}
-      <Route element={<MainLayout />}>
+        {/* Protected Routes within MainLayout */}
         <Route
           path='/profile'
           element={
@@ -60,10 +67,9 @@ const RouteSwitch = () => {
             </PrivateRoute>
           }
         />
-        <Route path='/dashboard' element={<Dashboard />} />
       </Route>
 
-      {/* 404 Not Found */}
+      {/* 404 - Not Found Route */}
       <Route path='*' element={<h1>404 Not Found!</h1>} />
     </Routes>
   );

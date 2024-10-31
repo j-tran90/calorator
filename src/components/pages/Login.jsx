@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import ProviderLogin from "../ProviderLogin";
-import Brand from "../layout/Brand";
+import Brand from "../layouts/Brand";
 
 export default function Login() {
   const emailRef = useRef();
