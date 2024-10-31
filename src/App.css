@@ -36,7 +36,6 @@ circle {
   fill: inherit;
 }
 
-
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -56,7 +55,6 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
 
 .card {
   border: 1px solid #555;
@@ -126,4 +124,3 @@ table {
 .progress-container {
   margin-top: 10px;
 }
-

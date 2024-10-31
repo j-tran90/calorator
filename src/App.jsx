@@ -1,17 +1,19 @@
 import "./App.css";
-import RouteSwitch from "./components/RouteSwitch";
+import RouteSwitch from "./components/navigation/RouteSwitch";
 import AuthProvider from "./contexts/AuthContext";
-import { DarkModeProvider } from "./contexts/DarkModeContext";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/navigation/NavBar";
+import { useLocation } from "react-router-dom";
 
 function App() {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/"; // Adjust this if your home route is different
+
   return (
     <>
       <AuthProvider>
-        <DarkModeProvider>
-          <NavBar />
-          <RouteSwitch />
-        </DarkModeProvider>
+        {!isHomePage && <NavBar />}{" "}
+        {/* Render NavBar only if not on home page */}
+        <RouteSwitch />
       </AuthProvider>
     </>
   );

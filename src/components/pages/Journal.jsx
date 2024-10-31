@@ -1,4 +1,4 @@
-import Navigation from "../components/NavBar";
+import Navigation from "../navigation/NavBar";
 import React, { useState, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,9 +13,9 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { db, auth } from "../config/Firebase";
+import { db, auth } from "../../config/Firebase";
 import { RiDeleteBack2Fill } from "react-icons/ri";
-import useTracker from "../hooks/useTracker";
+import useTracker from "../../hooks/useTracker";
 
 export default function Journal() {
   const { calorieTarget, total } = useTracker(0);
@@ -144,11 +144,12 @@ export default function Journal() {
                       .replace(/^0+/, "")}
                   </td>
                   <td>
-                    {entry.food
-                      ? entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
-                          value.toUpperCase()
-                        )
-                      : "N/A" // Handle case when food is undefined
+                    {
+                      entry.food
+                        ? entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
+                            value.toUpperCase()
+                          )
+                        : "N/A" // Handle case when food is undefined
                     }
                   </td>
                   <td>{entry.calories}</td>

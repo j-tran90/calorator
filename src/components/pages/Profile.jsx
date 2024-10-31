@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { db, auth } from "../config/Firebase";
+import { db, auth } from "../../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
-import User from "../components/User";
-import useCollectionData from "../hooks/useFetch";
-import Navigation from "../components/NavBar";
-import { DarkModeToggle } from "../contexts/DarkModeContext";
-import Targets from "../components/Targets";
+import User from "../User";
+import useCollectionData from "../../hooks/useFetch";
+import Navigation from "../navigation/NavBar";
+import { DarkModeToggle } from "../../contexts/DarkModeContext";
+import Targets from "../Targets";
 
 export default function Profile() {
   const { currentUser, logout, deleteAccount } = useAuth();
@@ -57,55 +57,6 @@ export default function Profile() {
             );
           })}
         </div>
-      </div>
-
-      <div className='accordion'>
-        <div className='' id='goal' onClick={() => setIsGoal(!isGoal)}>
-          <div>
-            Targets <span style={{ float: "right" }}>{isGoal ? "-" : "+"}</span>
-          </div>
-        </div>
-        {isGoal && (
-          <div style={{ marginTop: "20px" }}>
-            {" "}
-            <Targets />
-          </div>
-        )}
-      </div>
-
-      <div className='accordion'>
-        <div className='' id='account' onClick={() => setIsAccount(!isAccount)}>
-          <div>
-            Account
-            <span style={{ float: "right" }}>{isAccount ? "-" : "+"}</span>
-          </div>
-        </div>
-        {isAccount && (
-          <div style={{ marginTop: "20px" }}>
-            <div style={{ textAlign: "left" }}>
-              <div>Email: {currentUser.email || "N/A"}</div>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className='accordion'>
-        <div
-          className=''
-          id='settings'
-          onClick={() => setIsSettings(!isSettings)}
-        >
-          <div>
-            Settings
-            <span style={{ float: "right" }}>{isSettings ? "-" : "+"}</span>
-          </div>
-        </div>
-        {isSettings && (
-          <div style={{ marginTop: "20px" }}>
-            <div>
-              <DarkModeToggle />
-            </div>
-          </div>
-        )}
       </div>
 
       <div>

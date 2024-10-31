@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db, auth } from "../config/Firebase";
-import Add from "../components/Add";
-import FoodButtons from "../components/FoodButtons";
-import ProgressCircle from "../components/ProgressCircle";
-import useTracker from "../hooks/useTracker";
-import useFetchGoals from "../hooks/useFetchGoals";
-import ProgressLegend from "../components/ProgressLegend";
-import SearchBar from "../components/SearchBar";
+import { db, auth } from "../../config/Firebase";
+import Add from "../Add";
+import FoodButtons from "../FoodButtons";
+import ProgressCircle from "../features/graphs/ProgressCircle";
+import useTracker from "../../hooks/useTracker";
+import useFetchGoals from "../../hooks/useFetchGoals";
+import ProgressLegend from "../features/graphs/ProgressLegend";
+import SearchBar from "../features/search/SearchBar";
 
 export default function Dashboard() {
   const {

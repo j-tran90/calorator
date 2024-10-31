@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Stepper, Step, StepLabel, Button, Box } from "@mui/material";
-import WeightGoalForm from "../components/WeightGoalForm";
-import CalorieCalculatorForm from "../components/CalorieCalculatorForm";
-import Results from "../components/Results";
-import SendDataToDB from "../hooks/useSendDataToDB";
-import User from "../components/User";
+import WeightGoalForm from "../features/BMIcalc/WeightGoalForm";
+import CalorieCalculatorForm from "../features/BMIcalc/CalorieCalculatorForm";
+import Results from "../features/BMIcalc/Results";
+import SendDataToDB from "../../hooks/useSendDataToDB";
+import User from "../User";
 
 function CreateGoal() {
   const [activeStep, setActiveStep] = useState(0);
@@ -77,11 +77,11 @@ function CreateGoal() {
         return (
           <div>
             <Results />
-            <Box display="flex" justifyContent="space-between">
+            <Box display='flex' justifyContent='space-between'>
               <Button onClick={handleReset}>Reset</Button>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={handleFinishToDashboard}
               >
                 Finish to Dashboard
@@ -162,12 +162,12 @@ function CreateGoal() {
           <div>
             {getStepContent(activeStep)}
             {activeStep !== steps.length - 1 && (
-              <Box display="flex" justifyContent="space-between">
+              <Box display='flex' justifyContent='space-between'>
                 <Button disabled={activeStep === 0} onClick={handleBack}>
                   Back
                 </Button>
                 <Button
-                  variant="contained"
+                  variant='contained'
                   onClick={handleNext}
                   disabled={!isFormValid}
                 >

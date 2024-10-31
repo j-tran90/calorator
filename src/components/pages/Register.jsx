@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import ProviderLogin from "../components/ProviderLogin";
-import Title from "../components/Title";
+import { useAuth } from "../../contexts/AuthContext";
+import ProviderLogin from "../ProviderLogin";
 
 export default function Register() {
   const nameRef = useRef();
@@ -37,71 +36,70 @@ export default function Register() {
 
   return (
     <>
-      <Title />
       <h1>Register</h1>
 
       <form onSubmit={handleSubmit}>
         {currentUser}
         {error}
-        <div className="container">
-          <div className="row">
+        <div className='container'>
+          <div className='row'>
             <input
-              className="mt-3"
-              id="name"
-              label="Enter Name"
-              placeholder="Enter Name"
-              icon="envelope"
-              type="name"
+              className='mt-3'
+              id='name'
+              label='Enter Name'
+              placeholder='Enter Name'
+              icon='envelope'
+              type='name'
               ref={nameRef}
               required
               style={{ border: "1px solid #2bbbad" }}
             />
           </div>
 
-          <div className="row">
+          <div className='row'>
             <input
-              defaultValue=""
-              className="mt-3"
-              id="email"
-              label="Enter Email"
-              placeholder="Enter Email"
-              icon="envelope"
-              type="email"
+              defaultValue=''
+              className='mt-3'
+              id='email'
+              label='Enter Email'
+              placeholder='Enter Email'
+              icon='envelope'
+              type='email'
               ref={emailRef}
               required
               style={{ border: "1px solid #2bbbad" }}
             />
           </div>
-          <div className="row">
+          <div className='row'>
             <input
-              defaultValue=""
-              className="mt-3"
-              id="password"
-              label="Choose Password"
-              placeholder="Choose Password"
-              icon="lock"
-              type="password"
+              defaultValue=''
+              className='mt-3'
+              id='password'
+              label='Choose Password'
+              placeholder='Choose Password'
+              icon='lock'
+              type='password'
               ref={passwordRef}
               required
               style={{ border: "1px solid #2bbbad" }}
             />
           </div>
-          <div className="row">
+          <div className='row'>
             <input
-              className="mt-3"
-              id="password-confirm"
-              label="Confirm Password"
-              placeholder="Confirm Password"
-              icon="lock"
-              type="password"
+              className='mt-3'
+              id='password-confirm'
+              label='Confirm Password'
+              placeholder='Confirm Password'
+              icon='lock'
+              type='password'
               ref={passwordConfirmRef}
               required
               style={{ border: "1px solid #2bbbad" }}
             />
           </div>
 
-          <div className="text-center mt-4">
-            <button className="button" disabled={loading} type="submit">
+          <div className='text-center mt-4'>
+            <button className='button' disabled={loading} type='submit'>
               Submit
             </button>
           </div>
@@ -110,10 +108,10 @@ export default function Register() {
       <hr />
       <ProviderLogin />
       <hr />
-      <div className="text-center mt-2">
+      <div className='text-center mt-2'>
         Already have an account?
         <div>
-          <Link as={Link} to="/login">
+          <Link as={Link} to='/login'>
             Login
           </Link>
         </div>

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
-function Title() {
+function Brand() {
   return <Link to="/">Calorator</Link>;
 }
 
-export default Title;
+export default Brand;

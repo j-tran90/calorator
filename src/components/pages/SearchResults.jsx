@@ -8,22 +8,22 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
-import AddToJournalButton from "../components/AddToJournalButton"; // Import the button component
+import AddToJournalButton from "../AddToJournalButton"; // Import the button component
 
 const SearchResults = () => {
-  const location = useLocation(); // Get the location object
-  const searchQuery = location.state?.query; // Extract query from state
+  const location = useLocation();
+  const searchQuery = location.state?.query;
 
-  const [appleData, setAppleData] = useState([]);
-  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [foodData, setFoodData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAppleData = async () => {
+    const fetchFoodData = async () => {
       const apiKey = import.meta.env.VITE_FOOD_API_KEY;
 
       if (!searchQuery) return; // Skip fetch if no search query is provided
 
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true);
 
       try {
         const response = await fetch(
@@ -54,15 +54,15 @@ const SearchResults = () => {
           };
         });
 
-        setAppleData(formattedData);
+        setFoodData(formattedData); // Set the food data
       } catch (error) {
-        console.error("Error fetching apple data:", error);
+        console.error("Error fetching food data:", error);
       } finally {
         setLoading(false); // Set loading to false after fetching is done
       }
     };
 
-    fetchAppleData();
+    fetchFoodData();
   }, [searchQuery]); // Fetch whenever searchQuery changes
 
   return (
@@ -91,14 +91,14 @@ const SearchResults = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {appleData.length === 0 ? (
+            {foodData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} align='center'>
                   No results found.
                 </TableCell>
               </TableRow>
             ) : (
-              appleData.map((item, index) => (
+              foodData.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.energy}</TableCell>

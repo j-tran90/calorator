@@ -5,20 +5,19 @@ export default function User() {
   const { currentUser } = useAuth();
   return (
     <>
-      <Link as={Link} to="/profile">
+      <Link as={Link} to='/profile'>
         <img
           src={
             currentUser.photoURL ||
             "https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg"
           }
-          alt="..."
+          alt='...'
           style={{
             borderRadius: "100px",
             minHeight: "50px",
             height: "50px",
             color: "white",
-            marginTop: "5px"
-    
+            marginTop: "5px",
           }}
         />
       </Link>

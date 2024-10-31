@@ -1,4 +1,4 @@
-import "../stylesheets/ProgressCircle.css";
+import "../../../stylesheets/ProgressCircle.css";
 
 export default function ProgressCircle({ percent }) {
   const cx = 80;
