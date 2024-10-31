@@ -8,6 +8,7 @@ import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
 import SearchBar from "../features/search/SearchBar";
+import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
 
 export default function Dashboard() {
   const {
@@ -79,11 +80,6 @@ export default function Dashboard() {
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />
 
-      {/* <h3>
-        <Link to="/journal">Total: {total}</Link> | Remaining:{" "}
-        {remainingCalories}
-      </h3> */}
-
       <h6>
         Calorie: {calorieTarget} | Protein: {proteinTarget}g
       </h6>
@@ -102,6 +98,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+      <FoodCategoriesTabs />
     </>
   );
 }
