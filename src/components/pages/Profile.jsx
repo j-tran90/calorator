@@ -3,11 +3,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
-import User from "../User";
 import useCollectionData from "../../hooks/useFetch";
-import Navigation from "../navigation/NavBar";
-import { DarkModeToggle } from "../../contexts/DarkModeContext";
-import Targets from "../Targets";
+
 
 export default function Profile() {
   const { currentUser, logout, deleteAccount } = useAuth();

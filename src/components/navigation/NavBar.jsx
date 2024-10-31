@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import User from "..//User"; // Ensure this path is correct
+import User from "../layouts/User"; // Ensure this path is correct
 import NavLinks from "./NavLinks";
 import { Stack } from "@mui/material";
 import ListItem from "@mui/material/ListItem";

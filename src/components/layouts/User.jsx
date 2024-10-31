@@ -1,6 +1,6 @@
 import React from "react";
-import { useAuth } from "../contexts/AuthContext"; // Import your AuthContext
-import Brand from "./layouts/Brand";
+import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
+import Brand from "./Brand";
 
 const User = () => {
   const { currentUser } = useAuth(); // Access currentUser from AuthContext

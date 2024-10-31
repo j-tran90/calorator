@@ -4,7 +4,7 @@ import WeightGoalForm from "../features/BMIcalc/WeightGoalForm";
 import CalorieCalculatorForm from "../features/BMIcalc/CalorieCalculatorForm";
 import Results from "../features/BMIcalc/Results";
 import SendDataToDB from "../../hooks/useSendDataToDB";
-import User from "../User";
+import User from "../layouts/User";
 
 function CreateGoal() {
   const [activeStep, setActiveStep] = useState(0);
