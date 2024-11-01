@@ -9,16 +9,18 @@ import SearchBar from "../features/search/SearchBar";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
 
 export default function Dashboard() {
-  const { total, remainingCalories, percent, updateTotal } = useTracker(0);
-
+  // Use useTracker to manage total and trigger re-renders when total updates
+  const { total, remainingCalories, percent, updateTotal, sumEntry } =
+    useTracker(0);
   const { proteinTarget, remainingDays } = useFetchGoals(0);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null); // State to store daily calorie target
+  const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    navigate("/searchresults", { state: { query } }); // Navigate to results page with the query
+    navigate("/searchresults", { state: { query } });
   };
 
   useEffect(() => {
@@ -54,8 +56,6 @@ export default function Dashboard() {
           navigate("/creategoal");
           return;
         }
-
-        // Set the daily calorie target in state
         setDailyCalorieTarget(userGoalsData.dailyCalorieTarget);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -68,18 +68,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <SearchBar
-        placeholder='Search for food...'
-        onSearch={handleSearch} // Pass the handleSearch function
-      />
+      <SearchBar placeholder='Search for food...' onSearch={handleSearch} />
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />
       <h6>
         Calorie: {dailyCalorieTarget} | Protein: {proteinTarget}g
       </h6>
-      <FoodCategoriesTabs updateTotal={updateTotal} />{" "}
-      {/* Ensure updateTotal is passed */}
+      <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />
     </>
   );
 }

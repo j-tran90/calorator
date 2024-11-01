@@ -1,26 +1,35 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Fruits from "./Fruits"; // Adjust the path based on your structure
+import FoodCategory from "./FoodCategory";
+import { fruits } from "./data/fruitsData";
+import { vegetables } from "./data/vegetablesData";
+import { meats } from "./data/meatsData";
+import { dairy } from "./data/dairyData";
+import { grains } from "./data/grainsData";
+import { beverages } from "./data/beveragesData";
+import { sweets } from "./data/sweetsData";
+import { popularFoods } from "./data/popularData";
 
-function FoodCategoriesTabs({ apiKey, updateTotal }) {
-  // Accept updateTotal as a prop
+function FoodCategoriesTabs({ updateTotal, sumEntry }) {
   const [value, setValue] = useState(0);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile screens
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  // Define categories with data
   const categories = [
-    "Fruits",
-    "Vegetables",
-    "Meat",
-    "Dairy",
-    "Grains",
-    "Beverages",
-    "Sweets and Sugars",
+    { label: "Popular", items: popularFoods },
+    { label: "Fruits", items: fruits },
+    { label: "Vegetables", items: vegetables },
+    { label: "Meat", items: meats },
+    { label: "Dairy", items: dairy },
+    { label: "Grains", items: grains },
+    { label: "Beverages", items: beverages },
+    { label: "Sweets & Sugar", items: sweets },
   ];
 
   return (
@@ -43,7 +52,7 @@ function FoodCategoriesTabs({ apiKey, updateTotal }) {
         }}
       >
         {categories.map((category, index) => (
-          <Tab key={index} label={category} />
+          <Tab key={index} label={category.label} />
         ))}
       </Tabs>
 
@@ -57,11 +66,11 @@ function FoodCategoriesTabs({ apiKey, updateTotal }) {
           sx={{ p: 3 }}
         >
           {value === index && (
-            <>
-              {category === "Fruits" && <Fruits updateTotal={updateTotal} />}{" "}
-              {/* Pass updateTotal to Fruits */}
-              {/* Other category components can be added similarly */}
-            </>
+            <FoodCategory
+              items={category.items}
+              sumEntry={sumEntry}
+              updateTotal={updateTotal}
+            />
           )}
         </Box>
       ))}
