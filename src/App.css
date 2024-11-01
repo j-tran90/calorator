@@ -2,7 +2,23 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: calc(2rem + var(--navbar-height, 60px)); /* Navbar height */
+  margin-left: var(--drawer-width, 240px); /* Adjust for drawer width */
   text-align: center;
+  transition: margin-left 0.3s; /* Smooth transition when drawer opens/closes */
+}
+
+@media (max-width: 600px) {
+  #root {
+    margin-left: 0; /* Reset margin when drawer is hidden or in responsive mode */
+  }
+}
+
+@media (max-width: 600px) {
+  #root {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* * {

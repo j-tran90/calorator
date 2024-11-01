@@ -43,7 +43,8 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
             backgroundColor: "#4fc483",
           }}
         >
-          {item.name} +{item.kcal} kcal
+          <span>{item.name}</span>
+          <span style={{ display: "block" }}>+{item.kcal} kcal</span>
         </Button>
       ))}
     </div>
