@@ -6,7 +6,6 @@ import ListItemText from "@mui/material/ListItemText";
 
 const NavLinks = ({ onLinkClick }) => {
   const links = [
-    { to: "/today", text: "Today" },
     { to: "/dashboard", text: "Dashboard" },
     { to: "/goals", text: "Goals" },
     { to: "/profile", text: "Profile" },
