@@ -1,14 +1,16 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import useAdd from "../hooks/useAdd";
 
-const AddToJournalButton = ({ calories, food }) => {
-  const navigate = useNavigate(); // Initialize useNavigate
+const AddToJournalButton = ({ calories, food, onAdd }) => {
+  // Add onAdd prop
+  const navigate = useNavigate();
   const { handleAdd } = useAdd({ sumEntry: () => {}, updateTotal: () => {} });
 
   const handleClick = async () => {
-    await handleAdd(calories, food); // Wait for the add operation to complete
-    navigate("/dashboard"); // Navigate to the dashboard after adding
+    await handleAdd(calories, food);
+    if (onAdd) onAdd(); // Call onAdd to trigger a state update in the parent
+    navigate("/dashboard");
   };
 
   return <button onClick={handleClick}>Add</button>;

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Tabs, Tab, Box, Typography, useMediaQuery } from "@mui/material";
+import { Tabs, Tab, Box, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import Fruits from "./Fruits"; // Adjust the path based on your structure
 
-function FoodCategoriesTabs() {
+function FoodCategoriesTabs({ apiKey, updateTotal }) {
+  // Accept updateTotal as a prop
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile screens
@@ -29,16 +31,15 @@ function FoodCategoriesTabs() {
         variant='scrollable'
         scrollButtons='auto'
         allowScrollButtonsMobile
-        centered={!isMobile}
         sx={{
           "& .MuiTabs-scroller": {
             overflowX: isMobile ? "auto" : "hidden",
             maxWidth: isMobile ? "100%" : "100%",
           },
           "& .MuiTabs-flexContainer": {
-            width: isMobile ? "calc(100% + 100px)" : "100%", // Create overflow to reveal more tabs
+            width: isMobile ? "calc(100% + 100px)" : "100%",
           },
-          maxWidth: isMobile ? "75vw" : "100%", // Limit width to show only first 3 tabs on mobile
+          maxWidth: isMobile ? "75vw" : "100%",
         }}
       >
         {categories.map((category, index) => (
@@ -56,7 +57,11 @@ function FoodCategoriesTabs() {
           sx={{ p: 3 }}
         >
           {value === index && (
-            <Typography variant='h6'>{`Content for ${category}`}</Typography>
+            <>
+              {category === "Fruits" && <Fruits updateTotal={updateTotal} />}{" "}
+              {/* Pass updateTotal to Fruits */}
+              {/* Other category components can be added similarly */}
+            </>
           )}
         </Box>
       ))}

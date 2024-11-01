@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../../config/Firebase";
-import Add from "../Add";
-import FoodButtons from "../FoodButtons";
 import ProgressCircle from "../features/graphs/ProgressCircle";
 import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
@@ -11,18 +9,13 @@ import SearchBar from "../features/search/SearchBar";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
 
 export default function Dashboard() {
-  const {
-    total,
-    remainingCalories,
-    sumEntry,
-    updateTotal,
-    calorieTarget,
-    percent,
-  } = useTracker(0);
-  const [isActive, setIsActive] = useState(false);
+  const { total, remainingCalories, percent, updateTotal } = useTracker(0);
+
   const { proteinTarget, remainingDays } = useFetchGoals(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null); // State to store daily calorie target
   const navigate = useNavigate();
+
   const handleSearch = (query) => {
     setSearchQuery(query);
     navigate("/searchresults", { state: { query } }); // Navigate to results page with the query
@@ -59,7 +52,11 @@ export default function Dashboard() {
           !userGoalsData.dailyCalorieTarget
         ) {
           navigate("/creategoal");
+          return;
         }
+
+        // Set the daily calorie target in state
+        setDailyCalorieTarget(userGoalsData.dailyCalorieTarget);
       } catch (error) {
         console.error("Error fetching user data:", error);
         navigate("/creategoal");
@@ -75,30 +72,14 @@ export default function Dashboard() {
         placeholder='Search for food...'
         onSearch={handleSearch} // Pass the handleSearch function
       />
-
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />
-
       <h6>
-        Calorie: {calorieTarget} | Protein: {proteinTarget}g
+        Calorie: {dailyCalorieTarget} | Protein: {proteinTarget}g
       </h6>
-
-      <Add sumEntry={sumEntry} updateTotal={updateTotal} />
-      <div className='accordion'>
-        <div className='' onClick={() => setIsActive(!isActive)}>
-          <div>
-            Food Buttons
-            <span style={{ float: "right" }}>{isActive ? "-" : "+"}</span>
-          </div>
-        </div>
-        {isActive && (
-          <div style={{ marginTop: "20px" }}>
-            <FoodButtons sumEntry={sumEntry} updateTotal={updateTotal} />
-          </div>
-        )}
-      </div>
-      <FoodCategoriesTabs />
+      <FoodCategoriesTabs updateTotal={updateTotal} />{" "}
+      {/* Ensure updateTotal is passed */}
     </>
   );
 }
