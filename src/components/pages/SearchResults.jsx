@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
 import AddToJournalButton from "../AddToJournalButton"; // Import the button component
+import SearchBar from "../features/search/SearchBar";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -66,57 +67,60 @@ const SearchResults = () => {
   }, [searchQuery]); // Fetch whenever searchQuery changes
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxWidth: 600, margin: "0 auto", mt: 3 }}
-    >
-      {loading ? ( // Conditionally render loading circle
-        <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
-      ) : (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <strong>Food Name</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Calories (kcal)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Protein (g)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Add to Journal</strong>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {foodData.length === 0 ? (
+    <>
+      <SearchBar />
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: 600, margin: "0 auto", mt: 3 }}
+      >
+        {loading ? ( // Conditionally render loading circle
+          <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
+        ) : (
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableCell colSpan={4} align='center'>
-                  No results found.
+                <TableCell>
+                  <strong>Food Name</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Calories (kcal)</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Protein (g)</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Add to Journal</strong>
                 </TableCell>
               </TableRow>
-            ) : (
-              foodData.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.energy}</TableCell>
-                  <TableCell>{item.protein}</TableCell>
-                  <TableCell>
-                    <AddToJournalButton
-                      calories={parseFloat(item.energy)}
-                      food={item.name}
-                    />{" "}
-                    {/* Pass food name */}
+            </TableHead>
+            <TableBody>
+              {foodData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} align='center'>
+                    No results found.
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      )}
-    </TableContainer>
+              ) : (
+                foodData.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.energy}</TableCell>
+                    <TableCell>{item.protein}</TableCell>
+                    <TableCell>
+                      <AddToJournalButton
+                        calories={parseFloat(item.energy)}
+                        food={item.name}
+                      />{" "}
+                      {/* Pass food name */}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        )}
+      </TableContainer>
+    </>
   );
 };
 
