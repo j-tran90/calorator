@@ -5,9 +5,8 @@ import { db, auth } from "../../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
 import useCollectionData from "../../hooks/useFetch";
 
-
 export default function Profile() {
-  const { currentUser, logout, deleteAccount } = useAuth();
+  const { currentUser } = useAuth();
   const { uid } = auth.currentUser;
   const userProfileRef = collection(db, "userProfile/");
   const queryUserProfile = query(
@@ -15,23 +14,6 @@ export default function Profile() {
     where(documentId(), "==", uid)
   );
   const { data: profile } = useCollectionData(queryUserProfile);
-
-  const [error, setError] = useState("");
-  const redirect = useNavigate();
-  const [isGoal, setIsGoal] = useState(false);
-  const [isAccount, setIsAccount] = useState(false);
-  const [isSettings, setIsSettings] = useState(false);
-
-  async function handleLogout() {
-    setError(error);
-
-    try {
-      await logout();
-      redirect("/", { replace: true });
-    } catch {
-      setError("Failed to logout");
-    }
-  }
 
   return (
     <>
@@ -54,20 +36,6 @@ export default function Profile() {
             );
           })}
         </div>
-      </div>
-
-      <div>
-        <button title='Logout' onClick={handleLogout}>
-          Logout
-        </button>
-        <button
-          title='Disabled'
-          onClick={deleteAccount}
-          style={{ color: "#999", backgroundColor: "#555" }}
-          disabled
-        >
-          Delete Account
-        </button>
       </div>
     </>
   );

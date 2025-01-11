@@ -98,7 +98,7 @@ input {
   margin-right: auto;
 }
 
-.accordion {
+/* .accordion {
   background-color: #4fc483;
   border: 1px solid #4fc483;
   color: #fff;
@@ -110,13 +110,13 @@ input {
   transition: 0.4s;
   margin-top: 10px;
   margin-bottom: 10px;
-}
+} */
 
-.active,
+/* .active,
 .accordion:hover {
   background-color: #239968;
   color: #fff;
-}
+} */
 
 .panel {
   padding: 0 18px;
@@ -130,7 +130,7 @@ table {
   margin-left: auto;
   margin-right: auto;
   place-items: center;
-  width: 350px;
+  min-width: 350px;
 }
 
 #table-head {

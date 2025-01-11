@@ -11,6 +11,8 @@ import {
   TableRow,
   Paper,
   Button,
+  Typography,
+  Box,
 } from "@mui/material";
 
 export default function Targets() {
@@ -28,9 +30,12 @@ export default function Targets() {
   };
 
   return (
-    <>
-      <TableContainer component={Paper} sx={{ mt: 4 }}>
-        <Table aria-label='user targets table'>
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h5" textAlign="center" mb={3}>
+        Your Targets
+      </Typography>
+      <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
+        <Table aria-label="user targets table">
           <TableHead>
             <TableRow>
               <TableCell>Daily Calories</TableCell>
@@ -51,14 +56,19 @@ export default function Targets() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button
-        variant='contained'
-        component={Link}
-        to='/creategoal'
-        sx={{ mt: 2, backgroundColor: " #000" }}
-      >
-        Set New Targets
-      </Button>
-    </>
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Button
+          variant="contained"
+          component={Link}
+          to="/creategoal"
+          sx={{
+            backgroundColor: "#000",
+            "&:hover": { backgroundColor: "#333" },
+          }}
+        >
+          Set New Targets
+        </Button>
+      </Box>
+    </Box>
   );
 }

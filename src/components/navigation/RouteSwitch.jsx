@@ -11,6 +11,7 @@ import Journal from "../pages/Journal";
 import SearchResults from "../pages/SearchResults";
 import MainLayout from "../layouts/MainLayout";
 import Goals from "../pages/Goals";
+import Settings from "../pages/Settings";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
@@ -73,6 +74,14 @@ const RouteSwitch = () => {
           element={
             <PrivateRoute>
               <Goals />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path='/settings'
+          element={
+            <PrivateRoute>
+              <Settings />
             </PrivateRoute>
           }
         />
