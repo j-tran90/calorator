@@ -1,6 +1,5 @@
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
-import Brand from "./Brand";
 
 const User = () => {
   const { currentUser } = useAuth(); // Access currentUser from AuthContext
@@ -11,16 +10,15 @@ const User = () => {
   }
 
   return (
-    <div>
+    <div style={{padding: ".5rem"}}>
       {/* Render user information when logged in */}
-      <h2><Brand /></h2>
       <img
         src={
           currentUser.photoURL ||
           "https://cdn-icons-png.flaticon.com/256/9230/9230519.png"
         }
         alt='User Avatar'
-        style={{ borderRadius: "50%", width: "50px", height: "50px" }}
+        style={{ borderRadius: "50%", width: "50px", height: "50px"}}
       />
     </div>
   );

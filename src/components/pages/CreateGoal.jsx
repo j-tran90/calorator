@@ -4,7 +4,6 @@ import WeightGoalForm from "../features/BMIcalc/WeightGoalForm";
 import CalorieCalculatorForm from "../features/BMIcalc/CalorieCalculatorForm";
 import Results from "../features/BMIcalc/Results";
 import SendDataToDB from "../../hooks/useSendDataToDB";
-import User from "../layouts/User";
 
 function CreateGoal() {
   const [activeStep, setActiveStep] = useState(0);
@@ -18,15 +17,19 @@ function CreateGoal() {
   };
 
   const handleWeightGoalSubmit = (data) => {
-    setWeightGoal(data);
-    console.log("Weight goal data captured:", data);
-    localStorage.setItem(
-      "weightGoal",
-      JSON.stringify({
-        weightTarget: data.weightTarget,
-        targetDate: data.targetDate,
-      })
-    );
+    const currentDate = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+
+    const updatedData = {
+      weightTarget: data.weightTarget,
+      targetDate: data.targetDate,
+      createdDate: currentDate, // Adding the creation date
+    };
+
+    setWeightGoal(updatedData);
+    console.log("Weight goal data captured:", updatedData);
+
+    localStorage.setItem("weightGoal", JSON.stringify(updatedData));
+
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -119,7 +122,6 @@ function CreateGoal() {
 
   return (
     <div>
-      <User />
       <Stepper
         activeStep={activeStep}
         alternativeLabel

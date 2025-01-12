@@ -17,7 +17,7 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
       const currentDate = new Date();
 
       if (!weightTarget.trim()) {
-        newErrors.weightTarget = "Weight Target is required";
+        newErrors.weightTarget = "Required";
       } else if (isNaN(weightTarget)) {
         newErrors.weightTarget = "Weight Target must be a number";
       } else {
@@ -28,7 +28,7 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
       }
 
       if (!targetDate) {
-        newErrors.targetDate = "Target Date is required";
+        newErrors.targetDate = "Required";
       } else if (targetDate <= currentDate) {
         newErrors.targetDate =
           "Target Date must be higher than the current date";
@@ -53,28 +53,42 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
   };
 
   return (
-    <form id="weight-goal-form" onSubmit={handleSubmit}>
-      <Box sx={{ "& > :not(style)": { mb: 2 } }}>
-        <TextField
-          label="Weight Target (lbs)"
-          type="number"
-          value={weightTarget}
-          onChange={(e) => setWeightTarget(e.target.value)}
-          fullWidth
-          error={!!errors.weightTarget}
-          helperText={errors.weightTarget}
-        />
-      </Box>
-      <Box sx={{ "& > :not(style)": { mb: 2 } }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Target Date"
-            value={targetDate}
-            onChange={(newDate) => setTargetDate(newDate)}
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+
+      }}
+    >
+      <form id='weight-goal-form' onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            width: 259,
+            "& > :not(style)": { mb: 2 },
+          }}
+        >
+          <TextField
+            label='Weight to Reach (lbs)'
+            type='number'
+            value={weightTarget}
+            onChange={(e) => setWeightTarget(e.target.value)}
+            fullWidth
+            error={!!errors.weightTarget}
+            helperText={errors.weightTarget}
           />
-        </LocalizationProvider>
-      </Box>
-    </form>
+        </Box>
+        <Box sx={{ "& > :not(style)": { mb: 2 } }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label='Date to Reach Goal'
+              value={targetDate}
+              onChange={(newDate) => setTargetDate(newDate)}
+            />
+          </LocalizationProvider>
+        </Box>
+      </form>
+    </Box>
   );
 }
 

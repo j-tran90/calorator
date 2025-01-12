@@ -31,17 +31,19 @@ export default function Targets() {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" textAlign="center" mb={3}>
+      <Typography variant='h5' textAlign='center' mb={3}>
         Your Targets
       </Typography>
       <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
-        <Table aria-label="user targets table">
+        <Table aria-label='user targets table'>
           <TableHead>
             <TableRow>
-              <TableCell>Daily Calories</TableCell>
-              <TableCell>Daily Protein</TableCell>
+              <TableCell>Daily Calories (kcals)</TableCell>
+              <TableCell>Daily Protein (g)</TableCell>
               <TableCell>Weight Goal (lbs)</TableCell>
+              <TableCell>Start Date (mm/dd/yyyy)</TableCell>
               <TableCell>Target Date</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -50,17 +52,19 @@ export default function Targets() {
                 <TableCell>{showTargets.dailyCalorieTarget}</TableCell>
                 <TableCell>{showTargets.dailyProteinTarget}</TableCell>
                 <TableCell>{showTargets.weightTarget}</TableCell>
+                <TableCell>{formatDate(showTargets.createdDate)}</TableCell>
                 <TableCell>{formatDate(showTargets.targetDate)}</TableCell>
+                <TableCell>{showTargets.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Box display="flex" justifyContent="center" mt={2}>
+      <Box display='flex' justifyContent='center' mt={2}>
         <Button
-          variant="contained"
+          variant='contained'
           component={Link}
-          to="/creategoal"
+          to='/creategoal'
           sx={{
             backgroundColor: "#000",
             "&:hover": { backgroundColor: "#333" },
