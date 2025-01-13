@@ -8,16 +8,19 @@ import {
   Radio,
   FormControlLabel,
 } from "@mui/material";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";  // Corrected import
+
 
 function UserProfileForm({ onNext, onValidationChange }) {
   const [formData, setFormData] = useState({
-    age: "",
+    dateOfBirth: null, // Changed to store date of birth
     height: "",
     weight: "",
     gender: "male",
   });
   const [errors, setErrors] = useState({
-    age: false,
+    dateOfBirth: false,
     height: false,
     weight: false,
   });
@@ -26,11 +29,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
   useEffect(() => {
     const validateFields = () => {
       const newErrors = {
-        age:
-          !formData.age.trim() ||
-          isNaN(formData.age) ||
-          formData.age < 0 ||
-          formData.age > 150,
+        dateOfBirth: !formData.dateOfBirth,
         height:
           !formData.height.trim() ||
           isNaN(formData.height) ||
@@ -61,6 +60,13 @@ function UserProfileForm({ onNext, onValidationChange }) {
     }));
   };
 
+  const handleDateChange = (newDate) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      dateOfBirth: newDate,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onNext(formData);
@@ -70,15 +76,14 @@ function UserProfileForm({ onNext, onValidationChange }) {
   return (
     <form id='calorie-calculator-form' onSubmit={handleSubmit}>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
-        <TextField
-          label='Age'
-          type='number'
-          name='age'
-          value={formData.age}
-          onChange={handleChange}
-          fullWidth
-          error={errors.age}
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label='Date of Birth'
+            value={formData.dateOfBirth}
+            onChange={handleDateChange}
+            renderInput={(params) => <TextField {...params} fullWidth error={errors.dateOfBirth} />}
+          />
+        </LocalizationProvider>
       </Box>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
