@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import WeightGoalForm from "../features/BMIcalc/WeightGoalForm";
-import CalorieCalculatorForm from "../features/BMIcalc/UserProfileForm";
+import UserProfileForm from "../features/BMIcalc/UserProfileForm";
 import Results from "../features/BMIcalc/Results";
 import SendDataToDB from "../../hooks/useSendDataToDB";
 
@@ -94,7 +94,7 @@ function CreateGoal() {
     switch (step) {
       case 0:
         return (
-          <CalorieCalculatorForm
+          <UserProfileForm
             onNext={handleCalorieCalculatorNext}
             onValidationChange={setIsFormValid}
           />

@@ -9,12 +9,12 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";  // Corrected import
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Correct import
+import dayjs from "dayjs";
 
 function UserProfileForm({ onNext, onValidationChange }) {
   const [formData, setFormData] = useState({
-    dateOfBirth: null, // Changed to store date of birth
+    dateOfBirth: null, // Date of birth field
     height: "",
     weight: "",
     gender: "male",
@@ -26,6 +26,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
   });
   const [isFormValid, setIsFormValid] = useState(false);
 
+  // Validate the fields
   useEffect(() => {
     const validateFields = () => {
       const newErrors = {
@@ -52,6 +53,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
     setIsFormValid(isValid);
   }, [formData, onValidationChange]);
 
+  // Handle input field change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -60,6 +62,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
     }));
   };
 
+  // Handle date change
   const handleDateChange = (newDate) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -67,29 +70,48 @@ function UserProfileForm({ onNext, onValidationChange }) {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    const dobFormatted = formData.dateOfBirth
+      ? dayjs(formData.dateOfBirth).format("YYYY-MM-DD")
+      : null; // Only format if a date exists
+
+    const dataToSave = {
+      dob: dobFormatted, // Store dob in YYYY-MM-DD format
+      height: formData.height,
+      weight: formData.weight,
+      gender: formData.gender,
+    };
+
+    // Save the data into localStorage
+    console.log("Saving data to localStorage", dataToSave); // Add this line to confirm data is being saved
+    localStorage.setItem("calorieData", JSON.stringify(dataToSave));
+
     onNext(formData);
     console.log("Data captured:", formData);
-  };
+};
+
 
   return (
-    <form id='calorie-calculator-form' onSubmit={handleSubmit}>
+    <form id="calorie-calculator-form" onSubmit={handleSubmit}>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            label='Date of Birth'
+            label="Date of Birth"
             value={formData.dateOfBirth}
             onChange={handleDateChange}
-            renderInput={(params) => <TextField {...params} fullWidth error={errors.dateOfBirth} />}
+            textField={(params) => (
+              <TextField {...params} fullWidth error={errors.dateOfBirth} />
+            )}
           />
         </LocalizationProvider>
       </Box>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
-          label='Height (cm)'
-          type='number'
-          name='height'
+          label="Height (cm)"
+          type="number"
+          name="height"
           value={formData.height}
           onChange={handleChange}
           fullWidth
@@ -98,26 +120,26 @@ function UserProfileForm({ onNext, onValidationChange }) {
       </Box>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
-          label='Weight (lbs)'
-          type='number'
-          name='weight'
+          label="Weight (lbs)"
+          type="number"
+          name="weight"
           value={formData.weight}
           onChange={handleChange}
           fullWidth
           error={errors.weight}
         />
       </Box>
-      <FormControl component='fieldset'>
-        <FormLabel component='legend'>Gender</FormLabel>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Gender</FormLabel>
         <RadioGroup
-          aria-label='gender'
-          name='gender'
+          aria-label="gender"
+          name="gender"
           value={formData.gender}
           onChange={handleChange}
           sx={{ display: "flex", flexDirection: "row" }} // Align horizontally
         >
-          <FormControlLabel value='male' control={<Radio />} label='Male' />
-          <FormControlLabel value='female' control={<Radio />} label='Female' />
+          <FormControlLabel value="male" control={<Radio />} label="Male" />
+          <FormControlLabel value="female" control={<Radio />} label="Female" />
         </RadioGroup>
       </FormControl>
     </form>

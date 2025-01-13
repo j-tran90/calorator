@@ -1,4 +1,5 @@
 import { db, auth } from "../config/Firebase";
+import dayjs from "dayjs";
 
 const SendDataToDB = async () => {
   const { uid } = auth.currentUser;
@@ -16,9 +17,11 @@ const SendDataToDB = async () => {
   // Current timestamp
   const currentDate = new Date().toISOString(); // Format: YYYY-MM-DDTHH:mm:ss.sssZ
 
+
+
   // Data for userProfile collection
   const userProfileData = {
-    age: parseInt(calorieData.age) || 0,
+    dob: calorieData.dateOfBirth || "", // Ensure dob is being passed correctly
     height: parseFloat(calorieData.height) || 0,
     currentWeight: parseFloat(calorieData.weight) || 0,
     gender: calorieData.gender || "",
