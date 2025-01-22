@@ -16,6 +16,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
+import  Brand from "../layouts/Brand"
 
 const drawerWidth = 240;
 
@@ -59,7 +60,7 @@ function ResponsiveDrawer(props) {
           alignItems: "center",
         }}
       >
-        <User /> {/* Ensure this renders your user image */}
+        <Brand />
       </div>
       <Divider sx={{ width: "100%" }} />
       <List sx={{ flexGrow: 1, width: "100%" }}>
@@ -113,7 +114,7 @@ function ResponsiveDrawer(props) {
             >
               <MenuIcon />
             </IconButton>
-          </Stack>
+          </Stack><User/>
         </Toolbar>
       </AppBar>
       <Box

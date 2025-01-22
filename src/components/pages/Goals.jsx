@@ -26,7 +26,7 @@ export default function Targets() {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
+    return `${month}/${day}/${year}`;
   };
 
   return (
@@ -38,11 +38,11 @@ export default function Targets() {
         <Table aria-label='user targets table'>
           <TableHead>
             <TableRow>
-              <TableCell>Daily Calories (kcals)</TableCell>
-              <TableCell>Daily Protein (g)</TableCell>
+              <TableCell>Calories (kcals)</TableCell>
+              <TableCell>Protein (g)</TableCell>
               <TableCell>Weight Goal (lbs)</TableCell>
-              <TableCell>Start Date (mm/dd/yyyy)</TableCell>
-              <TableCell>Target Date</TableCell>
+              <TableCell>Start (mm/dd/yyyy)</TableCell>
+              <TableCell>End</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
