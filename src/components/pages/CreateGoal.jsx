@@ -47,9 +47,15 @@ function CreateGoal() {
   };
 
   const handleCalorieCalculatorNext = (data) => {
-    setCalorieData(data);
-    localStorage.setItem("calorieData", JSON.stringify(data));
-    setActiveStep((prevStep) => prevStep + 1);
+    if (data.step === 1) {
+      // Navigate to step 1 explicitly
+      setActiveStep(1);
+    } else {
+      // Save data and proceed to the next step
+      setCalorieData(data);
+      localStorage.setItem("calorieData", JSON.stringify(data));
+      setActiveStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handleNext = () => {
@@ -85,8 +91,8 @@ function CreateGoal() {
   };
 
   const steps = [
-    "Provide Personal Information", // Changed order
-    "Set Weight Goal", // Changed order
+    "Provide Personal Information",
+    "Set Weight Goal",
     "View Results",
   ];
 
@@ -110,11 +116,11 @@ function CreateGoal() {
         return (
           <div>
             <Results />
-            <Box display='flex' justifyContent='space-between'>
+            <Box display="flex" justifyContent="space-between">
               <Button onClick={handleReset}>Reset</Button>
               <Button
-                variant='contained'
-                color='primary'
+                variant="contained"
+                color="primary"
                 onClick={handleFinishToDashboard}
                 disabled={loading}
               >
@@ -155,12 +161,12 @@ function CreateGoal() {
           <div>
             {getStepContent(activeStep)}
             {activeStep !== steps.length - 1 && (
-              <Box display='flex' justifyContent='space-between'>
+              <Box display="flex" justifyContent="space-between">
                 <Button disabled={activeStep === 0} onClick={handleBack}>
                   Back
                 </Button>
                 <Button
-                  variant='contained'
+                  variant="contained"
                   onClick={handleNext}
                   disabled={!isFormValid}
                 >

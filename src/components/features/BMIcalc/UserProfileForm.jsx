@@ -9,12 +9,14 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Correct import
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { auth } from "../../../config/Firebase";
+import { getFirestore, doc, getDoc } from "firebase/firestore"; // Import Firestore methods
 
 function UserProfileForm({ onNext, onValidationChange }) {
   const [formData, setFormData] = useState({
-    dob: null, // Date of birth field
+    dob: null,
     height: "",
     weight: "",
     gender: "male",
@@ -25,6 +27,43 @@ function UserProfileForm({ onNext, onValidationChange }) {
     weight: false,
   });
   const [isFormValid, setIsFormValid] = useState(false);
+
+  // Fetch user profile from Firestore
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const { uid } = auth.currentUser;
+  
+      if (uid) {
+        const db = getFirestore();
+        const userProfileRef = doc(db, "userProfile", uid);
+        const userProfileSnap = await getDoc(userProfileRef);
+  
+        if (userProfileSnap.exists()) {
+          const userData = userProfileSnap.data();
+          const { currentWeight, dob, gender, height } = userData;
+  
+          // Store data in localStorage
+          localStorage.setItem("currentWeight", currentWeight);
+          localStorage.setItem("dob", dob);
+          localStorage.setItem("gender", gender);
+          localStorage.setItem("height", height);
+  
+          // Update formData with fetched data
+          setFormData({
+            dob: dayjs(dob),
+            height: height.toString(),
+            weight: currentWeight.toString(),
+            gender,
+          });
+  
+          // Skip to step 1 only
+          onNext({ step: 1 }); // Signal to the parent component
+        }
+      }
+    };
+  
+    fetchUserProfile();
+  }, [onNext]);
 
   // Validate the fields
   useEffect(() => {
@@ -75,23 +114,18 @@ function UserProfileForm({ onNext, onValidationChange }) {
     e.preventDefault();
     const dobFormatted = formData.dob
       ? dayjs(formData.dob).format("YYYY-MM-DD")
-      : null; // Only format if a date exists
+      : null;
 
     const dataToSave = {
-      dob: dobFormatted, // Store dob in YYYY-MM-DD format
+      dob: dobFormatted,
       height: formData.height,
       weight: formData.weight,
       gender: formData.gender,
     };
 
-    // Save the data into localStorage
-    console.log("Saving data to localStorage", dataToSave); // Add this line to confirm data is being saved
     localStorage.setItem("calorieData", JSON.stringify(dataToSave));
-
     onNext(formData);
-    console.log("Data captured:", formData);
-};
-
+  };
 
   return (
     <form id="calorie-calculator-form" onSubmit={handleSubmit}>
@@ -136,7 +170,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
           name="gender"
           value={formData.gender}
           onChange={handleChange}
-          sx={{ display: "flex", flexDirection: "row" }} // Align horizontally
+          sx={{ display: "flex", flexDirection: "row" }}
         >
           <FormControlLabel value="male" control={<Radio />} label="Male" />
           <FormControlLabel value="female" control={<Radio />} label="Female" />
