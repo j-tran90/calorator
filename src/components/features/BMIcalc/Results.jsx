@@ -17,7 +17,7 @@ function Results() {
     const savedData = JSON.parse(localStorage.getItem("calorieData"));
     if (savedData) {
       console.log("Retrieved data from localStorage:", savedData);
-      const formattedDob = dayjs(savedData.dob).format("YYYY-MM-DD"); // Format the DOB
+      const formattedDob = dayjs(savedData.dob).format("MM/DD/YYYY"); // Format the DOB
       setDob(formattedDob); // Now use the formatted DOB
     } else {
       console.log("No data found in localStorage.");

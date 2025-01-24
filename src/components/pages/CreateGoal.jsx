@@ -19,15 +19,20 @@ function CreateGoal() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Load data from localStorage on component mount
   useEffect(() => {
     const storedWeightGoal = localStorage.getItem("weightGoal");
     const storedCalorieData = localStorage.getItem("calorieData");
+
+    console.log("Retrieved weightGoal from localStorage:", storedWeightGoal);
+    console.log("Retrieved calorieData from localStorage:", storedCalorieData);
 
     if (storedWeightGoal) setWeightGoal(JSON.parse(storedWeightGoal));
     if (storedCalorieData) setCalorieData(JSON.parse(storedCalorieData));
   }, []);
 
   const clearLocalStorage = () => {
+    console.log("Clearing localStorage data...");
     localStorage.removeItem("weightGoal");
     localStorage.removeItem("calorieData");
   };
@@ -43,6 +48,7 @@ function CreateGoal() {
 
     setWeightGoal(updatedData);
     localStorage.setItem("weightGoal", JSON.stringify(updatedData));
+    console.log("Saved weightGoal to localStorage:", updatedData);
     setActiveStep((prevStep) => prevStep + 1);
   };
 
@@ -54,6 +60,7 @@ function CreateGoal() {
       // Save data and proceed to the next step
       setCalorieData(data);
       localStorage.setItem("calorieData", JSON.stringify(data));
+      console.log("Saved calorieData to localStorage:", data);
       setActiveStep((prevStep) => prevStep + 1);
     }
   };
@@ -82,9 +89,10 @@ function CreateGoal() {
     setLoading(true);
     try {
       await SendDataToDB();
+      console.log("Data successfully sent to database.");
       window.location.href = "/dashboard";
     } catch (error) {
-      console.error("Error finishing to dashboard: ", error);
+      console.error("Error finishing to dashboard:", error);
     } finally {
       setLoading(false);
     }

@@ -32,35 +32,39 @@ function UserProfileForm({ onNext, onValidationChange }) {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const { uid } = auth.currentUser;
-  
+    
       if (uid) {
         const db = getFirestore();
         const userProfileRef = doc(db, "userProfile", uid);
         const userProfileSnap = await getDoc(userProfileRef);
-  
+    
         if (userProfileSnap.exists()) {
           const userData = userProfileSnap.data();
           const { currentWeight, dob, gender, height } = userData;
-  
-          // Store data in localStorage
-          localStorage.setItem("currentWeight", currentWeight);
-          localStorage.setItem("dob", dob);
-          localStorage.setItem("gender", gender);
-          localStorage.setItem("height", height);
-  
-          // Update formData with fetched data
+    
+          // Store all data in calorieData object
+          const calorieData = {
+            dob: dayjs(dob).format("YYYY-MM-DD"), // Ensure ISO format
+            height: height.toString(),
+            weight: currentWeight.toString(),
+            gender,
+          };
+    
+          localStorage.setItem("calorieData", JSON.stringify(calorieData));
+    
+          // Update formData
           setFormData({
             dob: dayjs(dob),
             height: height.toString(),
             weight: currentWeight.toString(),
             gender,
           });
-  
-          // Skip to step 1 only
-          onNext({ step: 1 }); // Signal to the parent component
+    
+          onNext({ step: 1 });
         }
       }
     };
+    
   
     fetchUserProfile();
   }, [onNext]);
@@ -115,18 +119,18 @@ function UserProfileForm({ onNext, onValidationChange }) {
     const dobFormatted = formData.dob
       ? dayjs(formData.dob).format("YYYY-MM-DD")
       : null;
-
+  
     const dataToSave = {
       dob: dobFormatted,
       height: formData.height,
       weight: formData.weight,
       gender: formData.gender,
     };
-
+  
     localStorage.setItem("calorieData", JSON.stringify(dataToSave));
     onNext(formData);
   };
-
+  
   return (
     <form id="calorie-calculator-form" onSubmit={handleSubmit}>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
