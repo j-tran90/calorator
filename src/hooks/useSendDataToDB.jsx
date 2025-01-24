@@ -21,7 +21,7 @@ const SendDataToDB = async () => {
 
   // Data for userProfile collection
   const userProfileData = {
-    dob: calorieData.dateOfBirth || "", // Ensure dob is being passed correctly
+    dob: calorieData.dob || "", // Ensure dob is being passed correctly
     height: parseFloat(calorieData.height) || 0,
     currentWeight: parseFloat(calorieData.weight) || 0,
     gender: calorieData.gender || "",

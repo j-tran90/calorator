@@ -17,7 +17,7 @@ function Results() {
     const savedData = JSON.parse(localStorage.getItem("calorieData"));
     if (savedData) {
       console.log("Retrieved data from localStorage:", savedData);
-      const formattedDob = dayjs(savedData.dateOfBirth).format("YYYY-MM-DD"); // Format the DOB
+      const formattedDob = dayjs(savedData.dob).format("YYYY-MM-DD"); // Format the DOB
       setDob(formattedDob); // Now use the formatted DOB
     } else {
       console.log("No data found in localStorage.");
@@ -111,7 +111,6 @@ function Results() {
     <div>
       <p>Weight Goal: {weightTarget}</p>
       <p>Remaining Days: {remainingDays}</p>
-      <p>Age: {age} years</p> {/* Display the calculated age */}
       <p>Daily Calorie Target: {dailyCalorieTarget} kcal</p>
       <p>Daily Protein Target: {dailyProteinTarget} g</p>
     </div>

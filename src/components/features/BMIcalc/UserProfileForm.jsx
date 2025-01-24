@@ -14,13 +14,13 @@ import dayjs from "dayjs";
 
 function UserProfileForm({ onNext, onValidationChange }) {
   const [formData, setFormData] = useState({
-    dateOfBirth: null, // Date of birth field
+    dob: null, // Date of birth field
     height: "",
     weight: "",
     gender: "male",
   });
   const [errors, setErrors] = useState({
-    dateOfBirth: false,
+    dob: false,
     height: false,
     weight: false,
   });
@@ -30,7 +30,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
   useEffect(() => {
     const validateFields = () => {
       const newErrors = {
-        dateOfBirth: !formData.dateOfBirth,
+        dob: !formData.dob,
         height:
           !formData.height.trim() ||
           isNaN(formData.height) ||
@@ -66,15 +66,15 @@ function UserProfileForm({ onNext, onValidationChange }) {
   const handleDateChange = (newDate) => {
     setFormData((prevData) => ({
       ...prevData,
-      dateOfBirth: newDate,
+      dob: newDate,
     }));
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    const dobFormatted = formData.dateOfBirth
-      ? dayjs(formData.dateOfBirth).format("YYYY-MM-DD")
+    const dobFormatted = formData.dob
+      ? dayjs(formData.dob).format("YYYY-MM-DD")
       : null; // Only format if a date exists
 
     const dataToSave = {
@@ -99,10 +99,10 @@ function UserProfileForm({ onNext, onValidationChange }) {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Date of Birth"
-            value={formData.dateOfBirth}
+            value={formData.dob}
             onChange={handleDateChange}
             textField={(params) => (
-              <TextField {...params} fullWidth error={errors.dateOfBirth} />
+              <TextField {...params} fullWidth error={errors.dob} />
             )}
           />
         </LocalizationProvider>

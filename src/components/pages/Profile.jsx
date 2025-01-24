@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { db, auth } from "../../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
 import useCollectionData from "../../hooks/useFetch";
-import dayjs from "dayjs"; // Import dayjs for date manipulation
+import dayjs from "dayjs";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -15,16 +14,23 @@ export default function Profile() {
     where(documentId(), "==", uid)
   );
   const { data: profile } = useCollectionData(queryUserProfile);
+  const [age, setAge] = useState(0); // Calculated age in years
 
-  // Function to format date in "M-D-YYYY" format, without leading zeros
-  const formatDate = (date) => {
-    const formattedDate = dayjs(date);
-    const month = formattedDate.month() + 1; // `.month()` is zero-indexed, so we add 1
-    const day = formattedDate.date(); // `.date()` returns the day of the month
-    const year = formattedDate.year(); // `.year()` returns the year
+  function calculateAge(dateOfBirth) {
+    const currentDate = new Date();
+    const ageInMilliseconds = currentDate - new Date(dateOfBirth);
+    const ageInYears = Math.floor(
+      ageInMilliseconds / (1000 * 3600 * 24 * 365.25)
+    );
+    return ageInYears;
+  }
 
-    return `${month}-${day}-${year}`;
-  };
+  useEffect(() => {
+    if (profile && profile.length > 0) {
+      const calculatedAge = calculateAge(profile[0].dob);
+      setAge(calculatedAge);
+    }
+  }, [profile]); // Recalculate age when profile data changes
 
   return (
     <>
@@ -34,28 +40,22 @@ export default function Profile() {
             Name: {currentUser.displayName || "Guest User"}
           </div>
 
-          {profile.map((showProfile) => {
-            const age = showProfile.dateOfBirth
-              ? calculateAge(showProfile.dateOfBirth)
-              : "N/A"; // Calculate age from dob if it exists
-
-            return (
-              <div key={showProfile.id}>
+          {profile.map((showProfile) => (
+            <div key={showProfile.id}>
+              <div className='column'>
                 <div className='column'>
-                  <div className='column'>
-                    Age: {showProfile.age} {/* Display calculated age */}
-                  </div>
-                  <div>
-                    Date of Birth: {formatDate(showProfile.dateOfBirth)}
-                  </div>{" "}
-                  {/* Display formatted DOB */}
-                  <div>Gender: {showProfile.gender}</div>
-                  <div>Current Weight: {showProfile.currentWeight} lbs</div>
+                  Age: {age} {/* Display calculated age */}
                 </div>
-                <div>Height: {showProfile.height} cm</div>
+                <div>
+                  Date of Birth: {dayjs(showProfile.dob).format("MM/DD/YYYY")}
+                </div>{" "}
+                {/* Display formatted DOB */}
+                <div>Gender: {showProfile.gender}</div>
+                <div>Current Weight: {showProfile.currentWeight} lbs</div>
               </div>
-            );
-          })}
+              <div>Height: {showProfile.height} cm</div>
+            </div>
+          ))}
         </div>
       </div>
     </>
