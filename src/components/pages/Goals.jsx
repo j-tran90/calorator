@@ -113,9 +113,9 @@ export default function Targets() {
         <Table aria-label='user targets table'>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#9993" }}>
-              <TableCell>Calories (kcals)</TableCell>
-              <TableCell>Protein (g)</TableCell>
-              <TableCell>Weight Goal (lbs)</TableCell>
+              <TableCell>Daily (kcals)</TableCell>
+              <TableCell>Daily Protein</TableCell>
+              <TableCell>Weight Goal</TableCell>
               <TableCell>Start (mm/dd/yyyy)</TableCell>
               <TableCell>End</TableCell>
               <TableCell>Status</TableCell>
@@ -125,8 +125,8 @@ export default function Targets() {
             {paginatedData.map((showTargets) => (
               <TableRow key={showTargets.id}>
                 <TableCell>{showTargets.dailyCalorieTarget}</TableCell>
-                <TableCell>{showTargets.dailyProteinTarget}</TableCell>
-                <TableCell>{showTargets.weightTarget}</TableCell>
+                <TableCell>{showTargets.dailyProteinTarget}g</TableCell>
+                <TableCell>{showTargets.weightTarget} lbs</TableCell>
                 <TableCell>{formatDate(showTargets.createdDate)}</TableCell>
                 <TableCell>{formatDate(showTargets.targetDate)}</TableCell>
                 <TableCell>
