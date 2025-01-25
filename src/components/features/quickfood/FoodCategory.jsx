@@ -3,12 +3,13 @@ import Button from "@mui/material/Button";
 import { db, auth, timestamp } from "../../../config/Firebase";
 
 const FoodCategory = ({ items, sumEntry, updateTotal }) => {
-  const addToJournal = async (kcal, name) => {
+  const addToJournal = async (kcal, protein, name) => {
     const uid = auth.currentUser.uid;
 
     try {
       await db.collection("journal").doc(uid).collection("entries").doc().set({
         calories: kcal,
+        protein: protein,
         food: name,
         createdAt: timestamp,
       });
@@ -33,7 +34,7 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
         <Button
           key={item.id}
           variant='contained'
-          onClick={() => addToJournal(item.kcal, item.name)}
+          onClick={() => addToJournal(item.kcal, item.protein, item.name)}
           startIcon={item.icon}
           style={{
             minWidth: "120px",

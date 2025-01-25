@@ -125,7 +125,7 @@ export default function Targets() {
             {paginatedData.map((showTargets) => (
               <TableRow key={showTargets.id}>
                 <TableCell>{showTargets.dailyCalorieTarget}</TableCell>
-                <TableCell>{showTargets.dailyProteinTarget}g</TableCell>
+                <TableCell>{showTargets.dailyProteinTarget} g</TableCell>
                 <TableCell>{showTargets.weightTarget} lbs</TableCell>
                 <TableCell>{formatDate(showTargets.createdDate)}</TableCell>
                 <TableCell>{formatDate(showTargets.targetDate)}</TableCell>

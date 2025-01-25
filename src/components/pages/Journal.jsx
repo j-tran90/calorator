@@ -121,7 +121,8 @@ export default function Journal() {
               <TableCell>Time</TableCell>
               <TableCell>Food</TableCell>
               <TableCell>Calories</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell>Protein</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -139,7 +140,7 @@ export default function Journal() {
                   {isNewDay && (
                     <TableRow sx={{backgroundColor: "#9992"}}>
                       <TableCell
-                        colSpan={5}
+                        colSpan={6}
                         sx={{ textAlign: "center", fontWeight: "bold" }}
                       >
                         {createdAt.toLocaleDateString(navigator.language, {
@@ -169,6 +170,7 @@ export default function Journal() {
                         : "N/A"}
                     </TableCell>
                     <TableCell>{entry.calories}</TableCell>
+                    <TableCell>{entry.protein} g</TableCell>
                     <TableCell>
                       <RiDeleteBack2Fill
                         style={{
