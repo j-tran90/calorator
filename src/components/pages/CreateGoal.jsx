@@ -41,6 +41,7 @@ function CreateGoal() {
     const currentDate = new Date().toISOString().split("T")[0];
 
     const updatedData = {
+      currentWeight: data.currentWeight,
       weightTarget: data.weightTarget,
       targetDate: data.targetDate,
       createdDate: currentDate,

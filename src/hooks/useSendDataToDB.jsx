@@ -17,12 +17,13 @@ const SendDataToDB = async () => {
   const userProfileData = {
     dob: calorieData.dob || "",
     height: parseFloat(calorieData.height) || 0,
-    currentWeight: parseFloat(calorieData.weight) || 0,
+    // currentWeight: parseFloat(calorieData.currentWeight) || 0,
     gender: calorieData.gender || "",
     createdDate: currentDate,
   };
 
   const userGoalData = {
+    currentWeight: parseFloat(weightGoalData.currentWeight) || 0,
     weightTarget: weightGoalData.weightTarget || "",
     targetDate: weightGoalData.targetDate || "",
     dailyCalorieTarget: resultsData.dailyCalorieTarget || 0,

@@ -37,7 +37,7 @@ function Results() {
 
     setWeightTarget(weightGoalData.weightTarget);
     setHeight(calorieData.height);
-    setCurrentWeight(calorieData.weight);
+    setCurrentWeight(weightGoalData.currentWeight);
     setGender(calorieData.gender);
 
     if (!weightTarget || !currentWeight) return;

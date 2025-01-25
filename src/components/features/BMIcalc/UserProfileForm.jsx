@@ -18,13 +18,11 @@ function UserProfileForm({ onNext, onValidationChange }) {
   const [formData, setFormData] = useState({
     dob: null,
     height: "",
-    weight: "",
     gender: "male",
   });
   const [errors, setErrors] = useState({
     dob: false,
     height: false,
-    weight: false,
   });
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -40,13 +38,14 @@ function UserProfileForm({ onNext, onValidationChange }) {
 
         if (userProfileSnap.exists()) {
           const userData = userProfileSnap.data();
-          const { currentWeight, dob, gender, height } = userData;
+          const { dob, gender, height } = userData;
+
+          console.log(userData)
 
           // Store all data in calorieData object
           const calorieData = {
             dob: dayjs(dob).format("YYYY-MM-DD"), // Ensure ISO format
             height: height.toString(),
-            weight: currentWeight.toString(),
             gender,
           };
 
@@ -56,7 +55,6 @@ function UserProfileForm({ onNext, onValidationChange }) {
           setFormData({
             dob: dayjs(dob),
             height: height.toString(),
-            weight: currentWeight.toString(),
             gender,
           });
 
@@ -78,11 +76,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
           isNaN(formData.height) ||
           formData.height < 50 ||
           formData.height > 400,
-        weight:
-          !formData.weight.trim() ||
-          isNaN(formData.weight) ||
-          formData.weight < 1 ||
-          formData.weight > 500,
+
       };
 
       return newErrors;
@@ -122,7 +116,6 @@ function UserProfileForm({ onNext, onValidationChange }) {
     const dataToSave = {
       dob: dobFormatted,
       height: formData.height,
-      weight: formData.weight,
       gender: formData.gender,
     };
 
@@ -157,9 +150,9 @@ function UserProfileForm({ onNext, onValidationChange }) {
           error={errors.height}
         />
       </Box>
-      <Box sx={{ "& > :not(style)": { mb: 2 } }}>
+      {/* <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
-          label='Weight (lbs)'
+          label='Current Weight (lbs)'
           type='number'
           name='weight'
           value={formData.weight}
@@ -167,7 +160,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
           fullWidth
           error={errors.weight}
         />
-      </Box>
+      </Box> */}
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
