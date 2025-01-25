@@ -35,18 +35,13 @@ export default function Targets() {
       const goalHistoryRef = collection(db, "userGoals", uid, "goalsHistory");
       const q = query(goalHistoryRef);
 
-      console.log("Fetching goal history for user:", uid);
-
       try {
         const querySnapshot = await getDocs(q);
-        console.log("Goal history fetched:", querySnapshot);
 
         const goalData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
-        console.log("Mapped goal history data:", goalData);
 
         // Sort by status: 'in progress' first, then 'complete'
         goalData.sort((a, b) => {
@@ -96,17 +91,17 @@ export default function Targets() {
       <Typography variant='h5' textAlign='center' mb={3}>
         Your Targets
       </Typography>
-      <Box display="flex" justifyContent="center" mb={3}>
+      <Box display='flex' justifyContent='center' mb={3}>
         <Button
-          variant="contained"
+          variant='contained'
           component={Link}
-          to="/creategoal"
+          to='/creategoal'
           sx={{
             backgroundColor: "#000",
             "&:hover": { backgroundColor: "#333" },
           }}
         >
-          Set New Targets
+          Set New Target
         </Button>
       </Box>
       <TableContainer component={Paper} sx={{ overflowX: "auto" }}>

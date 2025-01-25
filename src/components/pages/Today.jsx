@@ -12,7 +12,7 @@ export default function Dashboard() {
   // Use useTracker to manage total and trigger re-renders when total updates
   const { total, remainingCalories, percent, updateTotal, sumEntry } =
     useTracker(0);
-  const { proteinTarget, remainingDays } = useFetchGoals(0);
+  const { proteinTarget, remainingDays, SetNewTargetsButton } = useFetchGoals(0);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
@@ -70,6 +70,7 @@ export default function Dashboard() {
     <>
       <SearchBar onSearch={handleSearch} />
       <h3>{remainingDays} days left</h3>
+      {SetNewTargetsButton()}
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />
       <h6>

@@ -100,7 +100,7 @@ function CreateGoal() {
   };
 
   const steps = [
-    "Provide Personal Information",
+    "Create Profile",
     "Set Weight Goal",
     "View Results",
   ];
