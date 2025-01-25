@@ -116,7 +116,7 @@ export default function Journal() {
       <Paper sx={{ marginTop: 3, overflowX: "auto" }}>
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{backgroundColor: "#9999"}}>
               <TableCell>Entry</TableCell>
               <TableCell>Time</TableCell>
               <TableCell>Food</TableCell>
@@ -137,7 +137,7 @@ export default function Journal() {
               return (
                 <React.Fragment key={entry.id}>
                   {isNewDay && (
-                    <TableRow>
+                    <TableRow sx={{backgroundColor: "#9992"}}>
                       <TableCell
                         colSpan={5}
                         sx={{ textAlign: "center", fontWeight: "bold" }}

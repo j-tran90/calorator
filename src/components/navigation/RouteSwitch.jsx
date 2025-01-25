@@ -11,6 +11,7 @@ import Journal from "../pages/Journal";
 import SearchResults from "../pages/SearchResults";
 import MainLayout from "../layouts/MainLayout";
 import Goals from "../pages/Goals";
+import Today from "../pages/Today"
 import Settings from "../pages/Settings";
 
 const RouteSwitch = () => {
@@ -21,30 +22,39 @@ const RouteSwitch = () => {
       {/* Public routes without MainLayout */}
       <Route
         path='/'
-        element={currentUser ? <Navigate to='/dashboard' replace /> : <Home />}
+        element={currentUser ? <Navigate to='/today' replace /> : <Home />}
       />
       <Route
         path='/login'
-        element={currentUser ? <Navigate to='/dashboard' replace /> : <Login />}
+        element={currentUser ? <Navigate to='/today' replace /> : <Login />}
       />
       <Route
         path='/register'
         element={
-          currentUser ? <Navigate to='/dashboard' replace /> : <Register />
+          currentUser ? <Navigate to='/today' replace /> : <Register />
         }
       />
 
       {/* Routes wrapped with MainLayout */}
+      
       <Route element={<MainLayout />}>
         <Route
-          path='/dashboard'
+          path='/today'
           element={
-            currentUser ? <Dashboard /> : <Navigate to='/login' replace />
+            currentUser ? <Today /> : <Navigate to='/login' replace />
           }
         />
         <Route path='/searchresults' element={<SearchResults />} />
 
         {/* Protected Routes within MainLayout */}
+        <Route
+          path='/dashboard'
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path='/profile'
           element={

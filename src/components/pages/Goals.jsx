@@ -112,7 +112,7 @@ export default function Targets() {
       <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
         <Table aria-label='user targets table'>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#9993" }}>
+            <TableRow sx={{ backgroundColor: "#9999" }}>
               <TableCell>Daily (kcals)</TableCell>
               <TableCell>Daily Protein</TableCell>
               <TableCell>Weight Goal</TableCell>

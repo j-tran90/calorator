@@ -53,17 +53,18 @@ export default function Profile() {
           {profile.map((showProfile) => (
             <div key={showProfile.id}>
               <div className="column">
-                <div className="column">
-                  Age: {age} {/* Display calculated age */}
-                </div>
+
                 <div>
                   Date of Birth: {dayjs(showProfile.dob).format("MM/DD/YYYY")}
-                </div>{" "}
-                {/* Display formatted DOB */}
+                </div>
+                <div className="column">
+                  Age: {age}
+                </div>
                 <div>Gender: {showProfile.gender}</div>
-                <div>Current Weight: {currentWeight} lbs</div> {/* Display current weight from userGoals */}
-              </div>
+
               <div>Height: {showProfile.height} cm</div>
+              <div>Current Weight: {currentWeight} lbs</div> 
+              </div>
               <div>Joined: {dayjs(showProfile.joinDate).format("MM/DD/YYYY")}</div>
             </div>
           ))}
