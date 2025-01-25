@@ -32,16 +32,16 @@ function UserProfileForm({ onNext, onValidationChange }) {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const { uid } = auth.currentUser;
-    
+
       if (uid) {
         const db = getFirestore();
         const userProfileRef = doc(db, "userProfile", uid);
         const userProfileSnap = await getDoc(userProfileRef);
-    
+
         if (userProfileSnap.exists()) {
           const userData = userProfileSnap.data();
           const { currentWeight, dob, gender, height } = userData;
-    
+
           // Store all data in calorieData object
           const calorieData = {
             dob: dayjs(dob).format("YYYY-MM-DD"), // Ensure ISO format
@@ -49,9 +49,9 @@ function UserProfileForm({ onNext, onValidationChange }) {
             weight: currentWeight.toString(),
             gender,
           };
-    
+
           localStorage.setItem("calorieData", JSON.stringify(calorieData));
-    
+
           // Update formData
           setFormData({
             dob: dayjs(dob),
@@ -59,13 +59,12 @@ function UserProfileForm({ onNext, onValidationChange }) {
             weight: currentWeight.toString(),
             gender,
           });
-    
+
           onNext({ step: 1 });
         }
       }
     };
-    
-  
+
     fetchUserProfile();
   }, [onNext]);
 
@@ -119,37 +118,39 @@ function UserProfileForm({ onNext, onValidationChange }) {
     const dobFormatted = formData.dob
       ? dayjs(formData.dob).format("YYYY-MM-DD")
       : null;
-  
+
     const dataToSave = {
       dob: dobFormatted,
       height: formData.height,
       weight: formData.weight,
       gender: formData.gender,
     };
-  
+
     localStorage.setItem("calorieData", JSON.stringify(dataToSave));
     onNext(formData);
   };
-  
+
   return (
-    <form id="calorie-calculator-form" onSubmit={handleSubmit}>
-      <Box sx={{ "& > :not(style)": { mb: 2 } }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Date of Birth"
-            value={formData.dob}
-            onChange={handleDateChange}
-            textField={(params) => (
-              <TextField {...params} fullWidth error={errors.dob} />
-            )}
-          />
-        </LocalizationProvider>
-      </Box>
+    <form id='calorie-calculator-form' onSubmit={handleSubmit}>
+      <FormControl component='fieldset'>
+        <FormLabel component='legend'>Gender</FormLabel>
+        <RadioGroup
+          aria-label='gender'
+          name='gender'
+          value={formData.gender}
+          onChange={handleChange}
+          sx={{ display: "flex", flexDirection: "row" }}
+        >
+          <FormControlLabel value='male' control={<Radio />} label='Male' />
+          <FormControlLabel value='female' control={<Radio />} label='Female' />
+        </RadioGroup>
+      </FormControl>
+
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
-          label="Height (cm)"
-          type="number"
-          name="height"
+          label='Height (cm)'
+          type='number'
+          name='height'
           value={formData.height}
           onChange={handleChange}
           fullWidth
@@ -158,28 +159,27 @@ function UserProfileForm({ onNext, onValidationChange }) {
       </Box>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <TextField
-          label="Weight (lbs)"
-          type="number"
-          name="weight"
+          label='Weight (lbs)'
+          type='number'
+          name='weight'
           value={formData.weight}
           onChange={handleChange}
           fullWidth
           error={errors.weight}
         />
       </Box>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Gender</FormLabel>
-        <RadioGroup
-          aria-label="gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          sx={{ display: "flex", flexDirection: "row" }}
-        >
-          <FormControlLabel value="male" control={<Radio />} label="Male" />
-          <FormControlLabel value="female" control={<Radio />} label="Female" />
-        </RadioGroup>
-      </FormControl>
+      <Box sx={{ "& > :not(style)": { mb: 2 } }}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label='Date of Birth'
+            value={formData.dob}
+            onChange={handleDateChange}
+            textField={(params) => (
+              <TextField {...params} fullWidth error={errors.dob} />
+            )}
+          />
+        </LocalizationProvider>
+      </Box>
     </form>
   );
 }
