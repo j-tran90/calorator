@@ -1,31 +1,44 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { db, auth } from "../../config/Firebase";
 import { collection, documentId, query, where } from "firebase/firestore";
 import useCollectionData from "../../hooks/useFetch";
 import dayjs from "dayjs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 export default function Profile() {
   const { currentUser } = useAuth();
   const { uid } = auth.currentUser;
-  
+
   // Query user profile
   const userProfileRef = collection(db, "userProfile/");
-  const queryUserProfile = query(userProfileRef, where(documentId(), "==", uid));
+  const queryUserProfile = query(
+    userProfileRef,
+    where(documentId(), "==", uid)
+  );
   const { data: profile } = useCollectionData(queryUserProfile);
-  
+
   // Query user goals to fetch currentWeight
   const userGoalsRef = collection(db, "userGoals");
   const queryUserGoals = query(userGoalsRef, where(documentId(), "==", uid));
   const { data: goals } = useCollectionData(queryUserGoals);
-  
-  const [age, setAge] = useState(0); // Calculated age in years
+
+  const [age, setAge] = useState(0);
   const [currentWeight, setCurrentWeight] = useState(null);
 
   function calculateAge(dateOfBirth) {
     const currentDate = new Date();
     const ageInMilliseconds = currentDate - new Date(dateOfBirth);
-    const ageInYears = Math.floor(ageInMilliseconds / (1000 * 3600 * 24 * 365.25));
+    const ageInYears = Math.floor(
+      ageInMilliseconds / (1000 * 3600 * 24 * 365.25)
+    );
     return ageInYears;
   }
 
@@ -44,32 +57,63 @@ export default function Profile() {
 
   return (
     <>
-      <div className="card">
-        <div style={{ textAlign: "left" }}>
-          <div className="column">
-            Name: {currentUser.displayName || "Guest User"}
-          </div>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <strong>Name</strong>
+              </TableCell>
+              <TableCell>{currentUser.displayName || "Guest User"}</TableCell>
+            </TableRow>
 
-          {profile.map((showProfile) => (
-            <div key={showProfile.id}>
-              <div className="column">
-
-                <div>
-                  Date of Birth: {dayjs(showProfile.dob).format("MM/DD/YYYY")}
-                </div>
-                <div className="column">
-                  Age: {age}
-                </div>
-                <div>Gender: {showProfile.gender}</div>
-
-              <div>Height: {showProfile.height} cm</div>
-              <div>Current Weight: {currentWeight} lbs</div> 
-              </div>
-              <div>Joined: {dayjs(showProfile.joinDate).format("MM/DD/YYYY")}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+            {profile.map((showProfile) => (
+              <React.Fragment key={showProfile.id}>
+                <TableRow>
+                  <TableCell>
+                    <strong>Date of Birth</strong>
+                  </TableCell>
+                  <TableCell>
+                    {dayjs(showProfile.dob).format("MM/DD/YYYY")}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <strong>Age</strong>
+                  </TableCell>
+                  <TableCell>{age}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <strong>Gender</strong>
+                  </TableCell>
+                  <TableCell>{showProfile.gender}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <strong>Height</strong>
+                  </TableCell>
+                  <TableCell>{showProfile.height} cm</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <strong>Current Weight</strong>
+                  </TableCell>
+                  <TableCell>{currentWeight} lbs</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <strong>Joined</strong>
+                  </TableCell>
+                  <TableCell>
+                    {dayjs(showProfile.joinDate).format("MM/DD/YYYY")}
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }
