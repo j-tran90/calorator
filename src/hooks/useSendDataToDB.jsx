@@ -14,14 +14,6 @@ const SendDataToDB = async () => {
   const resultsData = JSON.parse(localStorage.getItem("resultsData")) || {};
   const currentDate = new Date().toISOString();
 
-  const userProfileData = {
-    dob: calorieData.dob || "",
-    height: parseFloat(calorieData.height) || 0,
-    // currentWeight: parseFloat(calorieData.currentWeight) || 0,
-    gender: calorieData.gender || "",
-    createdDate: currentDate,
-  };
-
   const userGoalData = {
     currentWeight: parseFloat(weightGoalData.currentWeight) || 0,
     weightTarget: weightGoalData.weightTarget || "",
@@ -36,9 +28,22 @@ const SendDataToDB = async () => {
     console.log("Sending data to Firestore...");
     const batch = db.batch();
 
-    // Update user profile
+    // Check if user profile already exists
     const userProfileRef = db.collection("userProfile").doc(uid);
-    batch.set(userProfileRef, userProfileData);
+    const userProfileDoc = await userProfileRef.get();
+
+    // If the profile exists, do not overwrite existing fields
+    const userProfileData = {
+      dob: calorieData.dob || userProfileDoc.data()?.dob || "",
+      height: parseFloat(calorieData.height) || userProfileDoc.data()?.height || 0,
+      gender: calorieData.gender || userProfileDoc.data()?.gender || "",
+      joinDate: userProfileDoc.exists ? userProfileDoc.data()?.joinDate : currentDate, // Only set joinDate if the profile doesn't exist
+    };
+
+    // Update user profile if necessary
+    if (!userProfileDoc.exists) {
+      batch.set(userProfileRef, userProfileData); // Only set if profile doesn't exist
+    }
 
     // Update user goals and goal history
     const userGoalsRef = db.collection("userGoals").doc(uid);
