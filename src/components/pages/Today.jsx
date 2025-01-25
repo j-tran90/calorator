@@ -8,12 +8,12 @@ import ProgressLegend from "../features/graphs/ProgressLegend";
 import SearchBar from "../features/search/SearchBar";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
 
-export default function Dashboard() {
+export default function Today() {
   // Use useTracker to manage total and trigger re-renders when total updates
   const { total, remainingCalories, percent, updateTotal, sumEntry } =
     useTracker(0);
-  const { proteinTarget, remainingDays, SetNewTargetsButton } = useFetchGoals(0);
-
+  const { proteinTarget, remainingDays, SetNewTargetsButton } =
+    useFetchGoals(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();

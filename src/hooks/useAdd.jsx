@@ -3,7 +3,7 @@ import useTracker from "../hooks/useTracker";
 import { useState } from "react";
 
 export default function useAdd({ sumEntry, updateTotal }) {
-  const { entries, total, getEntries } = useTracker(0);
+  const { entries, totalCals, getEntries } = useTracker(0);
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
 

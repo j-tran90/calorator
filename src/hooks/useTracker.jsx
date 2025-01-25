@@ -29,15 +29,19 @@ export default function useTracker() {
   );
   const { data: entries, getData: getEntries } =
     useCollectionData(entryCollectionRef);
-  const [total, setNewTotal] = useState(0);
+  const [totalCals, setNewTotalCals] = useState(0);
+  const [totalProtein, setNewTotalProtein] = useState(0);
   const [percent, setPercent] = useState(0);
 
   const sumEntry = async () => {
     const snapshot = await getAggregateFromServer(entryCollectionRef, {
       totalCalories: sum("calories"),
+      totalProtein: sum("protein"),
     });
-    const total = snapshot.data().totalCalories;
-    setNewTotal(total);
+    const totalCals = snapshot.data().totalCalories;
+    setNewTotalCals(totalCals);
+    const totalProtein = snapshot.data().totalProtein;
+    setNewTotalProtein(totalProtein);
   };
 
   useEffect(() => {
@@ -45,11 +49,11 @@ export default function useTracker() {
   }, []);
 
   const updateTotal = () => {
-    const remainingCalories = calorieTarget - total;
-    const percent = parseInt((total / calorieTarget) * 100);
+    const remainingCalories = calorieTarget - totalCals;
+    const percent = parseInt((totalCals / calorieTarget) * 100);
     if (remainingCalories === calorieTarget) {
       setRemainingCalories(0);
-    } else if (total > calorieTarget || total == calorieTarget) {
+    } else if (totalCals > calorieTarget || totalCals == calorieTarget) {
       setPercent(100);
       setRemainingCalories(0);
     } else {
@@ -70,7 +74,8 @@ export default function useTracker() {
 
   return {
     calorieTarget,
-    total,
+    totalCals,
+    totalProtein,
     remainingCalories,
     sumEntry,
     updateTotal,
