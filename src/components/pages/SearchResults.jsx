@@ -78,19 +78,11 @@ const SearchResults = () => {
         ) : (
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>
-                  <strong>Food Name</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Calories (kcal)</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Protein (g)</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Add to Journal</strong>
-                </TableCell>
+              <TableRow sx={{ backgroundColor: "#9998" }}>
+                <TableCell>Food Name</TableCell>
+                <TableCell>Calories (kcal)</TableCell>
+                <TableCell>Protein (g)</TableCell>
+                <TableCell>Add to Journal</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -108,10 +100,10 @@ const SearchResults = () => {
                     <TableCell>{item.protein}</TableCell>
                     <TableCell>
                       <AddToJournalButton
-                        calories={parseFloat(item.energy)}
                         food={item.name}
-                      />{" "}
-                      {/* Pass food name */}
+                        calories={parseFloat(item.energy)}
+                        protein={parseFloat(item.protein)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))

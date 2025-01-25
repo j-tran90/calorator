@@ -12,7 +12,6 @@ const SearchBar = ({ placeholder }) => {
 
   const handleSearch = (event) => {
     if (event.key === "Enter") {
-      console.log("Searching for:", value); // Debugging log for search term
       navigate("/searchresults", { state: { query: value } }); // Navigate to search results
     }
   };
@@ -25,10 +24,10 @@ const SearchBar = ({ placeholder }) => {
     <div style={{ position: "relative" }}>
       <TextField
         variant='outlined'
-        placeholder={placeholder}
+        placeholder='Search for food...'
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onKeyPress={handleSearch}
+        onKeyDown={handleSearch}
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>

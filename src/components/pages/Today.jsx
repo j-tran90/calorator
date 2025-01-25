@@ -68,7 +68,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <SearchBar placeholder='Search for food...' onSearch={handleSearch} />
+      <SearchBar onSearch={handleSearch} />
       <h3>{remainingDays} days left</h3>
       <ProgressCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />

@@ -15,7 +15,18 @@ import {
 import { db, auth } from "../../config/Firebase";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import useTracker from "../../hooks/useTracker";
-import { Grid, Box, Typography, Button, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 export default function Journal() {
   const { calorieTarget, total } = useTracker(0);
@@ -77,14 +88,14 @@ export default function Journal() {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" textAlign="center" mb={2}>
+      <Typography variant='h5' textAlign='center' mb={2}>
         Journal
       </Typography>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+      <Grid container spacing={2} justifyContent='center' alignItems='center'>
         <Grid item xs={12} sm={6} md={4}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              label="Start Date"
+              label='Start Date'
               value={startDate}
               onChange={(date) => handleStartDateChange(date)}
               fullWidth
@@ -94,17 +105,17 @@ export default function Journal() {
         <Grid item xs={12} sm={6} md={4}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              label="End Date"
+              label='End Date'
               value={endDate}
               onChange={(date) => handleEndDateChange(date)}
               fullWidth
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} textAlign="center">
+        <Grid item xs={12} sm={6} md={4} textAlign='center'>
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={handleTodayButtonClick}
             fullWidth
             style={{ color: "#fff", backgroundColor: "#000" }}
@@ -116,7 +127,7 @@ export default function Journal() {
       <Paper sx={{ marginTop: 3, overflowX: "auto" }}>
         <Table>
           <TableHead>
-            <TableRow sx={{backgroundColor: "#9999"}}>
+            <TableRow sx={{ backgroundColor: "#9999" }}>
               <TableCell>Entry</TableCell>
               <TableCell>Time</TableCell>
               <TableCell>Food</TableCell>
@@ -127,18 +138,21 @@ export default function Journal() {
           </TableHead>
           <TableBody>
             {data.map((entry, index) => {
-              const createdAt = entry.createdAt ? entry.createdAt.toDate() : null;
+              const createdAt = entry.createdAt
+                ? entry.createdAt.toDate()
+                : null;
               if (!createdAt) return null;
 
               const previousEntry =
                 index > 0 ? data[index - 1].createdAt.toDate() : null;
               const isNewDay =
-                !previousEntry || createdAt.getDate() !== previousEntry.getDate();
+                !previousEntry ||
+                createdAt.getDate() !== previousEntry.getDate();
 
               return (
                 <React.Fragment key={entry.id}>
                   {isNewDay && (
-                    <TableRow sx={{backgroundColor: "#9992"}}>
+                    <TableRow sx={{ backgroundColor: "#9992" }}>
                       <TableCell
                         colSpan={6}
                         sx={{ textAlign: "center", fontWeight: "bold" }}
@@ -163,12 +177,15 @@ export default function Journal() {
                         .replace(/^0+/, "")}
                     </TableCell>
                     <TableCell>
-                      {entry.food
+                      {typeof entry.food === "string"
                         ? entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
                             value.toUpperCase()
                           )
+                        : entry.food
+                        ? String(entry.food) // If `entry.food` is not null/undefined, convert it to a string
                         : "N/A"}
                     </TableCell>
+
                     <TableCell>{entry.calories}</TableCell>
                     <TableCell>{entry.protein} g</TableCell>
                     <TableCell>

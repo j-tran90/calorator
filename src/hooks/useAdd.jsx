@@ -7,7 +7,7 @@ export default function useAdd({ sumEntry, updateTotal }) {
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
 
-  const handleAdd = async (entry, food) => {
+  const handleAdd = async (entry, protein, food) => {
     setNewEntry(entry);
     await db
       .collection("journal")
@@ -15,18 +15,18 @@ export default function useAdd({ sumEntry, updateTotal }) {
       .collection("entries")
       .doc()
       .set({
-        calories: parseFloat(entry), // Ensure entry is parsed to float
-        food: food, // Add the food name to the entry
+        calories: parseFloat(entry),
+        protein: protein,
+        food: food,
         createdAt: timestamp,
       })
       .then(() => {
-        sumEntry(); // Call sumEntry to update totals if necessary
+        sumEntry();
       })
       .then(() => {
-        updateTotal(); // Update the total if necessary
+        updateTotal();
       });
-
-    console.log("added", typeof newEntry, newEntry); // Log for debugging
+    
   };
 
   return { handleAdd };
