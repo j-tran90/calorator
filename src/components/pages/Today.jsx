@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../../config/Firebase";
-import ProgressCircle from "../features/graphs/ProgressCircle";
+import CalorieCircle from "../features/graphs/CalorieCircle";
 import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
@@ -71,7 +71,7 @@ export default function Today() {
       <SearchBar onSearch={handleSearch} />
       <h3>{remainingDays} days left</h3>
       {SetNewTargetsButton()}
-      <ProgressCircle percent={percent} />
+      <CalorieCircle percent={percent} />
       <ProgressLegend total={total} remainingCalories={remainingCalories} />
       <h6>
         Calorie: {dailyCalorieTarget} | Protein: {proteinTarget}g
