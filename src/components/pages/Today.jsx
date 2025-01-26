@@ -77,9 +77,10 @@ export default function Today() {
       <h3>{remainingDays} days left</h3>
       {SetNewTargetsButton()}
       <ProgressCircle
-        percent={caloriePercent}
-        gradientId='greenYellow'
+        value={caloriePercent}
+        gradientId='greenYellow' 
         isPercentage={true}
+        targetValue={100} 
       />
 
       <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
