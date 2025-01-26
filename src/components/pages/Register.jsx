@@ -1,14 +1,24 @@
 import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import ProviderLogin from "../ProviderLogin";
+import {
+  Container,
+  Grid,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  Box,
+  Divider,
+} from "@mui/material";
 
 export default function Register() {
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { register, currentUser } = useAuth();
+  const { register } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -35,87 +45,149 @@ export default function Register() {
   }
 
   return (
-    <>
-      <h1>Register</h1>
+    <Container
+      maxWidth='lg'
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Grid container>
+        {/* Left Grid - Full-size Image */}
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: { xs: "none", sm: "block" }, // Hide left grid on mobile
+          }}
+        >
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              borderRadius: "20px 0px 0px 20px",
+            }}
+          >
+            <img
+              src='https://cdn.pixabay.com/photo/2022/05/28/07/07/watermelon-7226708_1280.png'
+              alt='Registration visual'
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </Box>
+        </Grid>
 
-      <form onSubmit={handleSubmit}>
-        {currentUser}
-        {error}
-        <div className='container'>
-          <div className='row'>
-            <input
-              className='mt-3'
-              id='name'
-              label='Enter Name'
-              placeholder='Enter Name'
-              icon='envelope'
-              type='name'
-              ref={nameRef}
-              required
-              style={{ border: "1px solid #2bbbad" }}
-            />
-          </div>
+        {/* Right Grid - Login Form */}
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            p: { xs: "none", md: 8 },
+          }}
+        >
+          <Typography variant='h4' gutterBottom align='center' sx={{ mb: 6 }}>
+            Create an account
+          </Typography>
+          {error && (
+            <Alert severity='error' sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id='name'
+                  label='Name'
+                  placeholder='Enter Name'
+                  inputRef={nameRef}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id='email'
+                  label='Email'
+                  placeholder='Enter Email'
+                  type='email'
+                  inputRef={emailRef}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id='password'
+                  label='Password'
+                  placeholder='Choose Password'
+                  type='password'
+                  inputRef={passwordRef}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id='password-confirm'
+                  label='Confirm Password'
+                  placeholder='Confirm Password'
+                  type='password'
+                  inputRef={passwordConfirmRef}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} textAlign='center'>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  disabled={loading}
+                  fullWidth
+                  sx={{
+                    mt: 2,
+                    backgroundColor: "#000",
+                    "&:hover": {
+                      backgroundColor: "#333",
+                    },
+                    padding: "16.5px 30px 16.5px 30px",
+                  }}
+                >
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
 
-          <div className='row'>
-            <input
-              defaultValue=''
-              className='mt-3'
-              id='email'
-              label='Enter Email'
-              placeholder='Enter Email'
-              icon='envelope'
-              type='email'
-              ref={emailRef}
-              required
-              style={{ border: "1px solid #2bbbad" }}
-            />
-          </div>
-          <div className='row'>
-            <input
-              defaultValue=''
-              className='mt-3'
-              id='password'
-              label='Choose Password'
-              placeholder='Choose Password'
-              icon='lock'
-              type='password'
-              ref={passwordRef}
-              required
-              style={{ border: "1px solid #2bbbad" }}
-            />
-          </div>
-          <div className='row'>
-            <input
-              className='mt-3'
-              id='password-confirm'
-              label='Confirm Password'
-              placeholder='Confirm Password'
-              icon='lock'
-              type='password'
-              ref={passwordConfirmRef}
-              required
-              style={{ border: "1px solid #2bbbad" }}
-            />
-          </div>
+          <Box sx={{ mt: 4 }}>
+            <Box display='flex' alignItems='center' width='100%'>
+              <Divider sx={{ flexGrow: 1 }} />
+              <Typography sx={{ mx: 2 }}>Or sign up with</Typography>
+              <Divider sx={{ flexGrow: 1 }} />
+            </Box>
+            <ProviderLogin />
+          </Box>
 
-          <div className='text-center mt-4'>
-            <button className='button' disabled={loading} type='submit'>
-              Submit
-            </button>
-          </div>
-        </div>
-      </form>
-      <hr />
-      <ProviderLogin />
-      <hr />
-      <div className='text-center mt-2'>
-        Already have an account?
-        <div>
-          <Link as={Link} to='/login'>
-            Login
-          </Link>
-        </div>
-      </div>
-    </>
+          <Typography align='center' sx={{ mt: 2 }}>
+            Already have an account?{" "}
+            <RouterLink
+              to='/login'
+              style={{ textDecoration: "none", color: "#1976d2" }}
+            >
+              Login
+            </RouterLink>
+          </Typography>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }

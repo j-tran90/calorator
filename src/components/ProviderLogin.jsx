@@ -1,6 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { Button, Grid } from "@mui/material";
 
 export default function ProviderLogin() {
   const { googleLogin, guestLogin } = useAuth();
@@ -15,37 +16,60 @@ export default function ProviderLogin() {
 
   return (
     <>
-      <div className="text-center">
-        <button
-          style={{ marginRight: "20px", background: "none", color: "#000" }}
-        >
-          <FcGoogle
-            type="button"
-            title="Google Sign In"
-            cursor="pointer"
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        {" "}
+        {/* Spacing between the buttons */}
+        <Grid item xs={6}>
+          {" "}
+          {/* Left button takes 60% width */}
+          <Button
+            fullWidth
+            sx={{
+              color: "#000",
+              padding: "16.5px 30px 16.5px 30px",
+              border: "1px solid black",
+              "&:hover": {
+                backgroundColor: "#9993",
+              },
+            }}
             onClick={googleLogin}
-            style={{ fontSize: "50px" }}
-          />
-          <div style={{ fontSize: "15px" }}>Google</div>
-        </button>
-
-        <button
-          style={{ marginRight: "0px", background: "none", color: "#000" }}
-        >
-          <Link as={Link} onClick={handleGuest}>
+          >
+            <FcGoogle
+              cursor='pointer'
+              style={{ fontSize: "25px", marginRight: "5px" }}
+            />
+            Google
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          {" "}
+          {/* Right button takes 60% width */}
+          <Button
+            fullWidth
+            onClick={handleGuest}
+            sx={{
+              color: "#000",
+              padding: "16.5px 30px 16.5px 30px",
+              border: "1px solid black",
+              "&:hover": {
+                backgroundColor: "#9993",
+              },
+            }}
+          >
             <img
-              src="https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg"
-              cursor="pointer"
-              title="Guest Sign In"
+              src='https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg'
+              cursor='pointer'
+              title='Guest Sign In'
               style={{
-                maxHeight: "50px",
+                height: "25px",
                 borderRadius: "30px",
+                marginRight: "5px",
               }}
             />
-          </Link>
-          <div style={{ fontSize: "15px" }}>Guest</div>
-        </button>
-      </div>
+            Guest
+          </Button>
+        </Grid>
+      </Grid>
     </>
   );
 }

@@ -1,13 +1,13 @@
 import "./App.css";
 import RouteSwitch from "./components/navigation/RouteSwitch";
 import AuthProvider from "./contexts/AuthContext";
-import NavBar from "./components/navigation/NavBar";
+import ResponsiveDrawer from "./components/navigation/ResponsiveDrawer";
 
 function App() {
   return (
     <>
       <AuthProvider>
-        <NavBar />
+        <ResponsiveDrawer />
         <RouteSwitch />
       </AuthProvider>
     </>

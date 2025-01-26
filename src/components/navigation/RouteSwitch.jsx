@@ -11,7 +11,7 @@ import Journal from "../pages/Journal";
 import SearchResults from "../pages/SearchResults";
 import MainLayout from "../layouts/MainLayout";
 import Goals from "../pages/Goals";
-import Today from "../pages/Today"
+import Today from "../pages/Today";
 import Settings from "../pages/Settings";
 
 const RouteSwitch = () => {
@@ -22,7 +22,7 @@ const RouteSwitch = () => {
       {/* Public routes without MainLayout */}
       <Route
         path='/'
-        element={currentUser ? <Navigate to='/today' replace /> : <Home />}
+        element={currentUser ? <Navigate to='/today' replace /> : <Register />}
       />
       <Route
         path='/login'
@@ -30,19 +30,15 @@ const RouteSwitch = () => {
       />
       <Route
         path='/register'
-        element={
-          currentUser ? <Navigate to='/today' replace /> : <Register />
-        }
+        element={currentUser ? <Navigate to='/today' replace /> : <Register />}
       />
 
       {/* Routes wrapped with MainLayout */}
-      
+
       <Route element={<MainLayout />}>
         <Route
           path='/today'
-          element={
-            currentUser ? <Today /> : <Navigate to='/login' replace />
-          }
+          element={currentUser ? <Today /> : <Navigate to='/login' replace />}
         />
         <Route path='/searchresults' element={<SearchResults />} />
 

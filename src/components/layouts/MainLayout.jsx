@@ -1,16 +1,20 @@
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import ResponsiveDrawer from "../navigation/NavBar"; // Ensure this path is correct
+import ResponsiveDrawer from "../navigation/ResponsiveDrawer"; // Ensure this path is correct
 import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   const { currentUser } = useAuth();
 
   return (
-    <div>
-      {/* Render ResponsiveDrawer only if currentUser is not null */}
+    <div
+      id='main-layout'
+      className={`${!currentUser ? "no-drawer" : "drawer-open"}`}
+    >
       {currentUser && <ResponsiveDrawer />}
-      <Outlet /> {/* This renders the child routes */}
+      <div className='content'>
+        <Outlet />
+      </div>
     </div>
   );
 };
