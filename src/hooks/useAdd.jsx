@@ -3,7 +3,7 @@ import useTracker from "../hooks/useTracker";
 import { useState } from "react";
 
 export default function useAdd({ sumEntry, updateTotal }) {
-  const { entries, totalCals, getEntries } = useTracker(0);
+  const { entries, calorieTotal, getEntries } = useTracker(0);
   const { uid } = auth.currentUser;
   const [newEntry, setNewEntry] = useState(0);
 
@@ -26,7 +26,6 @@ export default function useAdd({ sumEntry, updateTotal }) {
       .then(() => {
         updateTotal();
       });
-    
   };
 
   return { handleAdd };

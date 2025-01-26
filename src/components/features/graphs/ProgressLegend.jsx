@@ -1,4 +1,4 @@
-export default function ProgressLegend({ total, remainingCalories }) {
+export default function ProgressLegend({ total, remaining }) {
   return (
     <div>
       <svg
@@ -42,7 +42,7 @@ export default function ProgressLegend({ total, remainingCalories }) {
           rx="1"
         />
         <text x="35" y="2.3" fontSize="2.5" alignmentBaseline="middle">
-          Remaining: {remainingCalories}
+          Remaining: {remaining}
         </text>
       </svg>
     </div>

@@ -29,7 +29,7 @@ import {
 } from "@mui/material";
 
 export default function Journal() {
-  const { calorieTarget, totalCals } = useTracker(0);
+  const { calorieTarget, calorieTotal } = useTracker(0);
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [data, setData] = useState([]);
@@ -120,7 +120,7 @@ export default function Journal() {
             fullWidth
             style={{ color: "#fff", backgroundColor: "#000" }}
           >
-            Today: {totalCals}/{calorieTarget}
+            Today: {calorieTotal}/{calorieTarget}
           </Button>
         </Grid>
       </Grid>
