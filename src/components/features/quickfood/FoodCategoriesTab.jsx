@@ -48,7 +48,7 @@ function FoodCategoriesTabs({ updateTotal, sumEntry }) {
           "& .MuiTabs-flexContainer": {
             width: isMobile ? "calc(100% + 100px)" : "100%",
           },
-          maxWidth: isMobile ? "75vw" : "100%",
+          maxWidth: isMobile ? "100vw" : "100%",
         }}
       >
         {categories.map((category, index) => (
@@ -63,7 +63,7 @@ function FoodCategoriesTabs({ updateTotal, sumEntry }) {
           hidden={value !== index}
           id={`tabpanel-${index}`}
           aria-labelledby={`tab-${index}`}
-          sx={{ p: 3 }}
+          sx={{ p: 0 }} // Remove padding from tab panels here
         >
           {value === index && (
             <FoodCategory

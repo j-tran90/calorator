@@ -1,6 +1,28 @@
 import React from "react";
-import Button from "@mui/material/Button";
+import { ButtonBase, Box, Typography, styled } from "@mui/material";
 import { db, auth, timestamp } from "../../../config/Firebase";
+
+// Styled ButtonBase component
+const ComplexButton = styled(ButtonBase)(({ theme }) => ({
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "120px",
+  height: "120px",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: "#4FC483", // Set background color first
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  boxShadow: theme.shadows[3],
+  overflow: "hidden",
+  "&:hover": {
+    opacity: 0.9,
+    transform: "scale(1.05)",
+    transition: "all 0.3s ease-in-out",
+  },
+}));
 
 const FoodCategory = ({ items, sumEntry, updateTotal }) => {
   const addToJournal = async (kcal, protein, name) => {
@@ -21,34 +43,57 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
     }
   };
 
+  const getButtonBackground = (iconUrl) => {
+    // If there is a valid image URL, use it as the background
+    return iconUrl ? `url(${iconUrl})` : "#4FC483"; // Fallback to the background color if no image
+  };
+
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         flexWrap: "wrap",
-        gap: "16px",
+        gap: 2,
         justifyContent: "center",
+        p: 2,
       }}
     >
       {items.map((item) => (
-        <Button
+        <ComplexButton
           key={item.id}
-          variant='contained'
           onClick={() => addToJournal(item.kcal, item.protein, item.name)}
-          startIcon={item.icon}
           style={{
-            minWidth: "120px",
-            display: "flex",
-            flexDirection: "column",
-            fontSize: "12px",
-            backgroundColor: "#4fc483",
+            backgroundImage: getButtonBackground(item.icon), // Use the icon image if available
           }}
         >
-          <span>{item.name}</span>
-          <span style={{ display: "block" }}>+{item.kcal} kcal</span>
-        </Button>
+          <Typography
+            variant='body2'
+            sx={{
+              position: "absolute",
+              top: "50%",
+              transform: "translateY(-50%)",
+              fontWeight: "bold",
+              color: "white",
+              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            {item.name}
+          </Typography>
+          <Typography
+            variant='caption'
+            sx={{
+              position: "absolute",
+              bottom: 10,
+              fontSize: "10px",
+              color: "white",
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            +{item.kcal} kcal
+          </Typography>
+        </ComplexButton>
       ))}
-    </div>
+    </Box>
   );
 };
 

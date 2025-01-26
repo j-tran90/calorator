@@ -1,43 +1,37 @@
-import ChickenIcon from "@mui/icons-material/EmojiFoodBeverage"; // Placeholder for Chicken
-import BeefIcon from "@mui/icons-material/EmojiFoodBeverage"; // Placeholder for Beef
-import PorkIcon from "@mui/icons-material/EmojiFoodBeverage"; // Placeholder for Pork
-import FishIcon from "@mui/icons-material/EmojiFoodBeverage"; // Placeholder for Fish
-import TurkeyIcon from "@mui/icons-material/EmojiFoodBeverage"; // Placeholder for Turkey
-
 export const meats = [
   {
     id: 1,
     name: "Chicken",
     kcal: 239,
     protein: 27,
-    icon: <ChickenIcon style={{ color: "brown" }} />,
+    icon: "https://cdn.pixabay.com/photo/2017/03/14/00/46/hen-2141564_960_720.png",
   },
   {
     id: 2,
     name: "Beef",
     kcal: 250,
     protein: 26,
-    icon: <BeefIcon style={{ color: "red" }} />,
+    icon: "https://cdn.pixabay.com/photo/2017/03/15/12/00/cow-2146011_640.png",
   },
   {
     id: 3,
     name: "Pork",
     kcal: 242,
     protein: 25.7,
-    icon: <PorkIcon style={{ color: "pink" }} />,
+    icon: "https://cdn.pixabay.com/photo/2017/03/15/12/00/pork-2146010_640.png",
   },
   {
     id: 4,
     name: "Fish",
     kcal: 206,
     protein: 22,
-    icon: <FishIcon style={{ color: "blue" }} />,
+    icon: "https://cdn.pixabay.com/photo/2014/03/24/13/49/trout-294469_640.png",
   },
   {
     id: 5,
     name: "Turkey",
     kcal: 135,
     protein: 28,
-    icon: <TurkeyIcon style={{ color: "brown" }} />,
+    icon: "https://cdn.pixabay.com/photo/2017/03/14/00/45/turkey-2141562_960_720.png",
   },
 ];

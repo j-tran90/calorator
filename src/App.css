@@ -1,6 +1,5 @@
 #root {
   text-align: center;
-
 }
 
 #main-layout {
@@ -37,6 +36,12 @@ body {
 @media (max-width: 600px) {
   #main-layout.drawer-open {
     padding-left: 0;
+  }
+  #main-layout > .content {
+    flex-grow: 1;
+    padding: 0;
+    width: 100%;
+    text-align: center;
   }
 }
 
