@@ -159,7 +159,7 @@ export default function Register() {
                     "&:hover": {
                       backgroundColor: "#333",
                     },
-                    padding: "16.5px 30px 16.5px 30px",
+                    height: "56px",
                   }}
                 >
                   Submit

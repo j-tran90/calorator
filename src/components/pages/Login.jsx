@@ -37,7 +37,7 @@ export default function Login() {
 
   return (
     <Container
-      maxWidth="lg"
+      maxWidth='lg'
       sx={{
         minHeight: "100vh",
         display: "flex",
@@ -45,7 +45,7 @@ export default function Login() {
         justifyContent: "center",
       }}
     >
-      <Grid container sx={{height: "86vh"}}>
+      <Grid container sx={{ height: "86vh" }}>
         {/* Left Grid - Login Form */}
         <Grid
           item
@@ -58,11 +58,11 @@ export default function Login() {
             padding: { xs: 2, md: 8 },
           }}
         >
-          <Typography variant="h4" gutterBottom align="center" sx={{mb: 6}}>
+          <Typography variant='h4' gutterBottom align='center' sx={{ mb: 6 }}>
             Login
           </Typography>
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity='error' sx={{ mb: 2 }}>
               {error}
             </Alert>
           )}
@@ -71,10 +71,10 @@ export default function Login() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  id="email"
-                  label="Email"
-                  placeholder="Enter Email"
-                  type="email"
+                  id='email'
+                  label='Email'
+                  placeholder='Enter Email'
+                  type='email'
                   inputRef={emailRef}
                   required
                 />
@@ -82,18 +82,18 @@ export default function Login() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  id="password"
-                  label="Password"
-                  placeholder="Enter Password"
-                  type="password"
+                  id='password'
+                  label='Password'
+                  placeholder='Enter Password'
+                  type='password'
                   inputRef={passwordRef}
                   required
                 />
               </Grid>
-              <Grid item xs={12} textAlign="center">
+              <Grid item xs={12} textAlign='center'>
                 <Button
-                  type="submit"
-                  variant="contained"
+                  type='submit'
+                  variant='contained'
                   disabled={loading}
                   fullWidth
                   sx={{
@@ -102,7 +102,7 @@ export default function Login() {
                     "&:hover": {
                       backgroundColor: "#333",
                     },
-                    padding: "16.5px 30px 16.5px 30px",
+                    height: "56px",
                   }}
                 >
                   Login
@@ -112,7 +112,7 @@ export default function Login() {
           </form>
 
           <Box sx={{ mt: 4 }}>
-            <Box display="flex" alignItems="center" width="100%">
+            <Box display='flex' alignItems='center' width='100%'>
               <Divider sx={{ flexGrow: 1 }} />
               <Typography sx={{ mx: 2 }}>Or sign in with</Typography>
               <Divider sx={{ flexGrow: 1 }} />
@@ -120,10 +120,10 @@ export default function Login() {
             <ProviderLogin />
           </Box>
 
-          <Typography align="center" sx={{ mt: 2}}>
+          <Typography align='center' sx={{ mt: 2 }}>
             Don’t have an account?{" "}
             <RouterLink
-              to="/register"
+              to='/register'
               style={{ textDecoration: "none", color: "#1976d2" }}
             >
               Register
@@ -151,8 +151,8 @@ export default function Login() {
             }}
           >
             <img
-              src="https://cdn.pixabay.com/photo/2017/07/19/16/47/ice-2519682_1280.png"
-              alt="Login visual"
+              src='https://cdn.pixabay.com/photo/2017/07/19/16/47/ice-2519682_1280.png'
+              alt='Login visual'
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </Box>

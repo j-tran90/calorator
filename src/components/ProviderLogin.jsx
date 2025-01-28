@@ -26,7 +26,8 @@ export default function ProviderLogin() {
             fullWidth
             sx={{
               color: "#000",
-              padding: "16.5px 30px 16.5px 30px",
+
+              height: "56px",
               border: "1px solid black",
               "&:hover": {
                 backgroundColor: "#9993",
@@ -49,7 +50,7 @@ export default function ProviderLogin() {
             onClick={handleGuest}
             sx={{
               color: "#000",
-              padding: "16.5px 30px 16.5px 30px",
+              height: "56px",
               border: "1px solid black",
               "&:hover": {
                 backgroundColor: "#9993",
