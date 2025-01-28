@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
 import AddToJournalButton from "../AddToJournalButton"; // Import the button component
 import SearchBar from "../features/search/SearchBar";
+import { Typography } from "@mui/material";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -66,13 +67,19 @@ const SearchResults = () => {
     fetchFoodData();
   }, [searchQuery]); // Fetch whenever searchQuery changes
 
+  function capitalizeWords(input) {
+    return input
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  }
+
   return (
     <>
-      <SearchBar />
-      <TableContainer
-        component={Paper}
-        sx={{ maxWidth: 600, margin: "0 auto", mt: 3 }}
-      >
+      <Typography variant='h6'>
+        Searched for: {capitalizeWords(searchQuery)}
+      </Typography>
+      <TableContainer component={Paper}>
         {loading ? ( // Conditionally render loading circle
           <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
         ) : (

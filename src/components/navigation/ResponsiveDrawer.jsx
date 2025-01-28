@@ -17,6 +17,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
 import Brand from "../layouts/Brand";
+import SearchBar from "../features/search/SearchBar";
 
 const drawerWidth = 240;
 
@@ -114,6 +115,7 @@ function ResponsiveDrawer(props) {
             >
               <MenuIcon />
             </IconButton>
+            <SearchBar />
           </Stack>
           <User />
         </Toolbar>
@@ -149,6 +151,8 @@ function ResponsiveDrawer(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              // bgcolor: "#062118",
+              color: "",
             },
           }}
           open

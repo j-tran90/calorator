@@ -7,6 +7,7 @@ import useFetchGoals from "../../hooks/useFetchGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
 import SearchBar from "../features/search/SearchBar";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
+import { Card, Typography } from "@mui/material";
 
 export default function Today() {
   // Use useTracker to manage total and trigger re-renders when total updates
@@ -22,11 +23,6 @@ export default function Today() {
   const [searchQuery, setSearchQuery] = useState("");
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    navigate("/searchresults", { state: { query } });
-  };
 
   useEffect(() => {
     const checkUserData = async () => {
@@ -73,20 +69,30 @@ export default function Today() {
 
   return (
     <>
-      <SearchBar onSearch={handleSearch} />
       <h3>{remainingDays} days left</h3>
       {SetNewTargetsButton()}
-      <ProgressCircle
-        value={caloriePercent}
-        gradientId='greenYellow' 
-        isPercentage={true}
-        targetValue={100} 
-      />
-
-      <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
-      <h6>
-        Calorie: {dailyCalorieTarget} | Protein: {proteinTarget}g
-      </h6>
+      <Card
+        sx={{
+          m: 1,
+          border: "1px solid #9999",
+          borderRadius: "15px",
+          bgcolor: "",
+          p: 6,
+          boxShadow: "none",
+        }}
+      >
+        <Typography variant='h5'>Calories</Typography>
+        <ProgressCircle
+          value={caloriePercent}
+          gradientId='greenYellow'
+          isPercentage={true}
+          targetValue={100}
+        />
+        <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
+        <h6>
+          Calorie: {dailyCalorieTarget} | Protein: {proteinTarget}g
+        </h6>
+      </Card>
       <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />
     </>
   );
