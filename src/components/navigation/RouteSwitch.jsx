@@ -13,6 +13,7 @@ import MainLayout from "../layouts/MainLayout";
 import Goals from "../pages/Goals";
 import Today from "../pages/Today";
 import Settings from "../pages/Settings";
+import DailyJournal from "../pages/DailyJournal";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
@@ -88,6 +89,16 @@ const RouteSwitch = () => {
           element={
             <PrivateRoute>
               <Settings />
+            </PrivateRoute>
+          }
+        />
+
+        {/* WIP PAGES */}
+        <Route
+          path='/dailyjournal'
+          element={
+            <PrivateRoute>
+              <DailyJournal />
             </PrivateRoute>
           }
         />
