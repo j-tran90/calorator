@@ -132,11 +132,7 @@ const SearchResults = () => {
                 foodData.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.name}</TableCell>
-                    <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
-                    >
-                      {item.energy}
-                    </TableCell>{" "}
+                    <TableCell>{item.energy}</TableCell>
                     <TableCell>{item.protein}</TableCell>
                     <TableCell
                       sx={{ display: { xs: "none", md: "table-cell" } }}
@@ -148,7 +144,11 @@ const SearchResults = () => {
                     >
                       {item.carbs}
                     </TableCell>
-                    <TableCell>{item.totalLipids}</TableCell>
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {item.totalLipids}
+                    </TableCell>
                     <TableCell>
                       <AddToJournalButton
                         food={item.name}
