@@ -1,17 +1,29 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import TodayIcon from "@mui/icons-material/Today";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SettingsIcon from "@mui/icons-material/Settings";
 
-const NavLinks = ({ onLinkClick }) => {
-  const links = [
-    { to: "/today", text: "Today" },
-    { to: "/dashboard", text: "Dashboard" },
-    { to: "/goals", text: "Goals" },
-    { to: "/profile", text: "Profile" },
-    { to: "/journal", text: "Journal" },
+const NavLinks = ({ onLinkClick, isBottomLinks }) => {
+  const topLinks = [
+    { to: "/today", text: "Today", icon: <TodayIcon /> },
+    { to: "/dashboard", text: "Dashboard", icon: <SpaceDashboardIcon /> },
+    { to: "/goals", text: "Goals", icon: <OutlinedFlagIcon /> },
+    { to: "/profile", text: "Profile", icon: <AccountBoxIcon /> },
+    { to: "/journal", text: "Journal", icon: <AutoStoriesIcon /> },
   ];
+
+  const bottomLinks = [
+    { to: "/settings", text: "Settings", icon: <SettingsIcon /> },
+  ];
+
+  const links = isBottomLinks ? bottomLinks : topLinks;
 
   return (
     <>
@@ -24,7 +36,8 @@ const NavLinks = ({ onLinkClick }) => {
               onLinkClick();
             }}
           >
-            <ListItemText primary={link.text} />
+            {link.icon}
+            <ListItemText primary={link.text} sx={{ml: 3 }} />
           </ListItemButton>
         </ListItem>
       ))}

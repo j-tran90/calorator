@@ -1,4 +1,7 @@
 #root {
+  background-color: #fff;
+  color: #333;
+  font-family: Arial, sans-serif;
   text-align: center;
 }
 
@@ -44,6 +47,13 @@ body {
     padding: 0;
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text color */
   }
 }
 

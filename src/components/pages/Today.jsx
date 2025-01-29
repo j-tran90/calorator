@@ -5,9 +5,10 @@ import ProgressCircle from "../features/graphs/ProgressCircle";
 import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
-import SearchBar from "../features/search/SearchBar";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
-import { Card, Typography } from "@mui/material";
+import { Card, Grid, Typography } from "@mui/material";
+import SetTargetButton from "../buttons/SetTargetButton";
+import ProgressBar from "../features/graphs/ProgressBar";
 
 export default function Today() {
   // Use useTracker to manage total and trigger re-renders when total updates
@@ -17,10 +18,9 @@ export default function Today() {
     caloriePercent,
     updateTotal,
     sumEntry,
+    proteinTotal,
   } = useTracker(0);
-  const { proteinTarget, remainingDays, SetNewTargetsButton } =
-    useFetchGoals(0);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { proteinTarget, remainingDays, differenceInDays } = useFetchGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
 
@@ -69,15 +69,39 @@ export default function Today() {
 
   return (
     <>
-      <h3>{remainingDays} days left</h3>
-      {SetNewTargetsButton()}
       <Card
         sx={{
           m: 1,
           border: "1px solid #9999",
-          borderRadius: "15px",
+          borderRadius: "20px",
           bgcolor: "",
-          p: 6,
+          p: 0,
+          boxShadow: "none",
+        }}
+      >
+        {" "}
+        <Typography variant='h5'>
+          {remainingDays >= 0 ? (
+            <ProgressBar
+              barHeight={30}
+              barWidth={100}
+              barHeading={`${remainingDays} Days to Deadline`}
+              currentValue={differenceInDays - remainingDays}
+              targetValue={differenceInDays}
+            />
+          ) : (
+            <SetTargetButton />
+          )}
+        </Typography>
+      </Card>
+
+      <Card
+        sx={{
+          m: 1,
+          border: "1px solid #9999",
+          borderRadius: "20px",
+          bgcolor: "",
+          p: {xs: 3, md:5},
           boxShadow: "none",
         }}
       >
@@ -89,9 +113,44 @@ export default function Today() {
           targetValue={100}
         />
         <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
-        <h6>
-          Calorie: {dailyCalorieTarget} | Protein: {proteinTarget}g
-        </h6>
+
+        <Grid container rowSpacing={1} columnSpacing={{xs: 4, md: 10}}>
+          <Grid item xs={6}>
+            <ProgressBar
+              gradientType='purple'
+              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+              barHeight={10}
+              currentValue={proteinTotal}
+              targetValue={proteinTarget}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <ProgressBar
+              gradientType='purple'
+              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+              barHeight={10}
+    
+              currentValue={proteinTotal}
+              targetValue={proteinTarget}
+            />
+          </Grid>
+          <Grid item xs={6}>   <ProgressBar
+              gradientType='purple'
+              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+              barHeight={10}
+    
+              currentValue={proteinTotal}
+              targetValue={proteinTarget}
+            /></Grid>
+          <Grid item xs={6}>   <ProgressBar
+              gradientType='purple'
+              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+              barHeight={10}
+    
+              currentValue={proteinTotal}
+              targetValue={proteinTarget}
+            /></Grid>
+        </Grid>
       </Card>
       <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />
     </>

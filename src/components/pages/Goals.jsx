@@ -1,6 +1,5 @@
 import { db, auth } from "../../config/Firebase";
 import { collection, query, getDocs } from "firebase/firestore";
-import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -9,7 +8,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   Typography,
   Box,
   TablePagination,
@@ -17,6 +15,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
+import SetTargetButton from "../buttons/SetTargetButton";
 
 export default function Targets() {
   const { uid } = auth.currentUser;
@@ -91,19 +90,7 @@ export default function Targets() {
       <Typography variant='h5' textAlign='center' mb={3}>
         Your Targets
       </Typography>
-      <Box display='flex' justifyContent='center' mb={3}>
-        <Button
-          variant='contained'
-          component={Link}
-          to='/creategoal'
-          sx={{
-            backgroundColor: "#000",
-            "&:hover": { backgroundColor: "#333" },
-          }}
-        >
-          Set New Target
-        </Button>
-      </Box>
+      <SetTargetButton />
       <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
         <Table aria-label='user targets table'>
           <TableHead>

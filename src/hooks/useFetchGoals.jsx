@@ -8,6 +8,8 @@ export default function useGoals() {
   const [calorieTarget, setCalorieTarget] = useState(0);
   const [proteinTarget, setProteinTarget] = useState(0);
   const [targetDate, setTargetDate] = useState(null);
+  const [createdDate, setCreatedDate] = useState(new Date());
+  const [differenceInDays, setDifferenceInDays] = useState(null);
   const [remainingDays, setRemainingDays] = useState(0);
   const { uid } = auth.currentUser;
 
@@ -20,6 +22,7 @@ export default function useGoals() {
         setCalorieTarget(data.dailyCalorieTarget);
         setProteinTarget(data.dailyProteinTarget);
         setTargetDate(data.targetDate);
+        setCreatedDate(data.createdDate);
       } else {
         console.warn("No user goals found in Firestore.");
       }
@@ -45,6 +48,22 @@ export default function useGoals() {
     return 0;
   };
 
+  const calculateTargetLength = (createdDate, targetDate) => {
+    // Convert both dates to Date objects if they're not already
+    const created = new Date(createdDate);
+    const target = new Date(targetDate);
+
+    // Calculate the difference in milliseconds
+    const differenceInMilliseconds = target - created;
+
+    // Convert milliseconds to days and round down to the nearest whole number
+    const differenceInDays = Math.ceil(
+      differenceInMilliseconds / (1000 * 60 * 60 * 24)
+    );
+
+    return differenceInDays;
+  };
+
   useEffect(() => {
     fetchUserGoals();
   }, []);
@@ -57,28 +76,19 @@ export default function useGoals() {
     }
   }, [targetDate]);
 
-  const SetNewTargetsButton = () =>
-    remainingDays === 0 && (
-      <Box display='flex' justifyContent='center' mb={3}>
-        <Button
-          variant='contained'
-          component={Link}
-          to='/creategoal'
-          sx={{
-            backgroundColor: "#000",
-            "&:hover": { backgroundColor: "#333" },
-          }}
-        >
-          Set New Target
-        </Button>
-      </Box>
-    );
+  useEffect(() => {
+    if (targetDate && createdDate) {
+      const dayLength = calculateTargetLength(createdDate, targetDate);
+      setDifferenceInDays(dayLength); // Set the value to differenceInDays
+    }
+  }, [targetDate, createdDate]);
 
   return {
     calorieTarget,
     proteinTarget,
     targetDate,
     remainingDays,
-    SetNewTargetsButton,
+    createdDate,
+    differenceInDays,
   };
 }

@@ -21,7 +21,7 @@ import SearchBar from "../features/search/SearchBar";
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
+function ResponsiveDrawer(props, topLinks, bottomLinks) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -51,7 +51,7 @@ function ResponsiveDrawer(props) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        textAlign: "center", // Center text if any
+        textAlign: "center",
       }}
     >
       <div
@@ -69,20 +69,13 @@ function ResponsiveDrawer(props) {
       </List>
       <Divider sx={{ width: "100%" }} />
       <Box sx={{ mt: "auto", width: "100%" }}>
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton to='/settings' onClick={handleDrawerClose}>
-              <ListItemText primary='Settings' />
-            </ListItemButton>
-          </ListItem>
-        </List>
+        <NavLinks onLinkClick={handleDrawerClose} isBottomLinks={true} />
       </Box>
     </div>
   );
 
-  // Return null if the user is not logged in
   if (!currentUser) {
-    return null; // Don't render the drawer if not logged in
+    return null;
   }
 
   const container =
@@ -132,7 +125,7 @@ function ResponsiveDrawer(props) {
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
@@ -152,7 +145,7 @@ function ResponsiveDrawer(props) {
               boxSizing: "border-box",
               width: drawerWidth,
               // bgcolor: "#062118",
-              color: "",
+              // color: "#fff",
             },
           }}
           open
