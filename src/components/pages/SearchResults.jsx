@@ -49,10 +49,30 @@ const SearchResults = () => {
             (nutrient) => nutrient.nutrientName === "Protein"
           );
 
+          const sugarNutrient = food.foodNutrients.find(
+            (nutrient) =>
+              nutrient.nutrientName === "Sugars, total" ||
+              nutrient.nutrientName === "Total Sugars"
+          );
+
+          const carbsNutrient = food.foodNutrients.find(
+            (nutrient) =>
+              nutrient.nutrientName === "Carbohydrate, by difference"
+          );
+
+          const totalLipidsNutrient = food.foodNutrients.find(
+            (nutrient) => nutrient.nutrientName === "Total lipid (fat)"
+          );
+
           return {
             name: food.description,
             energy: energyNutrient ? `${energyNutrient.value} kcal` : "N/A",
             protein: proteinNutrient ? `${proteinNutrient.value} g` : "N/A",
+            sugar: sugarNutrient ? `${sugarNutrient.value} g` : "N/A",
+            carbs: carbsNutrient ? `${carbsNutrient.value} g` : "N/A",
+            totalLipids: totalLipidsNutrient
+              ? `${totalLipidsNutrient.value} g`
+              : "N/A",
           };
         });
 
@@ -80,7 +100,7 @@ const SearchResults = () => {
         Searched for: {capitalizeWords(searchQuery)}
       </Typography>
       <TableContainer component={Paper}>
-        {loading ? ( // Conditionally render loading circle
+        {loading ? (
           <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
         ) : (
           <Table>
@@ -89,6 +109,15 @@ const SearchResults = () => {
                 <TableCell>Food Name</TableCell>
                 <TableCell>Calories (kcal)</TableCell>
                 <TableCell>Protein (g)</TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  Sugar (g)
+                </TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  Carbs (g)
+                </TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  Fats (g)
+                </TableCell>
                 <TableCell>Add to Journal</TableCell>
               </TableRow>
             </TableHead>
@@ -103,8 +132,23 @@ const SearchResults = () => {
                 foodData.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.energy}</TableCell>
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {item.energy}
+                    </TableCell>{" "}
                     <TableCell>{item.protein}</TableCell>
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {item.sugar}
+                    </TableCell>
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {item.carbs}
+                    </TableCell>
+                    <TableCell>{item.totalLipids}</TableCell>
                     <TableCell>
                       <AddToJournalButton
                         food={item.name}

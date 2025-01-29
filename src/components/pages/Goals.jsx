@@ -14,8 +14,9 @@ import {
   IconButton,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import CheckIcon from "@mui/icons-material/Check";
 import SetTargetButton from "../buttons/SetTargetButton";
+import dayjs from "dayjs";
+import { CheckCircle, HourglassTop } from "@mui/icons-material";
 
 export default function Targets() {
   const { uid } = auth.currentUser;
@@ -71,12 +72,8 @@ export default function Targets() {
     setPage(0); // Reset to first page when rows per page changes
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
+  const formatDate = (date) => {
+    return dayjs(date).format("MMM DD, YYYY");
   };
 
   // Paginate the goalHistory based on current page and rowsPerPage
@@ -98,7 +95,7 @@ export default function Targets() {
               <TableCell>Daily (kcals)</TableCell>
               <TableCell>Daily Protein</TableCell>
               <TableCell>Weight Goal</TableCell>
-              <TableCell>Start (mm/dd/yyyy)</TableCell>
+              <TableCell>Start </TableCell>
               <TableCell>End</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
@@ -113,11 +110,9 @@ export default function Targets() {
                 <TableCell>{formatDate(showTargets.targetDate)}</TableCell>
                 <TableCell>
                   {showTargets.status === "completed" ? (
-                    <IconButton color='success' disabled>
-                      <CheckIcon />
-                    </IconButton>
+                    <CheckCircle sx={{ color: "#4caf50" }} />
                   ) : (
-                    showTargets.status
+                    <HourglassTop sx={{ color: " #FFA500" }} />
                   )}
                 </TableCell>
               </TableRow>

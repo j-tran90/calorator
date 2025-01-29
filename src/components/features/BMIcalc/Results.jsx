@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TableHead,
+} from "@mui/material";
 
 function Results() {
   const [weightTarget, setWeightTarget] = useState("");
+  const [targetDate, setTargetDate] = useState(0);
   const [remainingDays, setRemainingDays] = useState(0);
   const [dob, setDob] = useState(""); // Date of Birth instead of age
   const [height, setHeight] = useState(0);
@@ -49,6 +59,7 @@ function Results() {
 
     // Convert weightTarget to a Date object
     const targetDate = new Date(weightGoalData.targetDate);
+    setTargetDate(targetDate);
 
     // Capture user's system time
     const currentDate = new Date();
@@ -107,13 +118,56 @@ function Results() {
     localStorage.setItem("resultsData", JSON.stringify(dataToSave));
   }, [weightTarget, currentWeight, dob, height]);
 
+  const formatDate = (date) => {
+    return dayjs(date).format("MMM DD, YYYY");
+  };
+
   return (
-    <div>
-      <p>Weight Goal: {weightTarget}</p>
-      <p>Remaining Days: {remainingDays}</p>
-      <p>Daily Calorie Target: {dailyCalorieTarget} kcal</p>
-      <p>Daily Protein Target: {dailyProteinTarget} g</p>
-    </div>
+    <Box>
+      <TableContainer>
+        <Table fullWidth aria-label='goal details'>
+          <TableHead>
+            <TableRow>
+              <TableCell align='left'>Goal</TableCell>
+              <TableCell align='left'>Value</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell align='left'>Weight Goal</TableCell>
+              <TableCell align='left'>
+                <strong>{weightTarget} lbs</strong>
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align='left'>Daily Calorie Target</TableCell>
+              <TableCell align='left'>
+                <strong>{dailyCalorieTarget} kcal</strong>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align='left'>Daily Protein Target</TableCell>
+              <TableCell align='left'>
+                <strong>{dailyProteinTarget} g</strong>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align='left'>Reach Goal By</TableCell>
+              <TableCell align='left'>
+                <strong>{formatDate(targetDate)}</strong>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align='left'>Remaining Days</TableCell>
+              <TableCell align='left'>
+                <strong>{remainingDays}</strong>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 

@@ -12,7 +12,7 @@ const ComplexButton = styled(ButtonBase)(({ theme }) => ({
   width: "120px",
   height: "120px",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#4FC483", // Set background color first
+  backgroundColor: "#0009",//"#4FC483", // Set background color first
   backgroundSize: "cover",
   backgroundPosition: "center",
   boxShadow: theme.shadows[3],

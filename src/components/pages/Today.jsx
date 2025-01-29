@@ -6,7 +6,7 @@ import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
-import { Card, Grid, Typography } from "@mui/material";
+import { Box, Card, Grid, Typography } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import ProgressBar from "../features/graphs/ProgressBar";
 
@@ -23,6 +23,15 @@ export default function Today() {
   const { proteinTarget, remainingDays, differenceInDays } = useFetchGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
+
+  //PLACEHOLDER DELETE WHEN REPLACE
+  const placeholder1 = 10;
+  const placeholder2 = 55;
+  const placeholder3 = 33;
+
+  const handleClick = () => {
+    navigate("/journal");
+  };
 
   useEffect(() => {
     const checkUserData = async () => {
@@ -101,20 +110,24 @@ export default function Today() {
           border: "1px solid #9999",
           borderRadius: "20px",
           bgcolor: "",
-          p: {xs: 3, md:5},
+          p: { xs: 3, md: 5 },
           boxShadow: "none",
         }}
       >
         <Typography variant='h5'>Calories</Typography>
-        <ProgressCircle
-          value={caloriePercent}
-          gradientId='greenYellow'
-          isPercentage={true}
-          targetValue={100}
-        />
+
+        <Box onClick={handleClick}>
+          <ProgressCircle
+            value={caloriePercent}
+            gradientId='greenYellow'
+            isPercentage={true}
+            targetValue={100}
+          />
+        </Box>
+
         <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
 
-        <Grid container rowSpacing={1} columnSpacing={{xs: 4, md: 10}}>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 4, md: 10 }}>
           <Grid item xs={6}>
             <ProgressBar
               gradientType='purple'
@@ -126,30 +139,33 @@ export default function Today() {
           </Grid>
           <Grid item xs={6}>
             <ProgressBar
-              gradientType='purple'
-              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+              gradientType='yellowGreen'
+              barHeading={`Placeholder 1`}
               barHeight={10}
-    
-              currentValue={proteinTotal}
+              currentValue={placeholder1}
               targetValue={proteinTarget}
             />
           </Grid>
-          <Grid item xs={6}>   <ProgressBar
-              gradientType='purple'
-              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+          <Grid item xs={6}>
+            {" "}
+            <ProgressBar
+              gradientType='orangeRed'
+              barHeading={"Placeholder 2"}
               barHeight={10}
-    
-              currentValue={proteinTotal}
+              currentValue={placeholder2}
               targetValue={proteinTarget}
-            /></Grid>
-          <Grid item xs={6}>   <ProgressBar
-              gradientType='purple'
-              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            {" "}
+            <ProgressBar
+              gradientType='lightBlueBlue'
+              barHeading={`Placeholder 3`}
               barHeight={10}
-    
-              currentValue={proteinTotal}
+              currentValue={placeholder3}
               targetValue={proteinTarget}
-            /></Grid>
+            />
+          </Grid>
         </Grid>
       </Card>
       <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />

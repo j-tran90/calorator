@@ -2,8 +2,8 @@ import React from "react";
 import { LinearProgress, Box, Typography } from "@mui/material";
 
 export default function ProgressBar({
-  currentValue,
-  targetValue,
+  currentValue = 0,
+  targetValue = 1,
   barHeading,
   barHeight,
   barWidth,
@@ -11,18 +11,28 @@ export default function ProgressBar({
 }) {
   const gradients = {
     purple: {
-      start: "#7a4cff",
-      end: "#bb6eff",
+      start: "#bb6eff",
+      end: "#7a4cff",
     },
     greenYellow: {
-      start: "#4fc483",
-      end: "#e5ff00",
+      start: "#e5ff00",
+      end: "#4fc483",
+    },
+    orangeRed: {
+      start: "#FFA500", // Orange
+      end: "#FF0000", // Red
+    },
+    lightBlueBlue: {
+      start: "#ADD8E6", // Light Blue
+      end: "#0000FF", // Blue
     },
   };
 
   const selectedGradient = gradients[gradientType] || gradients.greenYellow; // Default to greenYellow
 
-  const progress = Math.min((currentValue / targetValue) * 100, 100); // Clamp progress between 0-100%
+  // Ensure targetValue is valid and prevent NaN issues
+  const progress =
+    targetValue > 0 ? Math.min((currentValue / targetValue) * 100, 100) : 0;
 
   return (
     <Box sx={{ marginTop: 2, width: `${barWidth}%` }}>

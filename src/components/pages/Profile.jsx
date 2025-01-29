@@ -42,6 +42,10 @@ export default function Profile() {
     return ageInYears;
   }
 
+  const formatDate = (date) => {
+    return dayjs(date).format("MMM DD, YYYY");
+  };
+
   useEffect(() => {
     if (profile && profile.length > 0) {
       const calculatedAge = calculateAge(profile[0].dob);
@@ -57,7 +61,7 @@ export default function Profile() {
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table>
           <TableBody>
             <TableRow>
@@ -73,9 +77,7 @@ export default function Profile() {
                   <TableCell>
                     <strong>Date of Birth</strong>
                   </TableCell>
-                  <TableCell>
-                    {dayjs(showProfile.dob).format("MM/DD/YYYY")}
-                  </TableCell>
+                  <TableCell>{formatDate(showProfile.dob)}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
@@ -103,11 +105,9 @@ export default function Profile() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <strong>Joined</strong>
+                    <strong>Account Created</strong>
                   </TableCell>
-                  <TableCell>
-                    {dayjs(showProfile.joinDate).format("MM/DD/YYYY")}
-                  </TableCell>
+                  <TableCell>{formatDate(showProfile.joinDate)}</TableCell>
                 </TableRow>
               </React.Fragment>
             ))}

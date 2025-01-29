@@ -99,11 +99,7 @@ function CreateGoal() {
     }
   };
 
-  const steps = [
-    "Create Profile",
-    "Set Weight Goal",
-    "View Results",
-  ];
+  const steps = ["Create Profile", "Set Weight Goal", "View Results"];
 
   const getStepContent = (step) => {
     switch (step) {
@@ -124,12 +120,22 @@ function CreateGoal() {
       case 2:
         return (
           <div>
-            <Results />
-            <Box display="flex" justifyContent="space-between">
-              <Button onClick={handleReset}>Reset</Button>
+            <Box sx={{ mt: 10, mb: 10 }}>
+              <Results />
+            </Box>
+            <Box display='flex' justifyContent='space-between'>
               <Button
-                variant="contained"
-                color="primary"
+                onClick={handleReset}
+                sx={{ color: "red", "&:hover": { backgroundColor: "" } }}
+              >
+                Reset
+              </Button>
+              <Button
+                variant='contained'
+                sx={{
+                  backgroundColor: "#000",
+                  "&:hover": { backgroundColor: "#333" },
+                }}
                 onClick={handleFinishToDashboard}
                 disabled={loading}
               >
@@ -148,11 +154,23 @@ function CreateGoal() {
   };
 
   return (
-    <div>
+    <Box
+      container
+      sx={{
+        p: 2,
+        mr: "auto",
+        ml: "auto",
+        mt: 6,
+        maxWidth: { md: "1280px" },
+        overflow: { xs: "hidden", md: "auto" },
+      }}
+    >
       <Stepper
         activeStep={activeStep}
         alternativeLabel
-        sx={{ marginBottom: "30px" }}
+        sx={{
+          mb: "30px",
+        }}
       >
         {steps.map((label) => (
           <Step key={label}>
@@ -164,20 +182,33 @@ function CreateGoal() {
         {activeStep === steps.length ? (
           <div>
             <p>All steps completed</p>
-            <Button onClick={handleReset}>Reset</Button>
+            <Button
+              onClick={handleReset}
+              sx={{ color: "#000", "&:hover": { backgroundColor: "" } }}
+            >
+              Reset
+            </Button>
           </div>
         ) : (
           <div>
             {getStepContent(activeStep)}
             {activeStep !== steps.length - 1 && (
-              <Box display="flex" justifyContent="space-between">
-                <Button disabled={activeStep === 0} onClick={handleBack}>
+              <Box display='flex' justifyContent='space-between'>
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ color: "#000", "&:hover": { backgroundColor: "" } }}
+                >
                   Back
                 </Button>
                 <Button
-                  variant="contained"
+                  variant='contained'
                   onClick={handleNext}
                   disabled={!isFormValid}
+                  sx={{
+                    backgroundColor: "#000",
+                    "&:hover": { backgroundColor: "#333" },
+                  }}
                 >
                   Next
                 </Button>
@@ -186,7 +217,7 @@ function CreateGoal() {
           </div>
         )}
       </div>
-    </div>
+    </Box>
   );
 }
 

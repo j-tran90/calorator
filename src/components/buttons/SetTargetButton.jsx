@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 export default function SetTargetButton() {
   return (
     <>
-      {" "}
       <Box display='flex' justifyContent='center' m={3}>
         <Button
           variant='contained'

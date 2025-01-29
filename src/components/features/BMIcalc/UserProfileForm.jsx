@@ -40,7 +40,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
           const userData = userProfileSnap.data();
           const { dob, gender, height } = userData;
 
-          console.log(userData)
+          console.log(userData);
 
           // Store all data in calorieData object
           const calorieData = {
@@ -76,7 +76,6 @@ function UserProfileForm({ onNext, onValidationChange }) {
           isNaN(formData.height) ||
           formData.height < 50 ||
           formData.height > 400,
-
       };
 
       return newErrors;
@@ -150,17 +149,6 @@ function UserProfileForm({ onNext, onValidationChange }) {
           error={errors.height}
         />
       </Box>
-      {/* <Box sx={{ "& > :not(style)": { mb: 2 } }}>
-        <TextField
-          label='Current Weight (lbs)'
-          type='number'
-          name='weight'
-          value={formData.weight}
-          onChange={handleChange}
-          fullWidth
-          error={errors.weight}
-        />
-      </Box> */}
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker

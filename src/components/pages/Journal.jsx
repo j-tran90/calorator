@@ -13,7 +13,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { db, auth } from "../../config/Firebase";
-import { RiDeleteBack2Fill } from "react-icons/ri";
+import ClearIcon from "@mui/icons-material/Clear";
 import useTracker from "../../hooks/useTracker";
 import {
   Grid,
@@ -91,24 +91,30 @@ export default function Journal() {
       <Typography variant='h5' textAlign='center' mb={2}>
         Journal
       </Typography>
-      <Grid container spacing={2} justifyContent='center' alignItems='center'>
-        <Grid item xs={12} sm={6} md={4}>
+      <Grid
+        container
+        spacing={2}
+        justifyContent='center'
+        alignItems='center'
+        sx={{ maxWidth: "1280px" }}
+      >
+        <Grid item xs={6} sm={6} md={4}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label='Start Date'
               value={startDate}
               onChange={(date) => handleStartDateChange(date)}
-              fullWidth
+              sx={{ width: { xs: "163.5px", md: "259px" } }}
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={6} sm={6} md={4}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label='End Date'
               value={endDate}
               onChange={(date) => handleEndDateChange(date)}
-              fullWidth
+              sx={{ width: { xs: "163.5px", md: "259px" } }}
             />
           </LocalizationProvider>
         </Grid>
@@ -189,15 +195,21 @@ export default function Journal() {
                     <TableCell>{entry.calories}</TableCell>
                     <TableCell>{entry.protein} g</TableCell>
                     <TableCell>
-                      <RiDeleteBack2Fill
-                        style={{
-                          marginLeft: "20px",
-                          marginBottom: "-3px",
-                          color: "red",
-                          cursor: "pointer",
-                        }}
+                      <Button
+                        variant='contained'
                         onClick={() => handleEntryDelete(entry.id)}
-                      />
+                        sx={{
+                          backgroundColor: "red",
+                          "&:hover": { backgroundColor: "#900" },
+                        }}
+                      >
+                        <ClearIcon
+                          style={{
+                            color: "#fff",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 </React.Fragment>

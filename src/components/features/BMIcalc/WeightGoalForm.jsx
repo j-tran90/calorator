@@ -49,8 +49,7 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
       if (!targetDate) {
         newErrors.targetDate = "Required";
       } else if (targetDate <= currentDate) {
-        newErrors.targetDate =
-          "Choose a future date";
+        newErrors.targetDate = "Choose a future date";
       }
 
       return newErrors;
@@ -63,29 +62,28 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
     setIsFormValid(isValid);
   }, [currentWeight, weightTarget, targetDate, onValidationChange]);
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     console.log("Form Data:", {
       currentWeight: currentWeight,
       weightTarget: weightTarget,
       targetDate: targetDate.toDate(),
     }); // Log form data before submitting
-  
+
     const weightInPounds = parseFloat(weightTarget);
     const currentWeightInPounds = parseFloat(currentWeight);
-  
+
     if (isNaN(currentWeightInPounds)) {
       console.error("Invalid currentWeight:", currentWeight);
       return;
     }
-  
+
     // Save data to localStorage
     localStorage.setItem("currentWeight", currentWeightInPounds);
     localStorage.setItem("weightTarget", weightInPounds);
     localStorage.setItem("targetDate", targetDate.toDate().toISOString());
-  
+
     onSubmit({
       currentWeight: currentWeightInPounds,
       weightTarget: weightInPounds,
@@ -101,7 +99,7 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
       }}
     >
       <form id='weight-goal-form' onSubmit={handleSubmit}>
-      <Box
+        <Box
           sx={{
             width: 259,
             "& > :not(style)": { mb: 2 },
@@ -139,12 +137,11 @@ function WeightGoalForm({ onSubmit, onValidationChange }) {
               label='Date to Reach Goal'
               value={targetDate}
               onChange={(newDate) => setTargetDate(newDate)}
+              sx={{ minWidth: "259px" }}
             />
           </LocalizationProvider>
           {!!errors.targetDate && (
-            <div style={{ color: "red" }}>
-              {errors.targetDate}
-            </div>
+            <div style={{ color: "red" }}>{errors.targetDate}</div>
           )}
         </Box>
       </form>
