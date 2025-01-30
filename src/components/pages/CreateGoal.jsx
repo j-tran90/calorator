@@ -155,7 +155,7 @@ function CreateGoal() {
 
   return (
     <Box
-      container
+      
       sx={{
         p: 2,
         mr: "auto",

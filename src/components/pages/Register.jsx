@@ -54,12 +54,12 @@ export default function Register() {
         justifyContent: "center",
       }}
     >
-      <Grid2 container>
+      <Grid2 container sx={{ height: "86vh" }}>
         {/* Left Grid2 - Full-size Image */}
         <Grid2
           size={{ xs: 12, md: 6 }}
           sx={{
-            display: { xs: "none", sm: "block" }, // Hide left Grid2 on mobile
+            display: { xs: "none", sm: "block" },
           }}
         >
           <Box
@@ -69,13 +69,17 @@ export default function Register() {
               alignItems: "center",
               justifyContent: "center",
               overflow: "hidden",
-              borderRadius: "20px 0px 0px 20px",
             }}
           >
             <img
               src='https://cdn.pixabay.com/photo/2022/05/28/07/07/watermelon-7226708_1280.png'
               alt='Registration visual'
-              style={{ width: "576px", height: "778px", objectFit: "cover" }}
+              style={{
+                width: "576px",
+                height: "778px",
+                objectFit: "cover",
+                borderRadius: "20px 0px 0px 20px",
+              }}
             />
           </Box>
         </Grid2>
@@ -87,7 +91,7 @@ export default function Register() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            p: { xs: "none", md: 8 },
+            padding: { xs: 2, md: 8 },
           }}
         >
           <Typography variant='h4' gutterBottom align='center' sx={{ mb: 6 }}>

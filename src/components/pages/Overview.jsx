@@ -138,7 +138,7 @@ export default function Overview() {
           <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='yellowGreen'
-              barHeading={`Placeholder 1`}
+              barHeading={`Sugar`}
               barHeight={10}
               currentValue={placeholder1}
               targetValue={proteinTarget}
@@ -147,7 +147,7 @@ export default function Overview() {
           <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='orangeRed'
-              barHeading={"Placeholder 2"}
+              barHeading={"Carbs"}
               barHeight={10}
               currentValue={placeholder2}
               targetValue={proteinTarget}
@@ -156,7 +156,7 @@ export default function Overview() {
           <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='lightBlueBlue'
-              barHeading={`Placeholder 3`}
+              barHeading={`Fats`}
               barHeight={10}
               currentValue={placeholder3}
               targetValue={proteinTarget}

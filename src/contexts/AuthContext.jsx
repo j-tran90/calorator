@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInAnonymously,
+  browserPopupRedirectResolver,
 } from "firebase/auth";
 
 const AuthContext = React.createContext();
@@ -43,7 +44,7 @@ export default function AuthProvider({ children }) {
 
   const googleLogin = () => {
     const googleAuth = getAuth();
-    signInWithPopup(googleAuth, provider);
+    signInWithPopup(googleAuth, provider, browserPopupRedirectResolver);
   };
 
   async function guestLogin() {

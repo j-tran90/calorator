@@ -44,7 +44,7 @@ export default function Journal() {
 
       const entryCollectionRef = query(
         collection(db, `journal/${uid}/entries`),
-        orderBy("createdAt", "asc"),
+        orderBy("createdAt", "desc"),
         where("createdAt", ">=", startOfStartDate),
         where("createdAt", "<=", endOfEndDate)
       );

@@ -133,7 +133,7 @@ export default function Login() {
         <Grid2
           size={{ xs: 12, md: 6 }}
           sx={{
-            display: { xs: "none", sm: "block" }, // Hide right Grid2 on mobile
+            display: { xs: "none", sm: "block" },
           }}
         >
           <Box
@@ -143,13 +143,17 @@ export default function Login() {
               alignItems: "center",
               justifyContent: "center",
               overflow: "hidden",
-              borderRadius: "20px 20px 20px 20px",
             }}
           >
             <img
               src='https://cdn.pixabay.com/photo/2017/07/19/16/47/ice-2519682_1280.png'
               alt='Login visual'
-              style={{ width: "576px", height: "778px", objectFit: "cover" }}
+              style={{
+                width: "576px",
+                height: "778px",
+                objectFit: "cover",
+                borderRadius: "0px 20px 20px 0px",
+              }}
             />
           </Box>
         </Grid2>

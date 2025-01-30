@@ -124,7 +124,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
 
   return (
     <form id='calorie-calculator-form' onSubmit={handleSubmit}>
-      <FormControl component='fieldset'>
+      <FormControl component='fieldset'             sx={{m: 1}}>
         <FormLabel component='legend'>Gender</FormLabel>
         <RadioGroup
           aria-label='gender'
@@ -147,6 +147,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
           onChange={handleChange}
           fullWidth
           error={errors.height}
+          sx={{ width: "259px" }}
         />
       </Box>
       <Box sx={{ "& > :not(style)": { mb: 2 } }}>
@@ -158,6 +159,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
             textField={(params) => (
               <TextField {...params} fullWidth error={errors.dob} />
             )}
+            sx={{ width: "259px" }}
           />
         </LocalizationProvider>
       </Box>

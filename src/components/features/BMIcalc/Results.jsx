@@ -125,7 +125,7 @@ function Results() {
   return (
     <Box>
       <TableContainer>
-        <Table fullWidth aria-label='goal details'>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell align='left'>Goal</TableCell>
