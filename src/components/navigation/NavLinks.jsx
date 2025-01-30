@@ -9,12 +9,14 @@ import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { BarChart } from "@mui/icons-material";
 
 const NavLinks = ({ onLinkClick, isBottomLinks }) => {
   const topLinks = [
+    { to: "/overview", text: "Overview", icon: <SpaceDashboardIcon /> },
     { to: "/today", text: "Today", icon: <TodayIcon /> },
     { to: "/journal", text: "Journal", icon: <AutoStoriesIcon /> },
-    { to: "/dashboard", text: "Dashboard", icon: <SpaceDashboardIcon /> },
+    { to: "/dashboard", text: "Statistic", icon: <BarChart /> },
     { to: "/goals", text: "Goals", icon: <OutlinedFlagIcon /> },
     { to: "/profile", text: "Profile", icon: <AccountBoxIcon /> },
   ];

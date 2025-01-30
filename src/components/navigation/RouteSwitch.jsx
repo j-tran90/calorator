@@ -13,8 +13,8 @@ import MainLayout from "../layouts/MainLayout";
 import Goals from "../pages/Goals";
 import Today from "../pages/Today";
 import Settings from "../pages/Settings";
-import DailyJournal from "../pages/Journal";
-import FullJournal from "../pages/FullJournal";
+import Overview from "../pages/Overview";
+
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
@@ -24,23 +24,23 @@ const RouteSwitch = () => {
       {/* Public routes without MainLayout */}
       <Route
         path='/'
-        element={currentUser ? <Navigate to='/today' replace /> : <Register />}
+        element={currentUser ? <Navigate to='/overview' replace /> : <Register />}
       />
       <Route
         path='/login'
-        element={currentUser ? <Navigate to='/today' replace /> : <Login />}
+        element={currentUser ? <Navigate to='/overview' replace /> : <Login />}
       />
       <Route
         path='/register'
-        element={currentUser ? <Navigate to='/today' replace /> : <Register />}
+        element={currentUser ? <Navigate to='/overview' replace /> : <Register />}
       />
 
       {/* Routes wrapped with MainLayout */}
 
       <Route element={<MainLayout />}>
         <Route
-          path='/today'
-          element={currentUser ? <Today /> : <Navigate to='/login' replace />}
+          path='/overview'
+          element={currentUser ? <Overview /> : <Navigate to='/login' replace />}
         />
         <Route path='/searchresults' element={<SearchResults />} />
 
@@ -70,10 +70,10 @@ const RouteSwitch = () => {
           }
         />
         <Route
-          path='/fulljournal'
+          path='/journal'
           element={
             <PrivateRoute>
-              <FullJournal />
+              <Journal />
             </PrivateRoute>
           }
         />
@@ -96,10 +96,10 @@ const RouteSwitch = () => {
 
         {/* WIP PAGES */}
         <Route
-          path='/journal'
+          path='/today'
           element={
             <PrivateRoute>
-              <Journal />
+              <Today />
             </PrivateRoute>
           }
         />

@@ -1,172 +1,177 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Divider,
+  Grid2,
+  Stack,
+  Typography,
+  CircularProgress,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Button,
+} from "@mui/material";
+import {
+  Restaurant,
+  LocalBar,
+  Icecream,
+  ExpandMore,
+  ExpandLess,
+} from "@mui/icons-material";
+import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db, auth } from "../../config/Firebase";
-import ProgressCircle from "../features/graphs/ProgressCircle";
-import useTracker from "../../hooks/useTracker";
-import useFetchGoals from "../../hooks/useFetchGoals";
-import ProgressLegend from "../features/graphs/ProgressLegend";
-import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
-import { Box, Card, Grid2, Typography } from "@mui/material";
-import SetTargetButton from "../buttons/SetTargetButton";
-import ProgressBar from "../features/graphs/ProgressBar";
+import dayjs from "dayjs";
+
+const boxStyles = {
+  //backgroundColor: "#f5f5f5",
+  textAlign: "left",
+  p: 2,
+  height: "100px",
+  borderRadius: "8px",
+  //boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  overflow: "hidden",
+};
+
+const expandedBoxStyles = {
+  ...boxStyles,
+  height: "auto",
+  transition: "height 0.3s ease",
+};
+
+const categoryIcons = {
+  main: <Restaurant />,
+  drink: <LocalBar />,
+  dessert: <Icecream />,
+};
 
 export default function Today() {
-  // Use useTracker to manage total and trigger re-renders when total updates
-  const {
-    calorieTotal,
-    calorieRemaning,
-    caloriePercent,
-    updateTotal,
-    sumEntry,
-    proteinTotal,
-  } = useTracker(0);
-  const { proteinTarget, remainingDays, differenceInDays } = useFetchGoals(0);
-  const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
-  const navigate = useNavigate();
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [expandedItems, setExpandedItems] = useState({});
 
-  //PLACEHOLDER DELETE WHEN REPLACE
-  const placeholder1 = 10;
-  const placeholder2 = 55;
-  const placeholder3 = 33;
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
 
-  const handleClick = () => {
-    navigate("/journal");
-  };
+  const uid = auth.currentUser?.uid;
 
   useEffect(() => {
-    const checkUserData = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        navigate("/login");
-        return;
-      }
+    if (!uid) return;
 
-      const userGoalsRef = db.collection("userGoals").doc(user.uid);
-      const userProfileRef = db.collection("userProfile").doc(user.uid);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
+      const startOfDay = dayjs().startOf("day").toDate();
+      const endOfDay = dayjs().endOf("day").toDate();
+
+      const entryQuery = query(
+        collection(db, `journal/${uid}/entries`),
+        where("createdAt", ">=", startOfDay),
+        where("createdAt", "<=", endOfDay),
+        orderBy("createdAt", "asc")
+      );
 
       try {
-        const [userGoalsDoc, userProfileDoc] = await Promise.all([
-          userGoalsRef.get(),
-          userProfileRef.get(),
-        ]);
-
-        if (!userGoalsDoc.exists || !userProfileDoc.exists) {
-          navigate("/creategoal");
-          return;
-        }
-
-        const userGoalsData = userGoalsDoc.data();
-        const userProfileData = userProfileDoc.data();
-
-        if (
-          !userGoalsData ||
-          !userProfileData ||
-          !userGoalsData.dailyCalorieTarget
-        ) {
-          navigate("/creategoal");
-          return;
-        }
-        setDailyCalorieTarget(userGoalsData.dailyCalorieTarget);
+        const querySnapshot = await getDocs(entryQuery);
+        const fetchedEntries = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setEntries(fetchedEntries);
       } catch (error) {
-        console.error("Error fetching user data:", error);
-        navigate("/creategoal");
+        setError("Error fetching journal entries. Please try again.");
+        console.error("Error fetching journal entries: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    checkUserData();
-  }, [navigate]);
+    fetchData();
+  }, [uid]);
+
+  const handleExpandClick = (id) => {
+    setExpandedItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   return (
     <>
-      <Card
-        sx={{
-          m: 1,
-          border: "1px solid #9999",
-          borderRadius: "20px",
-          bgcolor: "",
-          p: 0,
-          boxShadow: "none",
-        }}
+      <Typography variant='h5'>Today</Typography>
+      <Stack
+        divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
+        spacing={0}
       >
-        {" "}
-        <Typography variant='h5'>
-          {remainingDays >= 0 ? (
-            <ProgressBar
-              barHeight={30}
-              barWidth={100}
-              barHeading={`${remainingDays} Days to Deadline`}
-              currentValue={differenceInDays - remainingDays}
-              targetValue={differenceInDays}
-            />
-          ) : (
-            <SetTargetButton />
-          )}
-        </Typography>
-      </Card>
+        {loading ? (
+          <Box sx={{ textAlign: "center", p: 2 }}>
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Typography
+            variant='body2'
+            sx={{ p: 2, textAlign: "center", color: "red" }}
+          >
+            {error}
+          </Typography>
+        ) : entries.length > 0 ? (
+          entries.map((entry) => {
+            const isExpanded = expandedItems[entry.id];
+            const foodCategory = entry.category || "food";
 
-      <Card
-        sx={{
-          m: 1,
-          border: "1px solid #9999",
-          borderRadius: "20px",
-          bgcolor: "",
-          p: { xs: 3, md: 5 },
-          boxShadow: "none",
-        }}
-      >
-        <Typography variant='h5'>Calories</Typography>
+            // Dynamic food text length based on screen size
+            const maxLength = isMd ? 90 : 20;
+            const foodText =
+              entry.food.length > maxLength
+                ? entry.food.slice(0, maxLength) + "..."
+                : entry.food;
 
-        <Box onClick={handleClick}>
-          <ProgressCircle
-            value={caloriePercent}
-            gradientId='greenYellow'
-            isPercentage={true}
-            targetValue={100}
-          />
-        </Box>
-
-        <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
-
-        <Grid2 container rowSpacing={1} columnSpacing={{ xs: 4, md: 10 }}>
-          <Grid2 size={{ xs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='purple'
-              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
-              barHeight={10}
-              currentValue={proteinTotal}
-              targetValue={proteinTarget}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='yellowGreen'
-              barHeading={`Placeholder 1`}
-              barHeight={10}
-              currentValue={placeholder1}
-              targetValue={proteinTarget}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='orangeRed'
-              barHeading={"Placeholder 2"}
-              barHeight={10}
-              currentValue={placeholder2}
-              targetValue={proteinTarget}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='lightBlueBlue'
-              barHeading={`Placeholder 3`}
-              barHeight={10}
-              currentValue={placeholder3}
-              targetValue={proteinTarget}
-            />
-          </Grid2>
-        </Grid2>
-      </Card>
-      <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />
+            return (
+              <Box
+                key={entry.id}
+                sx={isExpanded ? expandedBoxStyles : boxStyles}
+              >
+                <Grid2 container alignItems='center' spacing={2}>
+                  <Grid2 size={{ xs: 2, md: 1 }}>
+                    {categoryIcons[foodCategory] || <Restaurant />}
+                  </Grid2>
+                  <Grid2 size={{ xs: 7 }}>
+                    <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
+                      {isExpanded ? entry.food : foodText}
+                    </Typography>
+                    <Typography variant='body2'>
+                      Calories {entry.calories} kcal
+                    </Typography>
+                    <Typography variant='body2'>
+                      Protein {entry.protein}g
+                    </Typography>
+                  </Grid2>
+                  <Grid2 size={{ xs: 3 }} textAlign='right'>
+                    <Typography variant='body2'>
+                      {dayjs(entry.createdAt.toDate()).format("h:mm A")}
+                    </Typography>
+                    {entry.food.length > maxLength && (
+                      <IconButton
+                        onClick={() => handleExpandClick(entry.id)}
+                        size='small'
+                      >
+                        {isExpanded ? <ExpandLess /> : <ExpandMore />}
+                      </IconButton>
+                    )}
+                  </Grid2>
+                </Grid2>
+              </Box>
+            );
+          })
+        ) : (
+          <Box sx={{ textAlign: "center", p: 2 }}>
+            <Typography variant='body2' sx={{ color: "gray" }}>
+              No entries for today. Let's add some food!
+            </Typography>
+          </Box>
+        )}
+      </Stack>
     </>
   );
 }

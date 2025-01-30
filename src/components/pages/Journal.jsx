@@ -1,176 +1,217 @@
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Divider,
-  Grid2,
-  Stack,
-  Typography,
-  CircularProgress,
-  IconButton,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import {
-  Restaurant,
-  LocalBar,
-  Icecream,
-  ExpandMore,
-  ExpandLess,
-} from "@mui/icons-material";
-import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
-import { db, auth } from "../../config/Firebase";
+import React, { useState, useEffect } from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { db, auth } from "../../config/Firebase";
+import ClearIcon from "@mui/icons-material/Clear";
+import useTracker from "../../hooks/useTracker";
+import {
+  Grid2,
+  Box,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
-const boxStyles = {
-  //backgroundColor: "#f5f5f5",
-  textAlign: "left",
-  p: 2,
-  height: "100px",
-  borderRadius: "8px",
-  //boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  overflow: "hidden",
-};
-
-const expandedBoxStyles = {
-  ...boxStyles,
-  height: "auto",
-  transition: "height 0.3s ease",
-};
-
-const categoryIcons = {
-  main: <Restaurant />,
-  drink: <LocalBar />,
-  dessert: <Icecream />,
-};
-
-export default function DailyJournal() {
-  const [entries, setEntries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [expandedItems, setExpandedItems] = useState({});
-
-  const theme = useTheme();
-  const isMd = useMediaQuery(theme.breakpoints.up("md"));
-
+export default function Journal() {
+  const { calorieTarget, calorieTotal } = useTracker(0);
+  const [startDate, setStartDate] = useState(dayjs());
+  const [endDate, setEndDate] = useState(dayjs());
+  const [data, setData] = useState([]);
   const uid = auth.currentUser?.uid;
 
   useEffect(() => {
     if (!uid) return;
 
     const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+      const startOfStartDate = startDate.startOf("day").toDate();
+      const endOfEndDate = endDate.endOf("day").toDate();
 
-      const startOfDay = dayjs().startOf("day").toDate();
-      const endOfDay = dayjs().endOf("day").toDate();
-
-      const entryQuery = query(
+      const entryCollectionRef = query(
         collection(db, `journal/${uid}/entries`),
-        where("createdAt", ">=", startOfDay),
-        where("createdAt", "<=", endOfDay),
-        orderBy("createdAt", "asc")
+        orderBy("createdAt", "asc"),
+        where("createdAt", ">=", startOfStartDate),
+        where("createdAt", "<=", endOfEndDate)
       );
 
       try {
-        const querySnapshot = await getDocs(entryQuery);
-        const fetchedEntries = querySnapshot.docs.map((doc) => ({
+        const querySnapshot = await getDocs(entryCollectionRef);
+        const entries = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setEntries(fetchedEntries);
+        setData(entries);
       } catch (error) {
-        setError("Error fetching journal entries. Please try again.");
-        console.error("Error fetching journal entries: ", error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching entries: ", error);
       }
     };
 
     fetchData();
-  }, [uid]);
+  }, [startDate, endDate, uid]);
 
-  const handleExpandClick = (id) => {
-    setExpandedItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
+
+  const handleTodayButtonClick = () => {
+    setStartDate(dayjs());
+    setEndDate(dayjs());
+  };
+
+  const handleEntryDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, `journal/${uid}/entries`, id));
+      setData(data.filter((entry) => entry.id !== id));
+    } catch (error) {
+      console.error("Error deleting entry: ", error);
+    }
   };
 
   return (
-    <>
-      <Typography variant='h5'>Today's Journal</Typography>
-      <Stack
-        divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
-        spacing={0}
-      >
-        {loading ? (
-          <Box sx={{ textAlign: "center", p: 2 }}>
-            <CircularProgress />
-          </Box>
-        ) : error ? (
-          <Typography
-            variant='body2'
-            sx={{ p: 2, textAlign: "center", color: "red" }}
+    <Box sx={{ padding: 2 }}>
+      <Typography variant='h5' textAlign='center' mb={2}>
+        Journal
+      </Typography>
+      <Grid2 container spacing={2} justifyContent='center' alignItems='center'>
+        <Grid2>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label='Start Date'
+              value={startDate}
+              onChange={(date) => handleStartDateChange(date)}
+              sx={{ width: { xs: "163.5px", md: "259px" } }}
+            />
+          </LocalizationProvider>
+        </Grid2>
+        <Grid2>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label='End Date'
+              value={endDate}
+              onChange={(date) => handleEndDateChange(date)}
+              sx={{ width: { xs: "163.5px", md: "259px" } }}
+            />
+          </LocalizationProvider>
+        </Grid2>
+        <Grid2 textAlign='center'>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleTodayButtonClick}
+            fullWidth
+            style={{ color: "#fff", backgroundColor: "#000" }}
           >
-            {error}
-          </Typography>
-        ) : entries.length > 0 ? (
-          entries.map((entry) => {
-            const isExpanded = expandedItems[entry.id];
-            const foodCategory = entry.category || "food";
+            Reset Filter
+          </Button>
+        </Grid2>
+      </Grid2>
+      <Paper sx={{ marginTop: 3, overflowX: "auto" }}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#9999" }}>
+              <TableCell>Entry</TableCell>
+              <TableCell>Time</TableCell>
+              <TableCell>Food</TableCell>
+              <TableCell>Calories</TableCell>
+              <TableCell>Protein</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((entry, index) => {
+              const createdAt = entry.createdAt
+                ? entry.createdAt.toDate()
+                : null;
+              if (!createdAt) return null;
 
-            // Dynamic food text length based on screen size
-            const maxLength = isMd ? 90 : 20;
-            const foodText =
-              entry.food.length > maxLength
-                ? entry.food.slice(0, maxLength) + "..."
-                : entry.food;
+              const previousEntry =
+                index > 0 ? data[index - 1].createdAt.toDate() : null;
+              const isNewDay =
+                !previousEntry ||
+                createdAt.getDate() !== previousEntry.getDate();
 
-            return (
-              <Box
-                key={entry.id}
-                sx={isExpanded ? expandedBoxStyles : boxStyles}
-              >
-                <Grid2 container alignItems='center' spacing={2}>
-                  <Grid2 item size={{ xs: 2, md: 1 }}>
-                    {categoryIcons[foodCategory] || <Restaurant />}
-                  </Grid2>
-                  <Grid2 item size={{ xs: 7 }}>
-                    <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
-                      {isExpanded ? entry.food : foodText}
-                    </Typography>
-                    <Typography variant='body2'>
-                      Calories {entry.calories} kcal
-                    </Typography>
-                    <Typography variant='body2'>
-                      Protein {entry.protein}g
-                    </Typography>
-                  </Grid2>
-                  <Grid2 item size={{ xs: 3 }} textAlign='right'>
-                    <Typography variant='body2'>
-                      {dayjs(entry.createdAt.toDate()).format("h:mm A")}
-                    </Typography>
-                    {entry.food.length > maxLength && (
-                      <IconButton
-                        onClick={() => handleExpandClick(entry.id)}
-                        size='small'
+              return (
+                <React.Fragment key={entry.id}>
+                  {isNewDay && (
+                    <TableRow sx={{ backgroundColor: "#9992" }}>
+                      <TableCell
+                        colSpan={6}
+                        sx={{ textAlign: "center", fontWeight: "bold" }}
                       >
-                        {isExpanded ? <ExpandLess /> : <ExpandMore />}
-                      </IconButton>
-                    )}
-                  </Grid2>
-                </Grid2>
-              </Box>
-            );
-          })
-        ) : (
-          <Box sx={{ textAlign: "center", p: 2 }}>
-            <Typography variant='body2' sx={{ color: "gray" }}>
-              No entries for today. Let's add some food!
-            </Typography>
-          </Box>
-        )}
-      </Stack>
-    </>
+                        {createdAt.toLocaleDateString(navigator.language, {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  <TableRow>
+                    <TableCell>{index + 1}.</TableCell>
+                    <TableCell>
+                      {createdAt
+                        .toLocaleTimeString(navigator.language, {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                        .replace(/^0+/, "")}
+                    </TableCell>
+                    <TableCell>
+                      {typeof entry.food === "string"
+                        ? entry.food.replace(/(^\w{1})|(\s+\w{1})/g, (value) =>
+                            value.toUpperCase()
+                          )
+                        : entry.food
+                        ? String(entry.food) // If `entry.food` is not null/undefined, convert it to a string
+                        : "N/A"}
+                    </TableCell>
+
+                    <TableCell>{entry.calories}</TableCell>
+                    <TableCell>{entry.protein} g</TableCell>
+                    <TableCell>
+                      <Button
+                        variant='contained'
+                        onClick={() => handleEntryDelete(entry.id)}
+                        sx={{
+                          backgroundColor: "red",
+                          "&:hover": { backgroundColor: "#900" },
+                        }}
+                      >
+                        <ClearIcon
+                          style={{
+                            color: "#fff",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+    </Box>
   );
 }

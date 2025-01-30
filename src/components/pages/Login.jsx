@@ -48,9 +48,7 @@ export default function Login() {
       <Grid2 container sx={{ height: "86vh" }}>
         {/* Left Grid2 - Login Form */}
         <Grid2
-          item
-          xs={12}
-          md={6}
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -68,7 +66,7 @@ export default function Login() {
           )}
           <form onSubmit={handleLogin}>
             <Grid2 container spacing={3}>
-              <Grid2 item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   id='email'
@@ -79,7 +77,7 @@ export default function Login() {
                   required
                 />
               </Grid2>
-              <Grid2 item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   id='password'
@@ -90,7 +88,7 @@ export default function Login() {
                   required
                 />
               </Grid2>
-              <Grid2 item xs={12} textAlign='center'>
+              <Grid2 size={{ xs: 12 }} textAlign='center'>
                 <Button
                   type='submit'
                   variant='contained'
@@ -133,9 +131,7 @@ export default function Login() {
 
         {/* Right Grid2 - Full-size Image */}
         <Grid2
-          item
-          xs={12}
-          md={6}
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: { xs: "none", sm: "block" }, // Hide right Grid2 on mobile
           }}
@@ -147,13 +143,13 @@ export default function Login() {
               alignItems: "center",
               justifyContent: "center",
               overflow: "hidden",
-              borderRadius: "0px 20px 20px 0px",
+              borderRadius: "20px 20px 20px 20px",
             }}
           >
             <img
               src='https://cdn.pixabay.com/photo/2017/07/19/16/47/ice-2519682_1280.png'
               alt='Login visual'
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "576px", height: "778px", objectFit: "cover" }}
             />
           </Box>
         </Grid2>

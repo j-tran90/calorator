@@ -11,7 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import User from "../layouts/User"; // Ensure this path is correct
 import NavLinks from "./NavLinks";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -44,8 +44,8 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
   };
 
   const drawer = (
-    <div
-      style={{
+    <Box
+      sx={{
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -54,24 +54,29 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
         textAlign: "center",
       }}
     >
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          height: "73px",
         }}
       >
         <Brand />
-      </div>
-      <Divider sx={{ width: "100%" }} />
+      </Box>
+
       <List sx={{ flexGrow: 1, width: "100%" }}>
         <NavLinks onLinkClick={handleDrawerClose} />
       </List>
       <Divider sx={{ width: "100%" }} />
-      <Box sx={{ mt: "auto", width: "100%" }}>
+      <Box sx={{ mt: "auto", width: "100%"}}>
         <NavLinks onLinkClick={handleDrawerClose} isBottomLinks={true} />
       </Box>
-    </div>
+      <Divider sx={{ width: "100%" }} />
+      <Box>
+        <Typography variant='caption'>Version 1.0</Typography>
+      </Box>
+    </Box>
   );
 
   if (!currentUser) {
@@ -104,7 +109,7 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
               aria-label='open drawer'
               edge='start'
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+              sx={{  display: { sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
@@ -116,7 +121,6 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
       <Box
         component='nav'
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label='mailbox folders'
       >
         <Drawer
           container={container}

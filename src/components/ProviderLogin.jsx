@@ -19,7 +19,7 @@ export default function ProviderLogin() {
       <Grid2 container spacing={2} sx={{ mt: 2 }}>
         {" "}
         {/* Spacing between the buttons */}
-        <Grid2 item xs={6}>
+        <Grid2 size={6}>
           {" "}
           {/* Left button takes 60% width */}
           <Button
@@ -42,7 +42,7 @@ export default function ProviderLogin() {
             Google
           </Button>
         </Grid2>
-        <Grid2 item xs={6}>
+        <Grid2 size={6}>
           {" "}
           {/* Right button takes 60% width */}
           <Button

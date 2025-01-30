@@ -11,8 +11,8 @@ const ComplexButton = styled(ButtonBase)(({ theme }) => ({
   alignItems: "center",
   width: "120px",
   height: "120px",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#0009",//"#4FC483", // Set background color first
+  borderRadius: "20px",
+  backgroundColor: "#0009",
   backgroundSize: "cover",
   backgroundPosition: "center",
   boxShadow: theme.shadows[3],
@@ -36,16 +36,15 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
         createdAt: timestamp,
       });
 
-      sumEntry(); // Update the sum of entries
-      updateTotal(); // Update the total calories
+      sumEntry();
+      updateTotal();
     } catch (error) {
       console.error("Error adding entry to journal:", error);
     }
   };
 
   const getButtonBackground = (iconUrl) => {
-    // If there is a valid image URL, use it as the background
-    return iconUrl ? `url(${iconUrl})` : "#4FC483"; // Fallback to the background color if no image
+    return iconUrl ? `url(${iconUrl})` : "#4FC483";
   };
 
   return (
@@ -63,7 +62,7 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
           key={item.id}
           onClick={() => addToJournal(item.kcal, item.protein, item.name)}
           style={{
-            backgroundImage: getButtonBackground(item.icon), // Use the icon image if available
+            backgroundImage: getButtonBackground(item.icon),
           }}
         >
           <Typography

@@ -57,9 +57,7 @@ export default function Register() {
       <Grid2 container>
         {/* Left Grid2 - Full-size Image */}
         <Grid2
-          item
-          xs={12}
-          md={6}
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: { xs: "none", sm: "block" }, // Hide left Grid2 on mobile
           }}
@@ -77,16 +75,14 @@ export default function Register() {
             <img
               src='https://cdn.pixabay.com/photo/2022/05/28/07/07/watermelon-7226708_1280.png'
               alt='Registration visual'
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "576px", height: "778px", objectFit: "cover" }}
             />
           </Box>
         </Grid2>
 
         {/* Right Grid2 - Login Form */}
         <Grid2
-          item
-          xs={12}
-          md={6}
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -104,7 +100,7 @@ export default function Register() {
           )}
           <form onSubmit={handleSubmit}>
             <Grid2 container spacing={3}>
-              <Grid2 item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   id='name'
@@ -114,7 +110,7 @@ export default function Register() {
                   required
                 />
               </Grid2>
-              <Grid2 item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   id='email'
@@ -125,7 +121,7 @@ export default function Register() {
                   required
                 />
               </Grid2>
-              <Grid2 item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   id='password'
@@ -136,7 +132,7 @@ export default function Register() {
                   required
                 />
               </Grid2>
-              <Grid2 item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   id='password-confirm'
@@ -147,7 +143,7 @@ export default function Register() {
                   required
                 />
               </Grid2>
-              <Grid2 item xs={12} textAlign='center'>
+              <Grid2 size={{ xs: 12 }} textAlign='center'>
                 <Button
                   type='submit'
                   variant='contained'
