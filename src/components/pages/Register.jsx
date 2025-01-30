@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import ProviderLogin from "../ProviderLogin";
 import {
   Container,
-  Grid,
+  Grid2,
   TextField,
   Button,
   Typography,
@@ -54,14 +54,14 @@ export default function Register() {
         justifyContent: "center",
       }}
     >
-      <Grid container>
-        {/* Left Grid - Full-size Image */}
-        <Grid
+      <Grid2 container>
+        {/* Left Grid2 - Full-size Image */}
+        <Grid2
           item
           xs={12}
           md={6}
           sx={{
-            display: { xs: "none", sm: "block" }, // Hide left grid on mobile
+            display: { xs: "none", sm: "block" }, // Hide left Grid2 on mobile
           }}
         >
           <Box
@@ -80,10 +80,10 @@ export default function Register() {
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </Box>
-        </Grid>
+        </Grid2>
 
-        {/* Right Grid - Login Form */}
-        <Grid
+        {/* Right Grid2 - Login Form */}
+        <Grid2
           item
           xs={12}
           md={6}
@@ -103,8 +103,8 @@ export default function Register() {
             </Alert>
           )}
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
+            <Grid2 container spacing={3}>
+              <Grid2 item xs={12}>
                 <TextField
                   fullWidth
                   id='name'
@@ -113,8 +113,8 @@ export default function Register() {
                   inputRef={nameRef}
                   required
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 item xs={12}>
                 <TextField
                   fullWidth
                   id='email'
@@ -124,8 +124,8 @@ export default function Register() {
                   inputRef={emailRef}
                   required
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 item xs={12}>
                 <TextField
                   fullWidth
                   id='password'
@@ -135,8 +135,8 @@ export default function Register() {
                   inputRef={passwordRef}
                   required
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 item xs={12}>
                 <TextField
                   fullWidth
                   id='password-confirm'
@@ -146,8 +146,8 @@ export default function Register() {
                   inputRef={passwordConfirmRef}
                   required
                 />
-              </Grid>
-              <Grid item xs={12} textAlign='center'>
+              </Grid2>
+              <Grid2 item xs={12} textAlign='center'>
                 <Button
                   type='submit'
                   variant='contained'
@@ -164,8 +164,8 @@ export default function Register() {
                 >
                   Submit
                 </Button>
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </form>
 
           <Box sx={{ mt: 4 }}>
@@ -186,8 +186,8 @@ export default function Register() {
               Login
             </RouterLink>
           </Typography>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Container>
   );
 }

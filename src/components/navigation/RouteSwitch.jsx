@@ -13,7 +13,8 @@ import MainLayout from "../layouts/MainLayout";
 import Goals from "../pages/Goals";
 import Today from "../pages/Today";
 import Settings from "../pages/Settings";
-import DailyJournal from "../pages/DailyJournal";
+import DailyJournal from "../pages/Journal";
+import FullJournal from "../pages/FullJournal";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
@@ -69,10 +70,10 @@ const RouteSwitch = () => {
           }
         />
         <Route
-          path='/journal'
+          path='/fulljournal'
           element={
             <PrivateRoute>
-              <Journal />
+              <FullJournal />
             </PrivateRoute>
           }
         />
@@ -95,10 +96,10 @@ const RouteSwitch = () => {
 
         {/* WIP PAGES */}
         <Route
-          path='/dailyjournal'
+          path='/journal'
           element={
             <PrivateRoute>
-              <DailyJournal />
+              <Journal />
             </PrivateRoute>
           }
         />

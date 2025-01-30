@@ -6,7 +6,7 @@ import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
-import { Box, Card, Grid, Typography } from "@mui/material";
+import { Box, Card, Grid2, Typography } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import ProgressBar from "../features/graphs/ProgressBar";
 
@@ -127,8 +127,8 @@ export default function Today() {
 
         <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
 
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 4, md: 10 }}>
-          <Grid item xs={6}>
+        <Grid2 container rowSpacing={1} columnSpacing={{ xs: 4, md: 10 }}>
+          <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='purple'
               barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
@@ -136,8 +136,8 @@ export default function Today() {
               currentValue={proteinTotal}
               targetValue={proteinTarget}
             />
-          </Grid>
-          <Grid item xs={6}>
+          </Grid2>
+          <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='yellowGreen'
               barHeading={`Placeholder 1`}
@@ -145,9 +145,8 @@ export default function Today() {
               currentValue={placeholder1}
               targetValue={proteinTarget}
             />
-          </Grid>
-          <Grid item xs={6}>
-            {" "}
+          </Grid2>
+          <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='orangeRed'
               barHeading={"Placeholder 2"}
@@ -155,9 +154,8 @@ export default function Today() {
               currentValue={placeholder2}
               targetValue={proteinTarget}
             />
-          </Grid>
-          <Grid item xs={6}>
-            {" "}
+          </Grid2>
+          <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='lightBlueBlue'
               barHeading={`Placeholder 3`}
@@ -165,8 +163,8 @@ export default function Today() {
               currentValue={placeholder3}
               targetValue={proteinTarget}
             />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Card>
       <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />
     </>

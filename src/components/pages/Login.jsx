@@ -4,7 +4,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import ProviderLogin from "../ProviderLogin";
 import {
   Container,
-  Grid,
+  Grid2,
   TextField,
   Button,
   Typography,
@@ -45,9 +45,9 @@ export default function Login() {
         justifyContent: "center",
       }}
     >
-      <Grid container sx={{ height: "86vh" }}>
-        {/* Left Grid - Login Form */}
-        <Grid
+      <Grid2 container sx={{ height: "86vh" }}>
+        {/* Left Grid2 - Login Form */}
+        <Grid2
           item
           xs={12}
           md={6}
@@ -67,8 +67,8 @@ export default function Login() {
             </Alert>
           )}
           <form onSubmit={handleLogin}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
+            <Grid2 container spacing={3}>
+              <Grid2 item xs={12}>
                 <TextField
                   fullWidth
                   id='email'
@@ -78,8 +78,8 @@ export default function Login() {
                   inputRef={emailRef}
                   required
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 item xs={12}>
                 <TextField
                   fullWidth
                   id='password'
@@ -89,8 +89,8 @@ export default function Login() {
                   inputRef={passwordRef}
                   required
                 />
-              </Grid>
-              <Grid item xs={12} textAlign='center'>
+              </Grid2>
+              <Grid2 item xs={12} textAlign='center'>
                 <Button
                   type='submit'
                   variant='contained'
@@ -107,8 +107,8 @@ export default function Login() {
                 >
                   Login
                 </Button>
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </form>
 
           <Box sx={{ mt: 4 }}>
@@ -129,15 +129,15 @@ export default function Login() {
               Register
             </RouterLink>
           </Typography>
-        </Grid>
+        </Grid2>
 
-        {/* Right Grid - Full-size Image */}
-        <Grid
+        {/* Right Grid2 - Full-size Image */}
+        <Grid2
           item
           xs={12}
           md={6}
           sx={{
-            display: { xs: "none", sm: "block" }, // Hide right grid on mobile
+            display: { xs: "none", sm: "block" }, // Hide right Grid2 on mobile
           }}
         >
           <Box
@@ -156,8 +156,8 @@ export default function Login() {
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </Box>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Container>
   );
 }

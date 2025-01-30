@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid2 } from "@mui/material";
 
 export default function ProviderLogin() {
   const { googleLogin, guestLogin } = useAuth();
@@ -16,10 +16,10 @@ export default function ProviderLogin() {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ mt: 2 }}>
+      <Grid2 container spacing={2} sx={{ mt: 2 }}>
         {" "}
         {/* Spacing between the buttons */}
-        <Grid item xs={6}>
+        <Grid2 item xs={6}>
           {" "}
           {/* Left button takes 60% width */}
           <Button
@@ -41,8 +41,8 @@ export default function ProviderLogin() {
             />
             Google
           </Button>
-        </Grid>
-        <Grid item xs={6}>
+        </Grid2>
+        <Grid2 item xs={6}>
           {" "}
           {/* Right button takes 60% width */}
           <Button
@@ -69,8 +69,8 @@ export default function ProviderLogin() {
             />
             Guest
           </Button>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </>
   );
 }

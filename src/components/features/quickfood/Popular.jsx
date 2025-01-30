@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid2 } from "@mui/material";
 import { popularFoods } from "./data/popularData"; // Adjust the import path as necessary
 import AddToJournalButton from "./AddToJournalButton"; // Import your button component
 
@@ -9,9 +9,9 @@ const Popular = ({ updateTotal, sumEntry }) => {
       <Typography variant='h4' component='h2' gutterBottom>
         Popular Foods
       </Typography>
-      <Grid container spacing={2}>
+      <Grid2 container spacing={2}>
         {popularFoods.map((food) => (
-          <Grid item xs={12} sm={6} md={4} key={food.id}>
+          <Grid2 item xs={12} sm={6} md={4} key={food.id}>
             <Box
               sx={{
                 border: "1px solid #ccc",
@@ -30,9 +30,9 @@ const Popular = ({ updateTotal, sumEntry }) => {
                 sumEntry={sumEntry}
               />
             </Box>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Box>
   );
 };

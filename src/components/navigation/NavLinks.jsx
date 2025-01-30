@@ -13,10 +13,10 @@ import SettingsIcon from "@mui/icons-material/Settings";
 const NavLinks = ({ onLinkClick, isBottomLinks }) => {
   const topLinks = [
     { to: "/today", text: "Today", icon: <TodayIcon /> },
+    { to: "/journal", text: "Journal", icon: <AutoStoriesIcon /> },
     { to: "/dashboard", text: "Dashboard", icon: <SpaceDashboardIcon /> },
     { to: "/goals", text: "Goals", icon: <OutlinedFlagIcon /> },
     { to: "/profile", text: "Profile", icon: <AccountBoxIcon /> },
-    { to: "/journal", text: "Journal", icon: <AutoStoriesIcon /> },
   ];
 
   const bottomLinks = [
@@ -37,7 +37,7 @@ const NavLinks = ({ onLinkClick, isBottomLinks }) => {
             }}
           >
             {link.icon}
-            <ListItemText primary={link.text} sx={{ml: 3 }} />
+            <ListItemText primary={link.text} sx={{ ml: 3 }} />
           </ListItemButton>
         </ListItem>
       ))}
