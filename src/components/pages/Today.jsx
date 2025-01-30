@@ -140,24 +140,32 @@ export default function Today() {
                     <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
                       {isExpanded ? entry.food : foodText}
                     </Typography>
-                    <Typography variant='body2'>
-                      Calories {entry.calories} kcal
-                    </Typography>
-                    <Typography variant='body2'>
-                      Protein {entry.protein}g
-                    </Typography>
+                    <Box>
+                      {" "}
+                      <Typography variant='caption'>
+                        Calories {entry.calories} kcal
+                      </Typography>
+                    </Box>
+                    <Box>
+                      {" "}
+                      <Typography variant='caption'>
+                        Protein {entry.protein}g
+                      </Typography>
+                    </Box>
                   </Grid2>
                   <Grid2 size={{ xs: 3 }} textAlign='right'>
-                    <Typography variant='body2'>
+                    <Typography variant='caption'>
                       {dayjs(entry.createdAt.toDate()).format("h:mm A")}
                     </Typography>
                     {entry.food.length > maxLength && (
-                      <IconButton
-                        onClick={() => handleExpandClick(entry.id)}
-                        size='small'
-                      >
-                        {isExpanded ? <ExpandLess /> : <ExpandMore />}
-                      </IconButton>
+                      <Box>
+                        <IconButton
+                          onClick={() => handleExpandClick(entry.id)}
+                          size='small'
+                        >
+                          {isExpanded ? <ExpandLess /> : <ExpandMore />}
+                        </IconButton>
+                      </Box>
                     )}
                   </Grid2>
                 </Grid2>
