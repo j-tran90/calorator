@@ -14,7 +14,6 @@ import Goals from "../pages/Goals";
 import Today from "../pages/Today";
 import Settings from "../pages/Settings";
 import Overview from "../pages/Overview";
-import Test from "../pages/Test";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
