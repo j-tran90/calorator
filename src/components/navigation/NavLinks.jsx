@@ -48,7 +48,12 @@ const NavLinks = ({ onLinkClick, isBottomLinks }) => {
               },
             }}
           >
-            {link.icon}
+            {/* Change icon color to green if the link is active */}
+            {React.cloneElement(link.icon, {
+              sx: {
+                color: location.pathname === link.to ? "#4FC483" : "inherit",
+              },
+            })}
             <ListItemText primary={link.text} sx={{ ml: 3 }} />
             {location.pathname === link.to && (
               <Box
@@ -57,8 +62,9 @@ const NavLinks = ({ onLinkClick, isBottomLinks }) => {
                   left: 0,
                   top: 0,
                   bottom: 0,
-                  width: "6px",
+                  width: "7px",
                   backgroundColor: "#4FC483",
+                  borderRadius: "0 20px 20px 0",
                 }}
               />
             )}

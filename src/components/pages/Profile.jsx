@@ -11,7 +11,9 @@ import {
   TableContainer,
   TableRow,
   Paper,
+  Grid2,
 } from "@mui/material";
+import SetTargetButton from "../buttons/SetTargetButton";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -101,13 +103,25 @@ export default function Profile() {
                   <TableCell>
                     <strong>Current Weight</strong>
                   </TableCell>
-                  <TableCell>{currentWeight} lbs</TableCell>
+                  <TableCell>
+                    <Grid2 container>
+                      <Grid2 size={6}> {currentWeight} lbs </Grid2>
+                      <Grid2 size={6}>
+                        <SetTargetButton
+                          buttonText={"New"}
+                          buttonHeight={"20px"}
+                        />
+                      </Grid2>
+                    </Grid2>
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <strong>Account Created</strong>
                   </TableCell>
-                  <TableCell>{formatDate(showProfile.joinDate)}</TableCell>
+                  <TableCell sx={{ fontStyle: "italic" }}>
+                    {formatDate(showProfile.joinDate)}
+                  </TableCell>
                 </TableRow>
               </React.Fragment>
             ))}

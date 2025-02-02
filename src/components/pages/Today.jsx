@@ -160,6 +160,7 @@ export default function Today() {
                   <Grid2 size={{ xs: 2, md: 1 }}>
                     {categoryIcons[foodCategory] || <Restaurant />}
                   </Grid2>
+
                   <Grid2 size={{ xs: 7 }}>
                     <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
                       {isExpanded ? entry.food : foodText}
