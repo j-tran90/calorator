@@ -110,14 +110,14 @@ const RouteSwitch = () => {
         />
 
         {/* TEST PAGES */}
-        <Route
+        {/* <Route
           path='/test'
           element={
             <PrivateRoute>
               <Test />
             </PrivateRoute>
           }
-        />
+        /> */}
       </Route>
 
       {/* 404 - Not Found Route */}
