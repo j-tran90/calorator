@@ -3,7 +3,6 @@ import useTracker from "../../hooks/useTracker";
 import useFetchGoals from "../../hooks/useFetchGoals";
 import CalorieLineGraph from "../features/graphs/CalorieLineGraph";
 import ProgressCircle from "../features/graphs/ProgressCircle";
-import Test from "./Test";
 import Header from "../navigation/Header";
 import ProteinBarGraph from "../features/graphs/ProteinBarGraph";
 import dayjs from "dayjs";
