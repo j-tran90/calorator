@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; // Import useLocation
+import { useLocation } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,10 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
-import AddToJournalButton from "../AddToJournalButton"; // Import the button component
-import SearchBar from "../features/search/SearchBar";
-import { Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import AddToJournalButton from "../../components/buttons/AddToJournalButton";
+import { Box, Typography } from "@mui/material";
+import Header from "../navigation/Header";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -96,9 +96,9 @@ const SearchResults = () => {
 
   return (
     <>
-      <Typography variant='h6'>
-        Searched for: {capitalizeWords(searchQuery)}
-      </Typography>
+      <Box sx={{ pb: 2, pl: 2 }}>
+        <Header headText={`Searched for: ${capitalizeWords(searchQuery)}`} />
+      </Box>
       <TableContainer component={Paper}>
         {loading ? (
           <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
@@ -118,7 +118,7 @@ const SearchResults = () => {
                 <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
                   Fats (g)
                 </TableCell>
-                <TableCell>Add to Journal</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

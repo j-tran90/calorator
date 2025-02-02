@@ -1,21 +1,25 @@
+import { Add, AddCircle } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function SetTargetButton() {
+export default function SetTargetButton({ buttonText }) {
   return (
     <>
-      <Box display='flex' justifyContent='center' m={3}>
+      <Box display='flex'>
         <Button
-          variant='contained'
+          variant='outlined'
           component={Link}
           to='/creategoal'
           sx={{
-            backgroundColor: "#000",
+            height: "36px",
+            color: "#4caf50",
             "&:hover": { backgroundColor: "#333" },
+            borderColor: "#4caf50",
           }}
         >
-          Set New Target
+          <Add sx={{ color: "#4caf50" }} />
+          {buttonText}
         </Button>
       </Box>
     </>

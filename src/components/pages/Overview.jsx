@@ -99,7 +99,9 @@ export default function Overview() {
               targetValue={differenceInDays}
             />
           ) : (
-            <SetTargetButton />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <SetTargetButton buttonText={"Set A New Target"} />
+            </Box>
           )}
         </Typography>
       </Card>
@@ -114,7 +116,9 @@ export default function Overview() {
           boxShadow: "none",
         }}
       >
-        <Typography variant='h5' gutterBottom>Calories</Typography>
+        <Typography variant='h5' gutterBottom>
+          Calories
+        </Typography>
 
         <Box onClick={handleClick}>
           <ProgressCircle

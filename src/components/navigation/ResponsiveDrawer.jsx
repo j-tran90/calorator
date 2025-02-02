@@ -9,24 +9,21 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import User from "../layouts/User"; // Ensure this path is correct
+import User from "../layouts/User";
 import NavLinks from "./NavLinks";
 import { Stack, Typography } from "@mui/material";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
+import { useAuth } from "../../contexts/AuthContext";
 import Brand from "../layouts/Brand";
 import SearchBar from "../features/search/SearchBar";
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props, topLinks, bottomLinks) {
+function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
-  const { currentUser } = useAuth(); // Access currentUser from AuthContext
+  const { currentUser } = useAuth();
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -69,12 +66,15 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
         <NavLinks onLinkClick={handleDrawerClose} />
       </List>
       <Divider sx={{ width: "100%" }} />
-      <Box sx={{ mt: "auto", width: "100%"}}>
+
+      <Box sx={{ mt: "auto", width: "100%" }}>
         <NavLinks onLinkClick={handleDrawerClose} isBottomLinks={true} />
       </Box>
       <Divider sx={{ width: "100%" }} />
       <Box>
-        <Typography variant='caption'>Version 1.0</Typography>
+        <Typography variant='caption' sx={{ fontStyle: "italic" }}>
+          Version 1.0
+        </Typography>
       </Box>
     </Box>
   );
@@ -109,7 +109,7 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
               aria-label='open drawer'
               edge='start'
               onClick={handleDrawerToggle}
-              sx={{  display: { sm: "none" } }}
+              sx={{ display: { sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
@@ -135,7 +135,7 @@ function ResponsiveDrawer(props, topLinks, bottomLinks) {
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth,
+              width: drawerWidth + 60,
             },
           }}
         >

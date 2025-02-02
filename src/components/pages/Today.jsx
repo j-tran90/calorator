@@ -21,6 +21,8 @@ import {
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db, auth } from "../../config/Firebase";
 import dayjs from "dayjs";
+import Header from "../navigation/Header";
+import useTracker from "../../hooks/useTracker";
 
 const boxStyles = {
   //backgroundColor: "#f5f5f5",
@@ -49,6 +51,7 @@ export default function Today() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedItems, setExpandedItems] = useState({});
+  const { caloriePercent } = useTracker(0);
 
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
@@ -99,7 +102,28 @@ export default function Today() {
 
   return (
     <>
-      <Typography variant='h5'>Today</Typography>
+      <Box sx={{ pb: 2 }}>
+        <Grid2 container>
+          <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
+            <Header headText='Today' />
+          </Grid2>
+          <Grid2
+            size={{ xs: 6 }}
+            sx={{
+              pr: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              textAlign: "right",
+            }}
+          >
+            <Typography variant='body2'>
+              <i>Progress: {caloriePercent}%</i>
+            </Typography>
+          </Grid2>
+        </Grid2>
+      </Box>
+
       <Stack
         divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
         spacing={0}

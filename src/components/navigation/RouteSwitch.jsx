@@ -14,7 +14,7 @@ import Goals from "../pages/Goals";
 import Today from "../pages/Today";
 import Settings from "../pages/Settings";
 import Overview from "../pages/Overview";
-
+import Test from "../pages/Test";
 
 const RouteSwitch = () => {
   const { currentUser } = useAuth();
@@ -24,7 +24,9 @@ const RouteSwitch = () => {
       {/* Public routes without MainLayout */}
       <Route
         path='/'
-        element={currentUser ? <Navigate to='/overview' replace /> : <Register />}
+        element={
+          currentUser ? <Navigate to='/overview' replace /> : <Register />
+        }
       />
       <Route
         path='/login'
@@ -32,7 +34,9 @@ const RouteSwitch = () => {
       />
       <Route
         path='/register'
-        element={currentUser ? <Navigate to='/overview' replace /> : <Register />}
+        element={
+          currentUser ? <Navigate to='/overview' replace /> : <Register />
+        }
       />
 
       {/* Routes wrapped with MainLayout */}
@@ -40,7 +44,9 @@ const RouteSwitch = () => {
       <Route element={<MainLayout />}>
         <Route
           path='/overview'
-          element={currentUser ? <Overview /> : <Navigate to='/login' replace />}
+          element={
+            currentUser ? <Overview /> : <Navigate to='/login' replace />
+          }
         />
         <Route path='/searchresults' element={<SearchResults />} />
 
@@ -94,12 +100,21 @@ const RouteSwitch = () => {
           }
         />
 
-        {/* WIP PAGES */}
         <Route
           path='/today'
           element={
             <PrivateRoute>
               <Today />
+            </PrivateRoute>
+          }
+        />
+
+        {/* TEST PAGES */}
+        <Route
+          path='/test'
+          element={
+            <PrivateRoute>
+              <Test />
             </PrivateRoute>
           }
         />
