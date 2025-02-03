@@ -17,8 +17,11 @@ export default function Dashboard() {
     calorieTotal,
     calorieTarget,
     caloriePercent,
+    programType,
+    currentWeight,
+    weightTarget,
   } = useTracker(0);
-  const { createdDate, targetDate, currentWeight } = useFetchGoals(0);
+  const { createdDate, targetDate } = useFetchGoals(0);
 
   //PLACEHOLDER DELETE WHEN REPLACE
   const placeholder1 = 10;
@@ -39,7 +42,8 @@ export default function Dashboard() {
         <Grid2 container spacing={{ xs: 1, md: 3 }}>
           <Grid2 size={{ xs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h4'>Weight Gain Program</Typography>
+              <Typography variant='h6'>Program</Typography>
+              <Typography variant='h4'>{programType}</Typography>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
                   <Typography variant='body2' sx={{ fontWeight: "bold" }}>
@@ -50,8 +54,12 @@ export default function Dashboard() {
                     In Progress
                   </Typography>
                   <Typography variant='body2'>Calorie Surplus</Typography>
-                  <Typography variant='body2'>Starting Weight ###</Typography>
-                  <Typography variant='body2'>Desired Weight ###</Typography>
+                  <Typography variant='body2'>
+                    Starting Weight {currentWeight} lbs
+                  </Typography>
+                  <Typography variant='body2'>
+                    Desired Weight {weightTarget} lbs
+                  </Typography>
                 </Stack>
               </Box>
             </Card>
@@ -144,22 +152,18 @@ export default function Dashboard() {
               <Typography variant='h6'>Calorie Calendar</Typography>
               <CalorieCalendar />
             </Card>
+          </Grid2>{" "}
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Card sx={{ borderRadius: "20px", p: 3 }}>
+              <CalorieLineGraph />
+            </Card>
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Card sx={{ borderRadius: "20px", p: 3 }}>
+              <ProteinBarGraph />
+            </Card>
           </Grid2>
         </Grid2>
-        <Box sx={{ pt: 3 }}>
-          <Grid2 container spacing={3}>
-            <Grid2 size={{ xs: 12, md: 6 }}>
-              <Card sx={{ borderRadius: "20px", p: 3 }}>
-                <CalorieLineGraph />
-              </Card>
-            </Grid2>
-            <Grid2 size={{ xs: 12, md: 6 }}>
-              <Card sx={{ borderRadius: "20px", p: 3 }}>
-                <ProteinBarGraph />
-              </Card>
-            </Grid2>
-          </Grid2>
-        </Box>
       </Box>
     </>
   );

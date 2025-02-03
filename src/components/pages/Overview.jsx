@@ -101,14 +101,13 @@ export default function Overview() {
                   position: "absolute",
                   top: "50%",
                   left: "50%",
-                  transform: "translate(-50%, -50%)", // Center text
-                  color: "#0009", // Adjust text color if needed
-                  fontWeight: "bold", // Optional for styling
+                  transform: "translate(-50%, -50%)",
+                  fontWeight: "bold", 
                 }}
               >
                 {remainingDays >= 0 ? (
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {remainingDays} Days to Deadline <FlagCircle />
+                    {remainingDays} Days Remaining <FlagCircle />
                   </Box>
                 ) : (
                   "No Target Set"

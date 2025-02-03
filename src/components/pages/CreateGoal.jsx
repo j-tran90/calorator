@@ -124,18 +124,9 @@ function CreateGoal() {
               <Results />
             </Box>
             <Box display='flex' justifyContent='space-between'>
-              <Button
-                onClick={handleReset}
-                sx={{ color: "red", "&:hover": { backgroundColor: "" } }}
-              >
-                Reset
-              </Button>
+              <Button onClick={handleReset}>Reset</Button>
               <Button
                 variant='contained'
-                sx={{
-                  backgroundColor: "#000",
-                  "&:hover": { backgroundColor: "#333" },
-                }}
                 onClick={handleFinishToDashboard}
                 disabled={loading}
               >
@@ -155,7 +146,6 @@ function CreateGoal() {
 
   return (
     <Box
-      
       sx={{
         p: 2,
         mr: "auto",
@@ -182,33 +172,20 @@ function CreateGoal() {
         {activeStep === steps.length ? (
           <div>
             <p>All steps completed</p>
-            <Button
-              onClick={handleReset}
-              sx={{ color: "#000", "&:hover": { backgroundColor: "" } }}
-            >
-              Reset
-            </Button>
+            <Button onClick={handleReset}>Reset</Button>
           </div>
         ) : (
           <div>
             {getStepContent(activeStep)}
             {activeStep !== steps.length - 1 && (
               <Box display='flex' justifyContent='space-between'>
-                <Button
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ color: "#000", "&:hover": { backgroundColor: "" } }}
-                >
+                <Button disabled={activeStep === 0} onClick={handleBack}>
                   Back
                 </Button>
                 <Button
                   variant='contained'
                   onClick={handleNext}
                   disabled={!isFormValid}
-                  sx={{
-                    backgroundColor: "#000",
-                    "&:hover": { backgroundColor: "#333" },
-                  }}
                 >
                   Next
                 </Button>

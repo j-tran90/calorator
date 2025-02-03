@@ -118,17 +118,6 @@ export default function Login() {
                       sx={{
                         mt: 2,
                         height: "56px",
-                        color: theme.palette.text.primary,
-                        backgroundColor:
-                          theme.palette.mode === "dark"
-                            ? theme.palette.grey[800]
-                            : theme.palette.primary.main,
-                        "&:hover": {
-                          backgroundColor:
-                            theme.palette.mode === "dark"
-                              ? theme.palette.grey[700]
-                              : theme.palette.primary.dark,
-                        },
                       }}
                     >
                       Login

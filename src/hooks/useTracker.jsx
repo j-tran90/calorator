@@ -15,47 +15,69 @@ import useCollectionData from "./useFetch";
 
 export default function useTracker() {
   const { uid } = auth.currentUser;
-  const { calorieTarget, proteinTarget, getDailyCalorieTarget } = useFetchGoals(0); // Assuming proteinTarget is also fetched
-  
+  const { calorieTarget, proteinTarget, getDailyCalorieTarget } =
+    useFetchGoals(0);
+
+  const [currentWeight, setCurrentWeight] = useState(0);
+  const [weightTarget, setTargetWeight] = useState(0);
   const [calorieRemaning, setRemainingCalories] = useState(0);
   const [proteinRemaining, setRemainingProtein] = useState(0);
+
   const startOfToday = new Date();
   const endOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
   endOfToday.setDate(startOfToday.getDate() + 1);
 
+  // Query userProfiles collection to fetch currentWeight and targetWeight
+  const userProfileRef = query(
+    collection(db, "userProfiles"),
+    where("uid", "==", uid)
+  );
+
+  const { data: userProfiles, getData: getUserProfile } =
+    useCollectionData(userProfileRef);
+
+  useEffect(() => {
+    if (userProfiles?.length > 0) {
+      setCurrentWeight(userProfiles[0].currentWeight || 0);
+      setTargetWeight(userProfiles[0].weightTarget || 0);
+    }
+  }, [userProfiles]);
+
   const entryCollectionRef = query(
-    collection(db, "journal/" + uid + "/entries"),
+    collection(db, "journal", uid, "entries"),
     orderBy("createdAt", "asc"),
     where("createdAt", ">=", startOfToday),
     where("createdAt", "<", endOfToday)
   );
-  
-  const { data: entries, getData: getEntries } = useCollectionData(entryCollectionRef);
-  
+
+  const { data: entries, getData: getEntries } =
+    useCollectionData(entryCollectionRef);
+
   const [calorieTotal, setNewTotalCals] = useState(0);
   const [proteinTotal, setNewTotalProtein] = useState(0);
   const [caloriePercent, setCaloriePercent] = useState(0);
   const [proteinPercent, setProteinPercent] = useState(0);
+
+  const programType =
+    currentWeight >= weightTarget ? "Weight Loss" : "Weight Gain";
+  console.log(programType);
 
   const sumEntry = async () => {
     const snapshot = await getAggregateFromServer(entryCollectionRef, {
       totalCalories: sum("calories"),
       proteinTotal: sum("protein"),
     });
-    const calorieTotal = snapshot.data().totalCalories;
-    const proteinTotal = snapshot.data().proteinTotal;
-    setNewTotalCals(calorieTotal);
-    setNewTotalProtein(proteinTotal);
+    setNewTotalCals(snapshot.data().totalCalories || 0);
+    setNewTotalProtein(snapshot.data().proteinTotal || 0);
   };
 
   useEffect(() => {
     sumEntry();
   }, []);
 
-  // Dynamic function for updating both calorie and protein percent
   const updateTotal = (total, target, setPercent, setRemaining) => {
-    if (target && total !== undefined) { // Ensure target and total are valid
+    if (target && total !== undefined) {
       const remaining = target - total;
       const percent = Math.round((total / target) * 100);
 
@@ -89,7 +111,7 @@ export default function useTracker() {
   }, [calorieTotal, proteinTotal, calorieTarget, proteinTarget]);
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(db, "journal/" + uid + "/entries", id));
+    await deleteDoc(doc(db, "journal", uid, "entries", id));
     getEntries();
     sumEntry();
   };
@@ -101,6 +123,9 @@ export default function useTracker() {
     proteinTotal,
     calorieRemaning,
     proteinRemaining,
+    currentWeight,
+    weightTarget,
+    programType,
     sumEntry,
     updateTotal,
     entries,
