@@ -12,6 +12,7 @@ import {
   Box,
   Divider,
 } from "@mui/material";
+import Brand from "../layouts/Brand";
 
 export default function Register() {
   const nameRef = useRef();
@@ -45,149 +46,161 @@ export default function Register() {
   }
 
   return (
-    <Container
-      maxWidth='lg'
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Grid2 container sx={{ height: "86vh" }}>
-        {/* Left Grid2 - Full-size Image */}
-        <Grid2
-          size={{ xs: 12, md: 6 }}
-          sx={{
-            display: { xs: "none", sm: "block" },
-          }}
-        >
-          <Box
+    <Container sx={{ height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "left",
+          justifyContent: "left",
+          pt: 2,
+          pb: 2
+        }}
+      >
+        <Brand />
+      </Box>
+      <Box
+        maxWidth='lg'
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Grid2 container sx={{ height: "86vh" }}>
+          {/* Left Grid2 - Full-size Image */}
+          <Grid2
+            size={{ xs: 12, md: 6 }}
             sx={{
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
+              display: { xs: "none", sm: "block" },
             }}
           >
-            <img
-              src='https://cdn.pixabay.com/photo/2022/05/28/07/07/watermelon-7226708_1280.png'
-              alt='Registration visual'
-              style={{
-                width: "576px",
-                height: "778px",
-                objectFit: "cover",
-                borderRadius: "20px 0px 0px 20px",
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
               }}
-            />
-          </Box>
-        </Grid2>
-
-        {/* Right Grid2 - Login Form */}
-        <Grid2
-          size={{ xs: 12, md: 6 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            padding: { xs: 2, md: 8 },
-          }}
-        >
-          <Typography variant='h4' gutterBottom align='center' sx={{ mb: 6 }}>
-            Create an account
-          </Typography>
-          {error && (
-            <Alert severity='error' sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-          <form onSubmit={handleSubmit}>
-            <Grid2 container spacing={3}>
-              <Grid2 size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  id='name'
-                  label='Name'
-                  placeholder='Enter Name'
-                  inputRef={nameRef}
-                  required
-                />
-              </Grid2>
-              <Grid2 size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  id='email'
-                  label='Email'
-                  placeholder='Enter Email'
-                  type='email'
-                  inputRef={emailRef}
-                  required
-                />
-              </Grid2>
-              <Grid2 size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  id='password'
-                  label='Password'
-                  placeholder='Choose Password'
-                  type='password'
-                  inputRef={passwordRef}
-                  required
-                />
-              </Grid2>
-              <Grid2 size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  id='password-confirm'
-                  label='Confirm Password'
-                  placeholder='Confirm Password'
-                  type='password'
-                  inputRef={passwordConfirmRef}
-                  required
-                />
-              </Grid2>
-              <Grid2 size={{ xs: 12 }} textAlign='center'>
-                <Button
-                  type='submit'
-                  variant='contained'
-                  disabled={loading}
-                  fullWidth
-                  sx={{
-                    mt: 2,
-                    backgroundColor: "#000",
-                    "&:hover": {
-                      backgroundColor: "#333",
-                    },
-                    height: "56px",
-                  }}
-                >
-                  Submit
-                </Button>
-              </Grid2>
-            </Grid2>
-          </form>
-
-          <Box sx={{ mt: 4 }}>
-            <Box display='flex' alignItems='center' width='100%'>
-              <Divider sx={{ flexGrow: 1 }} />
-              <Typography sx={{ mx: 2 }}>Or sign up with</Typography>
-              <Divider sx={{ flexGrow: 1 }} />
-            </Box>
-            <ProviderLogin />
-          </Box>
-
-          <Typography align='center' sx={{ mt: 2 }}>
-            Already have an account?{" "}
-            <RouterLink
-              to='/login'
-              style={{ textDecoration: "none", color: "#1976d2" }}
             >
-              Login
-            </RouterLink>
-          </Typography>
+              <img
+                src='https://cdn.pixabay.com/photo/2022/05/28/07/07/watermelon-7226708_1280.png'
+                alt='Registration visual'
+                style={{
+                  width: "576px",
+                  height: "778px",
+                  objectFit: "cover",
+                  borderRadius: "20px 0px 0px 20px",
+                }}
+              />
+            </Box>
+          </Grid2>
+
+          {/* Right Grid2 - Login Form */}
+          <Grid2
+            size={{ xs: 12, md: 6 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: { xs: 2, md: 8 },
+            }}
+          >
+            <Typography variant='h4' gutterBottom align='center' sx={{ mb: 6 }}>
+              Create an account
+            </Typography>
+            {error && (
+              <Alert severity='error' sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
+            <form onSubmit={handleSubmit}>
+              <Grid2 container spacing={3}>
+                <Grid2 size={{ xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    id='name'
+                    label='Name'
+                    placeholder='Enter Name'
+                    inputRef={nameRef}
+                    required
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    id='email'
+                    label='Email'
+                    placeholder='Enter Email'
+                    type='email'
+                    inputRef={emailRef}
+                    required
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    id='password'
+                    label='Password'
+                    placeholder='Choose Password'
+                    type='password'
+                    inputRef={passwordRef}
+                    required
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    id='password-confirm'
+                    label='Confirm Password'
+                    placeholder='Confirm Password'
+                    type='password'
+                    inputRef={passwordConfirmRef}
+                    required
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 12 }} textAlign='center'>
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    disabled={loading}
+                    fullWidth
+                    sx={{
+                      mt: 2,
+                      backgroundColor: "#000",
+                      "&:hover": {
+                        backgroundColor: "#333",
+                      },
+                      height: "56px",
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Grid2>
+              </Grid2>
+            </form>
+
+            <Box sx={{ mt: 4 }}>
+              <Box display='flex' alignItems='center' width='100%'>
+                <Divider sx={{ flexGrow: 1 }} />
+                <Typography sx={{ mx: 2 }}>Or sign up with</Typography>
+                <Divider sx={{ flexGrow: 1 }} />
+              </Box>
+              <ProviderLogin />
+            </Box>
+
+            <Typography align='center' sx={{ mt: 2 }}>
+              Already have an account?{" "}
+              <RouterLink
+                to='/login'
+                style={{ textDecoration: "none", color: "#1976d2" }}
+              >
+                Login
+              </RouterLink>
+            </Typography>
+          </Grid2>
         </Grid2>
-      </Grid2>
+      </Box>
     </Container>
   );
 }

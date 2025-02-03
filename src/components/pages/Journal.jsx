@@ -129,7 +129,7 @@ export default function Journal() {
           </Grid2>
         </Grid2>
       </Box>
-      <Box sx={{ padding: 2 }}>
+      <Box sx={{ p: { xs: 1, md: 2 } }}>
         <Grid2
           container
           spacing={2}
@@ -157,7 +157,7 @@ export default function Journal() {
             </LocalizationProvider>
           </Grid2>
         </Grid2>
-        <Paper sx={{ marginTop: 3, overflowX: "auto" }}>
+        <Paper sx={{ marginTop: 3, overflowX: "auto", borderRadius: "20px" }}>
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#9999" }}>
@@ -166,6 +166,15 @@ export default function Journal() {
                 <TableCell>Food</TableCell>
                 <TableCell>Calories</TableCell>
                 <TableCell>Protein</TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  Sugar
+                </TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  Carbs
+                </TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  Fats
+                </TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -187,7 +196,7 @@ export default function Journal() {
                     {isNewDay && (
                       <TableRow sx={{ backgroundColor: "#9992" }}>
                         <TableCell
-                          colSpan={6}
+                          colSpan={9}
                           sx={{ textAlign: "center", fontWeight: "bold" }}
                         >
                           {createdAt.toLocaleDateString(navigator.language, {
@@ -222,6 +231,15 @@ export default function Journal() {
 
                       <TableCell>{entry.calories}</TableCell>
                       <TableCell>{entry.protein} g</TableCell>
+                      <TableCell
+                        sx={{ display: { xs: "none", md: "table-cell" } }}
+                      ></TableCell>
+                      <TableCell
+                        sx={{ display: { xs: "none", md: "table-cell" } }}
+                      ></TableCell>
+                      <TableCell
+                        sx={{ display: { xs: "none", md: "table-cell" } }}
+                      ></TableCell>
                       <TableCell>
                         <IconButton
                           onClick={(event) => handleMenuOpen(event, entry.id)}

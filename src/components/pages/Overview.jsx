@@ -9,6 +9,7 @@ import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
 import { Box, Card, Grid2, Typography } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import ProgressBar from "../features/graphs/ProgressBar";
+import { FlagCircle } from "@mui/icons-material";
 
 export default function Overview() {
   // Use useTracker to manage total and trigger re-renders when total updates
@@ -80,24 +81,40 @@ export default function Overview() {
     <>
       <Card
         sx={{
-          m: 1,
           border: "1px solid #9999",
           borderRadius: "20px",
-          bgcolor: "",
-          p: 0,
+          m: 1,
           boxShadow: "none",
         }}
       >
-        {" "}
-        <Typography variant='h5'>
+        <Typography variant='h7'>
           {remainingDays >= 0 ? (
-            <ProgressBar
-              barHeight={30}
-              barWidth={100}
-              barHeading={`${remainingDays} Days to Deadline`}
-              currentValue={differenceInDays - remainingDays}
-              targetValue={differenceInDays}
-            />
+            <Box sx={{ position: "relative" }}>
+              <ProgressBar
+                barHeight={30}
+                barWidth={100}
+                currentValue={differenceInDays - remainingDays}
+                targetValue={differenceInDays}
+              />
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)", // Center text
+                  color: "#0009", // Adjust text color if needed
+                  fontWeight: "bold", // Optional for styling
+                }}
+              >
+                {remainingDays >= 0 ? (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {remainingDays} Days to Deadline <FlagCircle />
+                  </Box>
+                ) : (
+                  "No Target Set"
+                )}
+              </Box>
+            </Box>
           ) : (
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <SetTargetButton buttonText={"Set A New Target"} />
@@ -137,33 +154,37 @@ export default function Overview() {
               barHeight={10}
               currentValue={proteinTotal}
               targetValue={proteinTarget}
+              marginTop={2}
             />
           </Grid2>
           <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='yellowGreen'
-              barHeading={`Sugar`}
+              barHeading={`Sugar (WIP)`}
               barHeight={10}
               currentValue={placeholder1}
               targetValue={proteinTarget}
+              marginTop={2}
             />
           </Grid2>
           <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='orangeRed'
-              barHeading={"Carbs"}
+              barHeading={"Carbs (WIP)"}
               barHeight={10}
               currentValue={placeholder2}
               targetValue={proteinTarget}
+              marginTop={2}
             />
           </Grid2>
           <Grid2 size={{ xs: 6, md: 6 }}>
             <ProgressBar
               gradientType='lightBlueBlue'
-              barHeading={`Fats`}
+              barHeading={`Fats (WIP)`}
               barHeight={10}
               currentValue={placeholder3}
               targetValue={proteinTarget}
+              marginTop={2}
             />
           </Grid2>
         </Grid2>

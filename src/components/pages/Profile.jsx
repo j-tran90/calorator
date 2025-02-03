@@ -12,8 +12,10 @@ import {
   TableRow,
   Paper,
   Grid2,
+  Box,
 } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
+import Header from "../navigation/Header";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -128,6 +130,10 @@ export default function Profile() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Box sx={{ pt: 3 }}>
+        <Header headText={"Linked Accounts"} />
+      </Box>
     </>
   );
 }

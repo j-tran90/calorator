@@ -63,7 +63,7 @@ export default function Dashboard() {
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
                   <Typography variant='body2'>
-                    Today: {calorieTotal} kcals ({caloriePercent}%)
+                    Today {calorieTotal} kcals ({caloriePercent}%)
                   </Typography>
                 </Stack>
               </Box>
@@ -78,7 +78,7 @@ export default function Dashboard() {
                   <Typography variant='body2' component='div'>
                     <ProgressBar
                       gradientType='purple'
-                      barHeading={`Protein ${proteinTotal}g (${proteinPercent}%)`}
+                      barHeading={`Today ${proteinTotal}g (${proteinPercent}%)`}
                       barHeight={10}
                       currentValue={proteinTotal}
                       targetValue={proteinTarget}
@@ -90,7 +90,7 @@ export default function Dashboard() {
           </Grid2>
           <Grid2 size={{ xs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Other Contents</Typography>
+              <Typography variant='h6'>Other Contents (WIP)</Typography>
               <Typography variant='caption' sx={{ fontStyle: "italic" }}>
                 Consumed Today
               </Typography>
@@ -102,6 +102,7 @@ export default function Dashboard() {
                     barHeight={10}
                     currentValue={placeholder1}
                     targetValue={proteinTarget}
+                    marginTop={2}
                   />
 
                   <ProgressBar
@@ -110,6 +111,7 @@ export default function Dashboard() {
                     barHeight={10}
                     currentValue={placeholder2}
                     targetValue={proteinTarget}
+                    marginTop={2}
                   />
 
                   <ProgressBar
@@ -118,6 +120,7 @@ export default function Dashboard() {
                     barHeight={10}
                     currentValue={placeholder3}
                     targetValue={proteinTarget}
+                    marginTop={2}
                   />
                 </Stack>
               </Box>
@@ -125,7 +128,9 @@ export default function Dashboard() {
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Today's Calorie</Typography>
+              <Typography variant='h6' sx={{ pb: 2 }}>
+                Today's Calorie
+              </Typography>
               <ProgressCircle
                 value={caloriePercent}
                 gradientId='greenYellow'
@@ -144,12 +149,12 @@ export default function Dashboard() {
         <Box sx={{ pt: 3 }}>
           <Grid2 container spacing={3}>
             <Grid2 size={{ xs: 12, md: 6 }}>
-              <Card sx={{ borderRadius: "20px" }}>
+              <Card sx={{ borderRadius: "20px", p: 3 }}>
                 <CalorieLineGraph />
               </Card>
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-              <Card sx={{ borderRadius: "20px" }}>
+              <Card sx={{ borderRadius: "20px", p: 3 }}>
                 <ProteinBarGraph />
               </Card>
             </Grid2>

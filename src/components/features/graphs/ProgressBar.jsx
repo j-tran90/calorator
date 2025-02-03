@@ -8,6 +8,8 @@ export default function ProgressBar({
   barHeight,
   barWidth,
   gradientType,
+  marginTop,
+  marginBottom,
 }) {
   const gradients = {
     purple: {
@@ -35,10 +37,8 @@ export default function ProgressBar({
     targetValue > 0 ? Math.min((currentValue / targetValue) * 100, 100) : 0;
 
   return (
-    <Box sx={{ marginTop: 2, width: `${barWidth}%` }}>
-      <Typography variant='body2' gutterBottom>
-        {barHeading}
-      </Typography>
+    <Box sx={{ width: `${barWidth}%`, mt: marginTop, mb: marginBottom }}>
+      <Typography variant='body2'>{barHeading}</Typography>
       <LinearProgress
         variant='determinate'
         value={progress}

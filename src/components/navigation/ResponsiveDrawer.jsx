@@ -73,7 +73,7 @@ function ResponsiveDrawer(props) {
       <Divider sx={{ width: "100%" }} />
       <Box>
         <Typography variant='caption' sx={{ fontStyle: "italic" }}>
-          Version 1.0
+          Version 0.8.5
         </Typography>
       </Box>
     </Box>
@@ -97,7 +97,14 @@ function ResponsiveDrawer(props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ backgroundColor: "#fff", boxShadow: "none" }}>
+        <Toolbar
+          sx={{
+            backgroundColor: "#fff",
+            boxShadow: "none",
+            pt: { xs: 1 },
+            pb: { xs: 0, md: 1 },
+          }}
+        >
           <Stack
             direction='row'
             justifyContent='space-between'

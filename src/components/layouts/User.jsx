@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext"; // Import your AuthContext
 import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const User = () => {
   const { currentUser } = useAuth(); // Access currentUser from AuthContext
@@ -11,16 +12,23 @@ const User = () => {
   }
 
   return (
-    <div style={{padding: ".5rem"}}>
-    <Link to="/profile">  <img
-        src={
-          currentUser.photoURL ||
-          "https://cdn-icons-png.flaticon.com/256/9230/9230519.png"
-        }
-        alt='User Avatar'
-        style={{ borderRadius: "50%", width: "50px", height: "50px"}}
-      /></Link>
-    </div>
+    <Box>
+      <Link to='/profile'>
+        <img
+          src={
+            currentUser.photoURL ||
+            "https://cdn-icons-png.freepik.com/256/16783/16783993.png?semt=ais_hybrid"
+          }
+          alt='User Avatar'
+          style={{
+            borderRadius: "50%",
+            width: "50px",
+            objectFit: "cover", // Ensures the image maintains aspect ratio
+            transition: "width 0.3s ease, height 0.3s ease", // Smooth transition for resizing
+          }}
+        />
+      </Link>
+    </Box>
   );
 };
 

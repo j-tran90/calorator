@@ -58,7 +58,7 @@ export default function ProviderLogin() {
             }}
           >
             <img
-              src='https://icon-library.com/images/guest-account-icon/guest-account-icon-1.jpg'
+              src='https://cdn-icons-png.freepik.com/256/16783/16783993.png?semt=ais_hybrid'
               cursor='pointer'
               title='Guest Sign In'
               style={{

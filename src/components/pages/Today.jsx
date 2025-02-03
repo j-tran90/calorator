@@ -23,6 +23,7 @@ import { db, auth } from "../../config/Firebase";
 import dayjs from "dayjs";
 import Header from "../navigation/Header";
 import useTracker from "../../hooks/useTracker";
+import ProgressBar from "../features/graphs/ProgressBar";
 
 const boxStyles = {
   //backgroundColor: "#f5f5f5",
@@ -104,11 +105,11 @@ export default function Today() {
     <>
       <Box sx={{ pb: 2 }}>
         <Grid2 container>
-          <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
+          <Grid2 size={{ xs: 8 }} sx={{ pl: 2 }}>
             <Header headText='Today' />
           </Grid2>
           <Grid2
-            size={{ xs: 6 }}
+            size={{ xs: 4 }}
             sx={{
               pr: 2,
               display: "flex",
@@ -117,9 +118,11 @@ export default function Today() {
               textAlign: "right",
             }}
           >
-            <Typography variant='body2'>
-              <i>Progress: {caloriePercent}%</i>
-            </Typography>
+            <ProgressBar
+              currentValue={caloriePercent}
+              targetValue={100}
+              barHeading={"Progress"}
+            />
           </Grid2>
         </Grid2>
       </Box>
