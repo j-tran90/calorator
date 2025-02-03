@@ -15,6 +15,7 @@ import { Stack, Typography } from "@mui/material";
 import { useAuth } from "../../contexts/AuthContext";
 import Brand from "../layouts/Brand";
 import SearchBar from "../features/search/SearchBar";
+import { useTheme } from "@mui/material/styles"; // Import MUI theme hook
 
 const drawerWidth = 240;
 
@@ -24,6 +25,7 @@ function ResponsiveDrawer(props) {
   const [isClosing, setIsClosing] = React.useState(false);
 
   const { currentUser } = useAuth();
+  const theme = useTheme(); // Get current theme (light/dark mode)
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -49,6 +51,9 @@ function ResponsiveDrawer(props) {
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
+        backgroundColor: theme.palette.background.default, // Dark mode support
+        color: theme.palette.text.primary,
+        transition: "background-color 0.3s ease, color 0.3s ease",
       }}
     >
       <Box
@@ -72,7 +77,7 @@ function ResponsiveDrawer(props) {
       </Box>
       <Divider sx={{ width: "100%" }} />
       <Box>
-        <Typography variant='caption' sx={{ fontStyle: "italic" }}>
+        <Typography variant="caption" sx={{ fontStyle: "italic" }}>
           Version 0.8.5
         </Typography>
       </Box>
@@ -90,31 +95,33 @@ function ResponsiveDrawer(props) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
-        position='fixed'
+        position="fixed"
         elevation={0}
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          backgroundColor: theme.palette.background.default, // Dark mode support
+          color: theme.palette.text.primary,
+          transition: "background-color 0.3s ease, color 0.3s ease",
         }}
       >
         <Toolbar
           sx={{
-            backgroundColor: "#fff",
             boxShadow: "none",
             pt: { xs: 1 },
             pb: { xs: 0, md: 1 },
           }}
         >
           <Stack
-            direction='row'
-            justifyContent='space-between'
-            alignItems='center'
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
             sx={{ width: "100%" }}
           >
             <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='start'
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
               onClick={handleDrawerToggle}
               sx={{ display: { sm: "none" } }}
             >
@@ -126,12 +133,13 @@ function ResponsiveDrawer(props) {
         </Toolbar>
       </AppBar>
       <Box
-        component='nav'
+        component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
       >
+        {/* Mobile Drawer */}
         <Drawer
           container={container}
-          variant='temporary'
+          variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
@@ -143,20 +151,26 @@ function ResponsiveDrawer(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth + 60,
+              backgroundColor: theme.palette.background.default,
+              color: theme.palette.text.primary,
+              transition: "background-color 0.3s ease, color 0.3s ease",
             },
           }}
         >
           {drawer}
         </Drawer>
+
+        {/* Desktop Drawer */}
         <Drawer
-          variant='permanent'
+          variant="permanent"
           sx={{
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              // bgcolor: "#062118",
-              // color: "#fff",
+              backgroundColor: theme.palette.background.default,
+              color: theme.palette.text.primary,
+              transition: "background-color 0.3s ease, color 0.3s ease",
             },
           }}
           open
@@ -165,7 +179,7 @@ function ResponsiveDrawer(props) {
         </Drawer>
       </Box>
       <Box
-        component='main'
+        component="main"
         sx={{
           flexGrow: 1,
           p: 3,

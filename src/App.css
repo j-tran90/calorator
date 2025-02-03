@@ -1,8 +1,9 @@
 #root {
-  background-color: #fff;
-  color: #333;
+  background-color: var(--mui-background);
+  color: var(--mui-text);
   font-family: Arial, sans-serif;
   text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #main-layout {
@@ -20,6 +21,7 @@
 
 #main-layout.drawer-open {
   padding-left: 250px;
+  background-color: #9993;
 }
 
 #main-layout > .content {
@@ -42,6 +44,7 @@ body {
 @media (max-width: 600px) {
   #main-layout.drawer-open {
     padding-left: 0;
+    padding-top: 40px;
   }
   #main-layout > .content {
     flex-grow: 1;
@@ -51,17 +54,14 @@ body {
   }
 }
 
+/* Remove system dark mode enforcement */
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light text color */
+    background-color: unset;
+    color: unset;
   }
 }
 
-/* * {
-  border: 1px solid red;
-} */
-
 svg {
-  color: #555;
+  color: var(--mui-text);
 }

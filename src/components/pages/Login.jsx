@@ -12,6 +12,8 @@ import {
   Box,
   Divider,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
 import Brand from "../layouts/Brand";
 
 export default function Login() {
@@ -21,6 +23,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -45,7 +48,7 @@ export default function Login() {
             alignItems: "left",
             justifyContent: "left",
             pt: 2,
-            pb: 2
+            pb: 2,
           }}
         >
           <Brand />
@@ -58,7 +61,6 @@ export default function Login() {
             justifyContent: "center",
           }}
         >
-          {" "}
           <Grid2 container sx={{ height: "86vh" }}>
             {/* Left Grid2 - Login Form */}
             <Grid2
@@ -115,11 +117,18 @@ export default function Login() {
                       fullWidth
                       sx={{
                         mt: 2,
-                        backgroundColor: "#000",
-                        "&:hover": {
-                          backgroundColor: "#333",
-                        },
                         height: "56px",
+                        color: theme.palette.text.primary,
+                        backgroundColor:
+                          theme.palette.mode === "dark"
+                            ? theme.palette.grey[800]
+                            : theme.palette.primary.main,
+                        "&:hover": {
+                          backgroundColor:
+                            theme.palette.mode === "dark"
+                              ? theme.palette.grey[700]
+                              : theme.palette.primary.dark,
+                        },
                       }}
                     >
                       Login
@@ -141,7 +150,10 @@ export default function Login() {
                 Don’t have an account?{" "}
                 <RouterLink
                   to='/register'
-                  style={{ textDecoration: "none", color: "#1976d2" }}
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.primary.main,
+                  }}
                 >
                   Register
                 </RouterLink>
