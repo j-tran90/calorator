@@ -131,7 +131,7 @@ export default function Profile() {
         </Table>
       </TableContainer>
 
-      <Box sx={{ pt: 3 }}>
+      <Box sx={{ p: {xs: 2, md: 1} }}>
         <Header headText={"Linked Accounts"} />
       </Box>
     </>
