@@ -17,11 +17,9 @@ export default function Dashboard() {
     calorieTotal,
     calorieTarget,
     caloriePercent,
-    programType,
-    currentWeight,
-    weightTarget,
   } = useTracker(0);
-  const { createdDate, targetDate } = useFetchGoals(0);
+  const { createdDate, targetDate, programType, currentWeight, weightTarget } =
+    useFetchGoals(0);
 
   //PLACEHOLDER DELETE WHEN REPLACE
   const placeholder1 = 10;

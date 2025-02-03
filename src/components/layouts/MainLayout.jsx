@@ -23,10 +23,10 @@ const MainLayout = () => {
 
   return (
     <div
-      id="main-layout"
+      id='main-layout'
       className={`${!currentUser ? "no-drawer" : "drawer-open"}`}
       style={{
-        backgroundColor: "var(--mui-background)",
+        backgroundColor: "#9993",
         color: "var(--mui-text)",
         minHeight: "100vh",
         transition: "background-color 0.3s ease, color 0.3s ease",
@@ -34,7 +34,7 @@ const MainLayout = () => {
     >
       {/* Only show ResponsiveDrawer on larger screens, hide on mobile */}
       {currentUser && !isMobile && <ResponsiveDrawer />}
-      <div className="content">
+      <div className='content'>
         <Outlet />
       </div>
     </div>

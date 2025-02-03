@@ -21,10 +21,10 @@ const ThemeProviderComponent = ({ children }) => {
           },
           background: {
             default: mode === "dark" ? "#121212" : "#fff",
-            paper: mode === "dark" ? "#1e1e1e" : "#fff",
+            paper: mode === "dark" ? "#121212" : "#fff",
           },
           text: {
-            primary: mode === "dark" ? "#fff" : "#000",
+            primary: mode === "dark" ? "#eeeeee" : "#000",
           },
         },
       }),
