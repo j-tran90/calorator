@@ -26,7 +26,7 @@ export default function useGoals() {
       } else {
         console.warn("No user goals found in Firestore.");
       }
-    } catch (error) {
+    } catch (error) {  <FoodCategoriesTabs updateTotal={updateTotal} />
       console.error("Error fetching user goals: ", error);
     }
   };

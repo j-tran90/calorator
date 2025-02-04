@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { db, auth } from "../../config/Firebase";
 import ProgressCircle from "../features/graphs/ProgressCircle";
 import useTracker from "../../hooks/useTracker";
-import useFetchGoals from "../../hooks/useFetchGoals";
+import useGoals from "../../hooks/useGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
 import { Box, Card, Grid2, Typography } from "@mui/material";
@@ -21,7 +21,7 @@ export default function Overview() {
     sumEntry,
     proteinTotal,
   } = useTracker(0);
-  const { proteinTarget, remainingDays, differenceInDays } = useFetchGoals(0);
+  const { proteinTarget, remainingDays, differenceInDays } = useGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
 
@@ -102,7 +102,7 @@ export default function Overview() {
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%, -50%)",
-                  fontWeight: "bold", 
+                  fontWeight: "bold",
                 }}
               >
                 {remainingDays >= 0 ? (

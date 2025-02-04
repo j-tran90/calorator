@@ -1,6 +1,6 @@
 import { Box, Card, Grid2, Stack, Typography } from "@mui/material";
 import useTracker from "../../hooks/useTracker";
-import useFetchGoals from "../../hooks/useFetchGoals";
+import useGoals from "../../hooks/useGoals";
 import CalorieLineGraph from "../features/graphs/CalorieLineGraph";
 import ProgressCircle from "../features/graphs/ProgressCircle";
 import Header from "../navigation/Header";
@@ -18,8 +18,7 @@ export default function Dashboard() {
     calorieTarget,
     caloriePercent,
   } = useTracker(0);
-  const { createdDate, targetDate, programType, currentWeight, weightTarget } =
-    useFetchGoals(0);
+  const { createdDate, targetDate } = useGoals(0);
 
   //PLACEHOLDER DELETE WHEN REPLACE
   const placeholder1 = 10;
@@ -41,7 +40,7 @@ export default function Dashboard() {
           <Grid2 size={{ xs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Program</Typography>
-              <Typography variant='h4'>{programType}</Typography>
+              <Typography variant='h4'>Weight Gain</Typography>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
                   <Typography variant='body2' sx={{ fontWeight: "bold" }}>
@@ -51,13 +50,8 @@ export default function Dashboard() {
                   <Typography variant='body2' sx={{ fontStyle: "italic" }}>
                     In Progress
                   </Typography>
-                  <Typography variant='body2'>Calorie Surplus</Typography>
-                  <Typography variant='body2'>
-                    Starting Weight {currentWeight} lbs
-                  </Typography>
-                  <Typography variant='body2'>
-                    Desired Weight {weightTarget} lbs
-                  </Typography>
+                  <Typography variant='body2'>Starting Weight lbs</Typography>
+                  <Typography variant='body2'>Desired Weight lbs</Typography>
                 </Stack>
               </Box>
             </Card>

@@ -27,7 +27,7 @@ import {
 } from "@mui/icons-material";
 
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
-import useFetchGoals from "../../hooks/useFetchGoals";
+import useGoals from "../../hooks/useGoals";
 import Header from "../navigation/Header";
 
 export default function Goals() {
@@ -41,7 +41,7 @@ export default function Goals() {
   const [goalHistory, setGoalHistory] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { targetDate, createdDate, remainingDays } = useFetchGoals(0);
+  const { targetDate, createdDate, remainingDays } = useGoals(0);
 
   const boxStyles = {
     //backgroundColor: "#f5f5f5",

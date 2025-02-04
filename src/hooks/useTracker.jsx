@@ -10,16 +10,13 @@ import {
   sum,
   where,
 } from "firebase/firestore";
-import useFetchGoals from "./useFetchGoals";
+import useGoals from "./useGoals";
 import useCollectionData from "./useFetch";
 
 export default function useTracker() {
   const { uid } = auth.currentUser;
-  const { calorieTarget, proteinTarget, getDailyCalorieTarget } =
-    useFetchGoals(0);
+  const { calorieTarget, proteinTarget, getDailyCalorieTarget } = useGoals(0);
 
-  const [currentWeight, setCurrentWeight] = useState(0);
-  const [weightTarget, setTargetWeight] = useState(0);
   const [calorieRemaning, setRemainingCalories] = useState(0);
   const [proteinRemaining, setRemainingProtein] = useState(0);
 
@@ -29,20 +26,6 @@ export default function useTracker() {
   endOfToday.setDate(startOfToday.getDate() + 1);
 
   // Query userProfiles collection to fetch currentWeight and targetWeight
-  const userProfileRef = query(
-    collection(db, "userProfiles"),
-    where("uid", "==", uid)
-  );
-
-  const { data: userProfiles, getData: getUserProfile } =
-    useCollectionData(userProfileRef);
-
-  useEffect(() => {
-    if (userProfiles?.length > 0) {
-      setCurrentWeight(userProfiles[0].currentWeight || 0);
-      setTargetWeight(userProfiles[0].weightTarget || 0);
-    }
-  }, [userProfiles]);
 
   const entryCollectionRef = query(
     collection(db, "journal", uid, "entries"),
@@ -58,10 +41,6 @@ export default function useTracker() {
   const [proteinTotal, setNewTotalProtein] = useState(0);
   const [caloriePercent, setCaloriePercent] = useState(0);
   const [proteinPercent, setProteinPercent] = useState(0);
-
-  const programType =
-    currentWeight >= weightTarget ? "Weight Loss" : "Weight Gain";
-  console.log(programType);
 
   const sumEntry = async () => {
     const snapshot = await getAggregateFromServer(entryCollectionRef, {
@@ -123,9 +102,6 @@ export default function useTracker() {
     proteinTotal,
     calorieRemaning,
     proteinRemaining,
-    currentWeight,
-    weightTarget,
-    programType,
     sumEntry,
     updateTotal,
     entries,
