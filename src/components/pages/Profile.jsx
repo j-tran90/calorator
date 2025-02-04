@@ -11,18 +11,28 @@ import {
   TableContainer,
   TableRow,
   Paper,
-  Grid2,
+  Grid,
   Box,
+  Button,
+  Typography,
 } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import Header from "../navigation/Header";
+import {
+  EmailAuthProvider,
+  GoogleAuthProvider,
+  linkWithCredential,
+  linkWithPopup,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
+import { Google, MailOutline } from "@mui/icons-material";
 
 export default function Profile() {
   const { currentUser } = useAuth();
-  const { uid } = auth.currentUser;
+  const { uid, isAnonymous, providerData } = auth.currentUser;
 
   // Query user profile
-  const userProfileRef = collection(db, "userProfile/");
+  const userProfileRef = collection(db, "userProfile");
   const queryUserProfile = query(
     userProfileRef,
     where(documentId(), "==", uid)
@@ -36,36 +46,67 @@ export default function Profile() {
 
   const [age, setAge] = useState(0);
   const [currentWeight, setCurrentWeight] = useState(null);
+  const [linkedAccounts, setLinkedAccounts] = useState([]);
 
   function calculateAge(dateOfBirth) {
-    const currentDate = new Date();
-    const ageInMilliseconds = currentDate - new Date(dateOfBirth);
-    const ageInYears = Math.floor(
-      ageInMilliseconds / (1000 * 3600 * 24 * 365.25)
+    return Math.floor(
+      (new Date() - new Date(dateOfBirth)) / (1000 * 3600 * 24 * 365.25)
     );
-    return ageInYears;
   }
 
-  const formatDate = (date) => {
-    return dayjs(date).format("MMM DD, YYYY");
-  };
+  const formatDate = (date) => dayjs(date).format("MMM DD, YYYY");
 
   useEffect(() => {
-    if (profile && profile.length > 0) {
-      const calculatedAge = calculateAge(profile[0].dob);
-      setAge(calculatedAge);
+    if (profile?.length > 0) {
+      setAge(calculateAge(profile[0].dob));
     }
-  }, [profile]); // Recalculate age when profile data changes
+  }, [profile]);
 
   useEffect(() => {
-    if (goals && goals.length > 0) {
-      setCurrentWeight(goals[0].currentWeight); // Set the currentWeight from userGoals
+    if (goals?.length > 0) {
+      setCurrentWeight(goals[0].currentWeight);
     }
-  }, [goals]); // Update currentWeight when goals data changes
+  }, [goals]);
+
+  // Fetch linked authentication providers
+  useEffect(() => {
+    if (currentUser?.email) {
+      fetchSignInMethodsForEmail(auth, currentUser.email)
+        .then((methods) => {
+          setLinkedAccounts(methods);
+        })
+        .catch((error) =>
+          console.error("Error fetching sign-in methods:", error)
+        );
+    }
+  }, [currentUser]);
+
+  async function handleLinkEmail() {
+    const email = prompt("Enter your email:");
+    const password = prompt("Enter a password:");
+    if (!email || !password) return;
+
+    try {
+      const credential = EmailAuthProvider.credential(email, password);
+      await linkWithCredential(auth.currentUser, credential);
+      alert("Email linked successfully!");
+    } catch (error) {
+      console.error("Error linking email account:", error);
+    }
+  }
+
+  async function handleLinkGoogle() {
+    try {
+      await linkWithPopup(auth.currentUser, new GoogleAuthProvider());
+      alert("Google account linked successfully!");
+    } catch (error) {
+      console.error("Error linking Google account:", error);
+    }
+  }
 
   return (
     <>
-      <TableContainer>
+      <TableContainer component={Paper}>
         <Table>
           <TableBody>
             <TableRow>
@@ -74,7 +115,6 @@ export default function Profile() {
               </TableCell>
               <TableCell>{currentUser.displayName || "Guest User"}</TableCell>
             </TableRow>
-
             {profile.map((showProfile) => (
               <React.Fragment key={showProfile.id}>
                 <TableRow>
@@ -106,15 +146,12 @@ export default function Profile() {
                     <strong>Current Weight</strong>
                   </TableCell>
                   <TableCell>
-                    <Grid2 container>
-                      <Grid2 size={6}> {currentWeight} lbs </Grid2>
-                      <Grid2 size={6}>
-                        <SetTargetButton
-                          buttonText={"New"}
-                          buttonHeight={"20px"}
-                        />
-                      </Grid2>
-                    </Grid2>
+                    <Grid container spacing={2}>
+                      <Grid item>{currentWeight} lbs</Grid>
+                      <Grid item>
+                        <SetTargetButton buttonText='New' buttonHeight='20px' />
+                      </Grid>
+                    </Grid>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -131,9 +168,28 @@ export default function Profile() {
         </Table>
       </TableContainer>
 
-      <Box sx={{ p: {xs: 2, md: 1} }}>
-        <Header headText={"Linked Accounts"} />
+      <Box sx={{ p: { xs: 2, md: 1 } }}>
+        <Header headText='Linked Accounts' />
+        <Box sx={{ mt: 2 }}>
+          <Typography variant='body1'>
+            {linkedAccounts.length > 0
+              ? `Currently linked: ${linkedAccounts.join(", ")}`
+              : "No linked accounts found."}
+          </Typography>
+        </Box>
       </Box>
+
+      {isAnonymous && (
+        <Box sx={{ p: 2, textAlign: "center" }}>
+          <Button disabled variant='contained' onClick={handleLinkEmail} sx={{ mr: 2 }}>
+            <MailOutline sx={{ mr: 1 }} /> Link Email
+          </Button>
+          <Button variant='contained' onClick={handleLinkGoogle}>
+            <Google sx={{ mr: 1 }} />
+            Link Google
+          </Button>
+        </Box>
+      )}
     </>
   );
 }

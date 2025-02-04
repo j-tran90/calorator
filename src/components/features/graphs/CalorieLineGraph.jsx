@@ -90,68 +90,111 @@ const CalorieLineGraph = () => {
       return;
     }
 
-    const fetchCalorieData = async () => {
-      if (!uid) {
-        setError("User not authenticated");
+    // Check if it's time to fetch the data
+    const currentTime = new Date();
+    const nextMidnight = new Date(currentTime);
+    nextMidnight.setHours(24, 0, 0, 0); // Set to next midnight (12:00 AM)
+
+    const timeUntilMidnight = nextMidnight.getTime() - currentTime.getTime();
+
+    const fetchDataAtMidnight = () => {
+      fetchCalorieData(); // Fetch data when it reaches midnight
+    };
+
+    // Set a timeout to trigger data fetch at midnight
+    if (timeUntilMidnight > 0) {
+      setTimeout(fetchDataAtMidnight, timeUntilMidnight);
+    }
+
+    // Check if data is available in localStorage and it's still valid
+    const lastFetchedTime = localStorage.getItem("calorieDataLastFetched");
+    if (
+      !lastFetchedTime ||
+      new Date().getTime() - lastFetchedTime > timeUntilMidnight
+    ) {
+      fetchCalorieData();
+    } else {
+      const storedCalories = JSON.parse(localStorage.getItem("calorieData"));
+      const storedTarget = localStorage.getItem("calorieTarget");
+      if (storedCalories) {
+        setTotalCaloriesByDay(storedCalories);
+      }
+      if (storedTarget) {
+        setCalorieTarget(Number(storedTarget));
+      }
+      setLoading(false);
+    }
+  }, [createdDate, uid]);
+
+  const fetchCalorieData = async () => {
+    if (!uid) {
+      setError("User not authenticated");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Get the start date (from createdDate) and end date (today)
+      const startOfPeriod = new Date(createdDate);
+      const endOfPeriod = new Date(); // Today
+
+      // Convert to Firestore Timestamp objects
+      const startOfPeriodTimestamp = Timestamp.fromDate(startOfPeriod);
+      const endOfPeriodTimestamp = Timestamp.fromDate(endOfPeriod);
+
+      // Query the "entries" collection for the date range from createdDate to today
+      const calorieQuery = query(
+        collection(db, "journal/" + uid + "/entries"),
+        where("createdAt", ">=", startOfPeriodTimestamp),
+        where("createdAt", "<=", endOfPeriodTimestamp)
+      );
+
+      // Fetch the data from Firestore
+      const querySnapshot = await getDocs(calorieQuery);
+
+      if (querySnapshot.empty) {
+        setError("No calorie entries found.");
         setLoading(false);
         return;
       }
 
-      try {
-        // Get the start date (from createdDate) and end date (today)
-        const startOfPeriod = new Date(createdDate);
-        const endOfPeriod = new Date(); // Today
+      // Extract the data from the querySnapshot
+      const entries = querySnapshot.docs.map((doc) => doc.data());
 
-        // Convert to Firestore Timestamp objects
-        const startOfPeriodTimestamp = Timestamp.fromDate(startOfPeriod);
-        const endOfPeriodTimestamp = Timestamp.fromDate(endOfPeriod);
-
-        // Query the "entries" collection for the date range from createdDate to today
-        const calorieQuery = query(
-          collection(db, "journal/" + uid + "/entries"),
-          where("createdAt", ">=", startOfPeriodTimestamp),
-          where("createdAt", "<=", endOfPeriodTimestamp)
-        );
-
-        // Fetch the data from Firestore
-        const querySnapshot = await getDocs(calorieQuery);
-
-        if (querySnapshot.empty) {
-          setError();
-          setLoading(false);
-          return;
+      // Sum the calories for each day in the date range
+      const caloriesByDay = {};
+      entries.forEach((entry) => {
+        const entryDate = dayjs(entry.createdAt.toDate()).format("MMM DD");
+        if (!caloriesByDay[entryDate]) {
+          caloriesByDay[entryDate] = 0;
         }
+        caloriesByDay[entryDate] += entry.calories || 0;
+      });
 
-        // Extract the data from the querySnapshot
-        const entries = querySnapshot.docs.map((doc) => doc.data());
+      // Store the data in localStorage
+      localStorage.setItem("calorieData", JSON.stringify(caloriesByDay));
+      localStorage.setItem(
+        "calorieDataLastFetched",
+        new Date().getTime().toString()
+      );
 
-        // Sum the calories for each day in the date range
-        const caloriesByDay = {};
-        entries.forEach((entry) => {
-          const entryDate = dayjs(entry.createdAt.toDate()).format("MMM DD");
-          if (!caloriesByDay[entryDate]) {
-            caloriesByDay[entryDate] = 0;
-          }
-          caloriesByDay[entryDate] += entry.calories || 0;
-        });
+      // Fetch the calorie target from Firestore
+      const userProfileDocRef = doc(db, "users", uid);
+      const userProfileDoc = await getDoc(userProfileDocRef);
+      const target = userProfileDoc.data()?.calorieTarget || 2000;
+      setCalorieTarget(target);
 
-        setTotalCaloriesByDay(caloriesByDay);
+      // Store the calorie target in localStorage
+      localStorage.setItem("calorieTarget", target.toString());
 
-        // Fetch the calorie target from Firestore (assuming it's stored in the user's profile or goals)
-        const userProfileDocRef = doc(db, "users", uid);
-        const userProfileDoc = await getDoc(userProfileDocRef);
-        const target = userProfileDoc.data()?.calorieTarget || 2000;
-        setCalorieTarget(target);
-      } catch (error) {
-        console.error("Error fetching calorie entries:", error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCalorieData();
-  }, [uid, createdDate]); // Added createdDate as a dependency
+      setTotalCaloriesByDay(caloriesByDay);
+    } catch (error) {
+      console.error("Error fetching calorie entries:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <p>Loading...</p>;

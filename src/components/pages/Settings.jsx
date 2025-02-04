@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Button, Typography, Box } from "@mui/material";
+import { Button, Typography, Box, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 function Settings() {
@@ -21,6 +21,24 @@ function Settings() {
     }
   }
 
+  const clearLocalStorage = () => {
+    // Show confirmation prompt
+    const confirmClear = window.confirm(
+      "Are you sure you want to clear all localStorage data? This action cannot be undone."
+    );
+
+    if (confirmClear) {
+      // Clear only specific items
+      localStorage.removeItem(`proteinData-${uid}`);
+      localStorage.removeItem(`calorieData-${uid}`);
+      // Add any other localStorage keys you need to clear
+
+      alert("LocalStorage has been cleared.");
+    } else {
+      alert("Clear action canceled.");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -39,32 +57,34 @@ function Settings() {
         </Typography>
       )}
 
-      <Button
-        variant='contained'
-        onClick={handleLogout}
-        sx={{
-          margin: "5px",
-        }}
-      >
-        Logout
-      </Button>
-
-      <Button
-        disabled
-        variant='contained'
-        onClick={deleteAccount}
-        sx={{
-          backgroundColor: theme.palette.mode === "dark" ? "darkred" : "red",
-          color: theme.palette.text.primary,
-          "&:hover": {
-            backgroundColor:
-              theme.palette.mode === "dark" ? "maroon" : "darkred",
-          },
-          margin: "5px",
-        }}
-      >
-        Delete Account
-      </Button>
+      <Stack>
+        <Button onClick={clearLocalStorage}>Clear Data</Button>
+        <Button
+          disabled
+          variant='contained'
+          onClick={deleteAccount}
+          sx={{
+            backgroundColor: theme.palette.mode === "dark" ? "darkred" : "red",
+            color: theme.palette.text.primary,
+            "&:hover": {
+              backgroundColor:
+                theme.palette.mode === "dark" ? "maroon" : "darkred",
+            },
+            margin: "5px",
+          }}
+        >
+          Delete Account
+        </Button>{" "}
+        <Button
+          variant='contained'
+          onClick={handleLogout}
+          sx={{
+            margin: "5px",
+          }}
+        >
+          Logout
+        </Button>
+      </Stack>
     </Box>
   );
 }

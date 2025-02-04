@@ -53,7 +53,6 @@ const CalorieCalendar = () => {
         } else if (startDate instanceof Date) {
           start = dayjs(startDate).format("YYYY-MM-DD");
         } else {
-          // If it's a string, assume it's already formatted correctly
           start = startDate;
         }
 
@@ -68,13 +67,27 @@ const CalorieCalendar = () => {
         const querySnapshotEntries = await getDocs(calorieQuery);
         const entries = querySnapshotEntries.docs.map((doc) => doc.data());
 
-        const daysMetTarget = new Set();
+        const dailyCalories = {};
+
+        // Aggregate calories by day
         entries.forEach((entry) => {
-          const entryDate = dayjs(entry.createdAt.toDate()).format(
-            "YYYY-MM-DD"
-          );
-          if (!daysMetTarget.has(entryDate)) {
-            daysMetTarget.add(entryDate);
+          const entryDate = dayjs(entry.createdAt.toDate()).format("YYYY-MM-DD");
+          const totalCaloriesForDay = entry.calories || 0;
+
+          // Sum the calories for each day
+          if (dailyCalories[entryDate]) {
+            dailyCalories[entryDate] += totalCaloriesForDay;
+          } else {
+            dailyCalories[entryDate] = totalCaloriesForDay;
+          }
+        });
+
+        const daysMetTarget = new Set();
+
+        // Check if the total calories for each day meet the target
+        Object.keys(dailyCalories).forEach((day) => {
+          if (dailyCalories[day] >= target) {
+            daysMetTarget.add(day);
           }
         });
 
@@ -87,7 +100,7 @@ const CalorieCalendar = () => {
     };
 
     fetchCalorieData();
-  }, [uid]);
+  }, [uid, calorieTarget]);
 
   function CustomDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
@@ -101,16 +114,12 @@ const CalorieCalendar = () => {
     return (
       <Badge
         key={day.toString()}
-        overlap='circular'
+        overlap="circular"
         badgeContent={
           isHighlighted ? "✅" : isWithinGoalPeriod ? "❌" : undefined
         }
       >
-        <PickersDay
-          {...other}
-          outsideCurrentMonth={outsideCurrentMonth}
-          day={day}
-        />
+        <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
       </Badge>
     );
   }

@@ -10,6 +10,7 @@ import { Box, Card, Grid2, Typography } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import ProgressBar from "../features/graphs/ProgressBar";
 import { FlagCircle } from "@mui/icons-material";
+import LoadingScreen from "../layouts/LoadingScreen";
 
 export default function Overview() {
   // Use useTracker to manage total and trigger re-renders when total updates
@@ -24,6 +25,7 @@ export default function Overview() {
   const { proteinTarget, remainingDays, differenceInDays } = useGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);  // Start loading by default
 
   //PLACEHOLDER DELETE WHEN REPLACE
   const placeholder1 = 10;
@@ -52,6 +54,8 @@ export default function Overview() {
         ]);
 
         if (!userGoalsDoc.exists || !userProfileDoc.exists) {
+          // Show loading screen and redirect to /creategoal
+          setLoading(true);
           navigate("/creategoal");
           return;
         }
@@ -64,18 +68,29 @@ export default function Overview() {
           !userProfileData ||
           !userGoalsData.dailyCalorieTarget
         ) {
+          // Show loading screen and redirect to /creategoal
+          setLoading(true);
           navigate("/creategoal");
           return;
         }
+
         setDailyCalorieTarget(userGoalsData.dailyCalorieTarget);
+        setLoading(false);  // Stop loading once data is fetched
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setLoading(true);  // Show loading screen if there's an error and navigate to /creategoal
         navigate("/creategoal");
       }
     };
 
     checkUserData();
   }, [navigate]);
+
+  if (loading) {
+    return <LoadingScreen />;  // Only show loading screen if required (e.g., redirect to /creategoal)
+  }
+
+  console.log(JSON.stringify(localStorage).length);
 
   return (
     <>
