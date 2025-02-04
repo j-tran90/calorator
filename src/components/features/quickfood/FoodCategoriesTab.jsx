@@ -63,7 +63,6 @@ function FoodCategoriesTabs({ updateTotal, sumEntry }) {
           hidden={value !== index}
           id={`tabpanel-${index}`}
           aria-labelledby={`tab-${index}`}
-          sx={{ p: 0 }} // Remove padding from tab panels here
         >
           {value === index && (
             <FoodCategory

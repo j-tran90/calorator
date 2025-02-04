@@ -2,14 +2,13 @@ import React, { useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import ResponsiveDrawer from "../navigation/ResponsiveDrawer"; // Ensure this path is correct
 import { Outlet } from "react-router-dom";
-import { useTheme, useMediaQuery } from "@mui/material";
+import { useTheme, useMediaQuery, Container } from "@mui/material";
 
 const MainLayout = () => {
   const { currentUser } = useAuth();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile view
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Inject MUI theme colors into CSS variables
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--mui-background",
@@ -35,7 +34,16 @@ const MainLayout = () => {
       {/* Only show ResponsiveDrawer on larger screens, hide on mobile */}
       {currentUser && !isMobile && <ResponsiveDrawer />}
       <div className='content'>
-        <Outlet />
+        {/* Conditionally render Container based on isMobile */}
+        {isMobile ? (
+          <div className='mobile-content'>
+            <Outlet />
+          </div>
+        ) : (
+          <Container>
+            <Outlet />
+          </Container>
+        )}
       </div>
     </div>
   );

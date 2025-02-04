@@ -203,7 +203,10 @@ export default function Register() {
                 Already have an account?{" "}
                 <RouterLink
                   to='/login'
-                  style={{ textDecoration: "none", color: "#1976d2" }}
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.primary.main,
+                  }}
                 >
                   Login
                 </RouterLink>

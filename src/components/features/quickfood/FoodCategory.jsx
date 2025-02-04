@@ -12,12 +12,13 @@ const ComplexButton = styled(ButtonBase)(({ theme }) => ({
   width: "120px",
   height: "120px",
   borderRadius: "20px",
-  backgroundColor: "#0009",
+  border: `1px solid ${theme.palette.primary.main}`,
   backgroundSize: "cover",
   backgroundPosition: "center",
   boxShadow: theme.shadows[3],
   overflow: "hidden",
   "&:hover": {
+    backgroundColor: theme.palette.primary.main,
     opacity: 0.9,
     transform: "scale(1.05)",
     transition: "all 0.3s ease-in-out",
@@ -72,7 +73,6 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
               top: "50%",
               transform: "translateY(-50%)",
               fontWeight: "bold",
-              color: "white",
               textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
             }}
           >
@@ -84,7 +84,6 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
               position: "absolute",
               bottom: 10,
               fontSize: "10px",
-              color: "white",
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
             }}
           >

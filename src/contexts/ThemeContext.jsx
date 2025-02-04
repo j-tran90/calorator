@@ -24,7 +24,7 @@ const ThemeProviderComponent = ({ children }) => {
             paper: mode === "dark" ? "#121212" : "#fff",
           },
           text: {
-            primary: mode === "dark" ? "#eeeeee" : "#000",
+            primary: mode === "dark" ? "#d5cece" : "#000",
           },
         },
       }),

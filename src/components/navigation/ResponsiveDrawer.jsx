@@ -16,6 +16,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import Brand from "../layouts/Brand";
 import SearchBar from "../features/search/SearchBar";
 import { useTheme } from "@mui/material/styles"; // Import MUI theme hook
+import DarkModeToggle from "../features/darkmode/DarkModeToggle";
 
 const drawerWidth = 240;
 
@@ -77,7 +78,7 @@ function ResponsiveDrawer(props) {
       </Box>
       <Divider sx={{ width: "100%" }} />
       <Box>
-        <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+        <Typography variant='caption' sx={{ fontStyle: "italic" }}>
           Version 0.8.9
         </Typography>
       </Box>
@@ -95,7 +96,7 @@ function ResponsiveDrawer(props) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
-        position="fixed"
+        position='fixed'
         elevation={0}
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
@@ -113,33 +114,36 @@ function ResponsiveDrawer(props) {
           }}
         >
           <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'
             sx={{ width: "100%" }}
           >
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
+              color='inherit'
+              aria-label='open drawer'
+              edge='start'
               onClick={handleDrawerToggle}
               sx={{ display: { sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
             <SearchBar />
-          </Stack>
+          </Stack>{" "}
+          <Box sx={{pr:{ xs: 1, md: 2}}}>
+            <DarkModeToggle />
+          </Box>
           <User />
         </Toolbar>
       </AppBar>
       <Box
-        component="nav"
+        component='nav'
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
       >
         {/* Mobile Drawer */}
         <Drawer
           container={container}
-          variant="temporary"
+          variant='temporary'
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
@@ -162,7 +166,7 @@ function ResponsiveDrawer(props) {
 
         {/* Desktop Drawer */}
         <Drawer
-          variant="permanent"
+          variant='permanent'
           sx={{
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
@@ -179,7 +183,7 @@ function ResponsiveDrawer(props) {
         </Drawer>
       </Box>
       <Box
-        component="main"
+        component='main'
         sx={{
           flexGrow: 1,
           p: 3,
