@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { db, auth } from "../../config/Firebase";
-import { collection, documentId, query, where } from "firebase/firestore";
+import {
+  collection,
+  documentId,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import useCollectionData from "../../hooks/useFetch";
 import dayjs from "dayjs";
 import {
@@ -11,21 +18,21 @@ import {
   TableContainer,
   TableRow,
   Paper,
-  Grid,
   Box,
   Button,
-  Typography,
+  Grid2,
 } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
-import Header from "../navigation/Header";
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
   linkWithCredential,
   linkWithPopup,
   fetchSignInMethodsForEmail,
+  browserPopupRedirectResolver,
 } from "firebase/auth";
 import { Google, MailOutline } from "@mui/icons-material";
+import { Alert, Snackbar } from "@mui/material";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -47,6 +54,15 @@ export default function Profile() {
   const [age, setAge] = useState(0);
   const [currentWeight, setCurrentWeight] = useState(null);
   const [linkedAccounts, setLinkedAccounts] = useState([]);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const handleCloseAlert = () => {
+    setAlert((prev) => ({ ...prev, open: false }));
+  };
 
   function calculateAge(dateOfBirth) {
     return Math.floor(
@@ -97,12 +113,64 @@ export default function Profile() {
 
   async function handleLinkGoogle() {
     try {
-      await linkWithPopup(auth.currentUser, new GoogleAuthProvider());
-      alert("Google account linked successfully!");
+      const provider = new GoogleAuthProvider();
+      const result = await linkWithPopup(auth.currentUser, provider);
+
+      // Check if display name is null or "anonymous" (or any placeholder for guest users)
+      if (
+        !auth.currentUser.displayName ||
+        auth.currentUser.displayName.toLowerCase().includes("anonymous")
+      ) {
+        // Get Google display name
+        const googleDisplayName = result.user.displayName;
+
+        // Update Firebase Auth profile
+        await auth.currentUser.updateProfile({
+          displayName: googleDisplayName,
+        });
+
+        console.log("Updated display name to:", googleDisplayName);
+      }
+
+      // Show success alert
+      setAlert({
+        open: true,
+        message: "Google account linked successfully!",
+        severity: "success",
+      });
     } catch (error) {
+      setAlert({
+        open: true,
+        message: "Failed to link Google account.",
+        severity: "error",
+      });
       console.error("Error linking Google account:", error);
     }
   }
+
+  useEffect(() => {
+    async function fetchLinkedAccounts() {
+      if (currentUser?.email) {
+        try {
+          const methods = await fetchSignInMethodsForEmail(
+            auth,
+            currentUser.email
+          );
+          setLinkedAccounts(methods);
+        } catch (error) {
+          console.error("Error fetching sign-in methods:", error);
+        }
+      }
+    }
+
+    fetchLinkedAccounts();
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      setLinkedAccounts(currentUser.providerData.map((p) => p.providerId));
+    }
+  }, [currentUser]);
 
   return (
     <>
@@ -146,12 +214,12 @@ export default function Profile() {
                     <strong>Current Weight</strong>
                   </TableCell>
                   <TableCell>
-                    <Grid container spacing={2}>
-                      <Grid item>{currentWeight} lbs</Grid>
-                      <Grid item>
+                    <Grid2 container spacing={2}>
+                      <Grid2>{currentWeight} lbs</Grid2>
+                      <Grid2>
                         <SetTargetButton buttonText='New' buttonHeight='20px' />
-                      </Grid>
-                    </Grid>
+                      </Grid2>
+                    </Grid2>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -168,28 +236,43 @@ export default function Profile() {
         </Table>
       </TableContainer>
 
-      <Box sx={{ p: { xs: 2, md: 1 } }}>
-        <Header headText='Linked Accounts' />
-        <Box sx={{ mt: 2 }}>
-          <Typography variant='body1'>
-            {linkedAccounts.length > 0
-              ? `Currently linked: ${linkedAccounts.join(", ")}`
-              : "No linked accounts found."}
-          </Typography>
-        </Box>
-      </Box>
+      <Box sx={{ p: 2, textAlign: "center" }}>
+        <Button
+          disabled={linkedAccounts.includes("password")}
+          variant='contained'
+          onClick={handleLinkEmail}
+          sx={{ mr: 2 }}
+        >
+          <MailOutline sx={{ mr: 1 }} />
+          {linkedAccounts.includes("password")
+            ? "Linked to Email"
+            : "Link Email"}
+        </Button>
 
-      {isAnonymous && (
-        <Box sx={{ p: 2, textAlign: "center" }}>
-          <Button disabled variant='contained' onClick={handleLinkEmail} sx={{ mr: 2 }}>
-            <MailOutline sx={{ mr: 1 }} /> Link Email
-          </Button>
-          <Button variant='contained' onClick={handleLinkGoogle}>
-            <Google sx={{ mr: 1 }} />
-            Link Google
-          </Button>
-        </Box>
-      )}
+        <Button
+          disabled={linkedAccounts.includes("google.com")}
+          variant='contained'
+          onClick={handleLinkGoogle}
+        >
+          <Google sx={{ mr: 1 }} />
+          {linkedAccounts.includes("google.com")
+            ? "Linked to Google"
+            : "Link Google"}
+        </Button>
+      </Box>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={4000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

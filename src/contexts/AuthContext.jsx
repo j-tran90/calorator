@@ -9,6 +9,9 @@ import {
   browserPopupRedirectResolver,
   EmailAuthProvider,
   linkWithCredential,
+  updateProfile,
+  onAuthStateChanged,
+  linkWithRedirect,
 } from "firebase/auth";
 
 const AuthContext = React.createContext();
@@ -22,49 +25,70 @@ export default function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const provider = new GoogleAuthProvider();
 
-  // Register with email/password and link if anonymous
   async function register(email, password, displayName) {
-    if (auth.currentUser?.isAnonymous) {
-      // Link anonymous account to email/password
-      const credential = EmailAuthProvider.credential(email, password);
-      try {
-        const userCredential = await linkWithCredential(
-          auth.currentUser,
-          credential
-        );
-        await userCredential.user.updateProfile({
+    try {
+      let userCredential;
+
+      if (auth.currentUser?.isAnonymous) {
+        // Link anonymous account to email/password
+        const credential = EmailAuthProvider.credential(email, password);
+        userCredential = await linkWithCredential(auth.currentUser, credential);
+
+        // Update profile after linking
+        await updateProfile(userCredential.user, {
           displayName: displayName,
-          photoURL: "https://cdn-icons-png.flaticon.com/256/9230/9230519.png",
+          photoURL: null, // Set to a valid URL or leave as null
         });
-      } catch (error) {
-        console.error("Error linking anonymous account:", error);
+      } else {
+        // Standard email/password registration
+        userCredential = await auth.createUserWithEmailAndPassword(
+          email,
+          password
+        );
+
+        // Update profile after creating the user
+        await updateProfile(userCredential.user, {
+          displayName: displayName,
+          photoURL: null, // Set to a valid URL or leave as null
+        });
       }
-    } else {
-      // Standard email/password registration
-      return auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((result) =>
-          result.user.updateProfile({
-            displayName: displayName,
-            photoURL: "https://cdn-icons-png.flaticon.com/256/9230/9230519.png",
-          })
-        )
-        .catch((error) => console.log(error));
+
+      // Ensure user is signed in and updated profile is reflected
+      setCurrentUser(userCredential.user); // Ensure current user is updated
+    } catch (error) {
+      console.error("Registration error:", error);
     }
   }
 
   // Google login and link if anonymous
   async function googleLogin() {
     try {
-      if (auth.currentUser?.isAnonymous) {
-        // Link anonymous account to Google
-        await linkWithPopup(auth.currentUser, provider);
+      const provider = new GoogleAuthProvider();
+
+      if (auth.currentUser) {
+        // Check if user already exists and wants to link Google
+        try {
+          const result = await linkWithPopup(
+            auth.currentUser,
+            provider,
+            browserPopupRedirectResolver
+          );
+          console.log("Google account linked successfully:", result.user);
+        } catch (error) {
+          if (error.code === "auth/credential-already-in-use") {
+            console.log(
+              "This Google account is already linked to another user."
+            );
+          } else {
+            console.error("Error linking Google account:", error);
+          }
+        }
       } else {
-        // Standard Google login
+        // Standard Google sign-in if no user is logged in
         await signInWithPopup(auth, provider, browserPopupRedirectResolver);
       }
     } catch (error) {
-      console.error("Error linking Google account:", error);
+      console.error("Google sign-in error:", error);
     }
   }
 
@@ -87,7 +111,7 @@ export default function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
     });

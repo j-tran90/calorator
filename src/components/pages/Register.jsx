@@ -47,7 +47,11 @@ export default function Register() {
       setError("");
       setLoading(true);
       // Register user and navigate to the goal creation page
-      await register(emailRef.current.value, passwordRef.current.value);
+      await register(
+        emailRef.current.value,
+        passwordRef.current.value,
+        nameRef.current.value
+      );
       navigate("/creategoal", { replace: true });
     } catch {
       setError("Failed to create an account");

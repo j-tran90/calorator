@@ -25,7 +25,7 @@ export default function Overview() {
   const { proteinTarget, remainingDays, differenceInDays } = useGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);  // Start loading by default
+  const [loading, setLoading] = useState(true); // Start loading by default
 
   //PLACEHOLDER DELETE WHEN REPLACE
   const placeholder1 = 10;
@@ -75,10 +75,10 @@ export default function Overview() {
         }
 
         setDailyCalorieTarget(userGoalsData.dailyCalorieTarget);
-        setLoading(false);  // Stop loading once data is fetched
+        setLoading(false); // Stop loading once data is fetched
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setLoading(true);  // Show loading screen if there's an error and navigate to /creategoal
+        setLoading(true); // Show loading screen if there's an error and navigate to /creategoal
         navigate("/creategoal");
       }
     };
@@ -87,7 +87,7 @@ export default function Overview() {
   }, [navigate]);
 
   if (loading) {
-    return <LoadingScreen />;  // Only show loading screen if required (e.g., redirect to /creategoal)
+    return <LoadingScreen />; // Only show loading screen if required (e.g., redirect to /creategoal)
   }
 
   console.log(JSON.stringify(localStorage).length);

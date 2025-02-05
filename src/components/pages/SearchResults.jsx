@@ -154,6 +154,9 @@ const SearchResults = () => {
                         food={item.name}
                         calories={parseFloat(item.energy)}
                         protein={parseFloat(item.protein)}
+                        // sugar={parseFloat(item.sugar)}
+                        // carbs={parseFloat(item.carbs)}
+                        // fats={parseFloat(item.totalLipids)}
                       />
                     </TableCell>
                   </TableRow>
