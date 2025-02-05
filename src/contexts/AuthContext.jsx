@@ -28,7 +28,10 @@ export default function AuthProvider({ children }) {
       // Link anonymous account to email/password
       const credential = EmailAuthProvider.credential(email, password);
       try {
-        const userCredential = await linkWithCredential(auth.currentUser, credential);
+        const userCredential = await linkWithCredential(
+          auth.currentUser,
+          credential
+        );
         await userCredential.user.updateProfile({
           displayName: displayName,
           photoURL: "https://cdn-icons-png.flaticon.com/256/9230/9230519.png",
@@ -58,7 +61,7 @@ export default function AuthProvider({ children }) {
         await linkWithPopup(auth.currentUser, provider);
       } else {
         // Standard Google login
-        await signInWithPopup(auth, provider);
+        await signInWithPopup(auth, provider, browserPopupRedirectResolver);
       }
     } catch (error) {
       console.error("Error linking Google account:", error);
@@ -94,7 +97,8 @@ export default function AuthProvider({ children }) {
 
   const value = {
     currentUser,
-    login: (email, password) => auth.signInWithEmailAndPassword(email, password),
+    login: (email, password) =>
+      auth.signInWithEmailAndPassword(email, password),
     register,
     logout,
     deleteAccount,
@@ -102,5 +106,9 @@ export default function AuthProvider({ children }) {
     guestLogin,
   };
 
-  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 }
