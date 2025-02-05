@@ -114,7 +114,11 @@ export default function Profile() {
   async function handleLinkGoogle() {
     try {
       const provider = new GoogleAuthProvider();
-      const result = await linkWithPopup(auth.currentUser, provider);
+      const result = await linkWithPopup(
+        auth.currentUser,
+        provider,
+        browserPopupRedirectResolver
+      );
 
       // Check if display name is null or "anonymous" (or any placeholder for guest users)
       if (
