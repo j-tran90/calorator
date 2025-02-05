@@ -47,7 +47,7 @@ const ProteinBarGraph = () => {
       }
 
       const storedData = JSON.parse(localStorage.getItem(`proteinData-${uid}`));
-      const currentDate = dayjs().format("YYYY-MM-DD");
+      const currentDate = dayjs().format("YYYY-MM-DD"); // Declare here
 
       if (storedData && storedData.date === currentDate) {
         setTotalProteinByDay(storedData.totalProteinByDay);
@@ -79,7 +79,7 @@ const ProteinBarGraph = () => {
           return;
         }
 
-        await fetchProteinData(startDate);
+        await fetchProteinData(startDate, currentDate); // Pass currentDate
       } catch (error) {
         console.error("Error fetching user goal:", error);
         setError("Failed to fetch user goal data.");
@@ -90,7 +90,8 @@ const ProteinBarGraph = () => {
     fetchUserGoal();
   }, [uid]);
 
-  const fetchProteinData = async (startDate) => {
+  const fetchProteinData = async (startDate, currentDate) => {
+    // Accept currentDate
     if (!uid) {
       setError("User not authenticated");
       setLoading(false);
@@ -139,7 +140,7 @@ const ProteinBarGraph = () => {
       localStorage.setItem(
         `proteinData-${uid}`,
         JSON.stringify({
-          date: currentDate,
+          date: currentDate, // Now properly passed
           totalProteinByDay: proteinByDay,
           proteinTarget: target,
         })
@@ -176,7 +177,7 @@ const ProteinBarGraph = () => {
         backgroundColor: gradientColor,
         borderColor: "#4FC483",
         borderWidth: 1,
-        barThickness: 20,
+        barThickness: 10,
         fill: true,
       },
       {
