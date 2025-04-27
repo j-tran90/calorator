@@ -26,6 +26,8 @@ export default function Dashboard() {
   const placeholder2 = 55;
   const placeholder3 = 33;
 
+  const showGraphs = false; // Set to `true` to enable graphs
+
   return (
     <>
       {" "}
@@ -136,28 +138,57 @@ export default function Dashboard() {
               <Typography variant='h6' sx={{ pb: 2 }}>
                 Today's Calorie
               </Typography>
-              <ProgressCircle
-                value={caloriePercent}
-                gradientId='greenYellow'
-                isPercentage={true}
-                targetValue={100}
-              />
+              {showGraphs ? (
+                <ProgressCircle
+                  value={caloriePercent}
+                  gradientId='greenYellow'
+                  isPercentage={true}
+                  targetValue={100}
+                />
+              ) : (
+                <Typography variant='body2' sx={{ textAlign: "center" }}>
+                  Graph temporarily disabled
+                </Typography>
+              )}
             </Card>
           </Grid2>
+
           <Grid2 size={{ xs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Calorie Calendar</Typography>
-              <CalorieCalendar />
-            </Card>
-          </Grid2>{" "}
-          <Grid2 size={{ xs: 12, md: 6 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <CalorieLineGraph />
+              {showGraphs ? (
+                <CalorieCalendar />
+              ) : (
+                <Typography variant='body2' sx={{ textAlign: "center" }}>
+                  Calorie Calendar temporarily disabled
+                </Typography>
+              )}
             </Card>
           </Grid2>
+
           <Grid2 size={{ xs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <ProteinBarGraph />
+              <Typography variant='h6'>Calorie Line Graph</Typography>
+              {showGraphs ? (
+                <CalorieLineGraph />
+              ) : (
+                <Typography variant='body2' sx={{ textAlign: "center" }}>
+                  Calorie Line Graph temporarily disabled
+                </Typography>
+              )}
+            </Card>
+          </Grid2>
+
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Card sx={{ borderRadius: "20px", p: 3 }}>
+              <Typography variant='h6'>Protein Bar Graph</Typography>
+              {showGraphs ? (
+                <ProteinBarGraph />
+              ) : (
+                <Typography variant='body2' sx={{ textAlign: "center" }}>
+                  Protein Bar Graph temporarily disabled
+                </Typography>
+              )}
             </Card>
           </Grid2>
         </Grid2>
