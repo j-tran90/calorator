@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db, auth } from "../../config/Firebase";
+import { auth, db } from "../../config/Firebase";
+import { doc, getDoc } from "firebase/firestore"; // Import modular Firestore functions
 import ProgressCircle from "../features/graphs/ProgressCircle";
 import useTracker from "../../hooks/useTracker";
 import useGoals from "../../hooks/useGoals";
@@ -13,7 +14,6 @@ import { FlagCircle } from "@mui/icons-material";
 import LoadingScreen from "../layouts/LoadingScreen";
 
 export default function Overview() {
-  // Use useTracker to manage total and trigger re-renders when total updates
   const {
     calorieTotal,
     calorieRemaning,
@@ -26,11 +26,9 @@ export default function Overview() {
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true); // Start loading by default
-
-  //PLACEHOLDER DELETE WHEN REPLACE
-  const placeholder1 = 10;
-  const placeholder2 = 55;
-  const placeholder3 = 33;
+  const [placeholder1, setPlaceholder1] = useState(0); // For sugar
+  const [placeholder2, setPlaceholder2] = useState(0); // For carbs
+  const [placeholder3, setPlaceholder3] = useState(0); // For fats
 
   const handleClick = () => {
     navigate("/today");
@@ -38,22 +36,24 @@ export default function Overview() {
 
   useEffect(() => {
     const checkUserData = async () => {
-      const user = auth.currentUser;
-      if (!user) {
+      const uid = auth.currentUser?.uid;
+      if (!auth.currentUser) {
         navigate("/login");
         return;
       }
 
-      const userGoalsRef = db.collection("userGoals").doc(user.uid);
-      const userProfileRef = db.collection("userProfile").doc(user.uid);
+      // Use modular Firestore syntax
+      const userGoalsRef = doc(db, "userGoals", uid);
+      const userProfileRef = doc(db, "userProfile", uid);
 
       try {
+        // Fetch both documents using getDoc
         const [userGoalsDoc, userProfileDoc] = await Promise.all([
-          userGoalsRef.get(),
-          userProfileRef.get(),
+          getDoc(userGoalsRef),
+          getDoc(userProfileRef),
         ]);
 
-        if (!userGoalsDoc.exists || !userProfileDoc.exists) {
+        if (!userGoalsDoc.exists() || !userProfileDoc.exists()) {
           // Show loading screen and redirect to /creategoal
           setLoading(true);
           navigate("/creategoal");
@@ -86,11 +86,27 @@ export default function Overview() {
     checkUserData();
   }, [navigate]);
 
-  if (loading) {
-    return <LoadingScreen />; // Only show loading screen if required (e.g., redirect to /creategoal)
-  }
+  useEffect(() => {
+    const fetchAdditionalData = async () => {
+      try {
+        const sugar = 50; // Example value
+        const carbs = 200; // Example value
+        const fats = 70; // Example value
 
-  console.log(JSON.stringify(localStorage).length);
+        setPlaceholder1(sugar);
+        setPlaceholder2(carbs);
+        setPlaceholder3(fats);
+      } catch (error) {
+        console.error("Error fetching additional data:", error);
+      }
+    };
+
+    fetchAdditionalData();
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

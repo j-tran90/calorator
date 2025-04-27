@@ -6,10 +6,8 @@ import {
   documentId,
   query,
   where,
-  doc,
-  updateDoc,
+  getDocs,
 } from "firebase/firestore";
-import useCollectionData from "../../hooks/useFetch";
 import dayjs from "dayjs";
 import {
   Table,
@@ -38,19 +36,8 @@ export default function Profile() {
   const { currentUser } = useAuth();
   const { uid, isAnonymous, providerData } = auth.currentUser;
 
-  // Query user profile
-  const userProfileRef = collection(db, "userProfile");
-  const queryUserProfile = query(
-    userProfileRef,
-    where(documentId(), "==", uid)
-  );
-  const { data: profile } = useCollectionData(queryUserProfile);
-
-  // Query user goals to fetch currentWeight
-  const userGoalsRef = collection(db, "userGoals");
-  const queryUserGoals = query(userGoalsRef, where(documentId(), "==", uid));
-  const { data: goals } = useCollectionData(queryUserGoals);
-
+  const [profile, setProfile] = useState([]);
+  const [goals, setGoals] = useState([]);
   const [age, setAge] = useState(0);
   const [currentWeight, setCurrentWeight] = useState(null);
   const [linkedAccounts, setLinkedAccounts] = useState([]);
@@ -72,17 +59,63 @@ export default function Profile() {
 
   const formatDate = (date) => dayjs(date).format("MMM DD, YYYY");
 
+  // Fetch user profile
   useEffect(() => {
-    if (profile?.length > 0) {
-      setAge(calculateAge(profile[0].dob));
-    }
-  }, [profile]);
+    const fetchUserProfile = async () => {
+      try {
+        const userProfileRef = collection(db, "userProfile");
+        const queryUserProfile = query(
+          userProfileRef,
+          where(documentId(), "==", uid)
+        );
+        const querySnapshot = await getDocs(queryUserProfile);
+        const fetchedProfile = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProfile(fetchedProfile);
 
-  useEffect(() => {
-    if (goals?.length > 0) {
-      setCurrentWeight(goals[0].currentWeight);
+        if (fetchedProfile.length > 0) {
+          setAge(calculateAge(fetchedProfile[0].dob));
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    if (uid) {
+      fetchUserProfile();
     }
-  }, [goals]);
+  }, [uid]);
+
+  // Fetch user goals
+  useEffect(() => {
+    const fetchUserGoals = async () => {
+      try {
+        const userGoalsRef = collection(db, "userGoals");
+        const queryUserGoals = query(
+          userGoalsRef,
+          where(documentId(), "==", uid)
+        );
+        const querySnapshot = await getDocs(queryUserGoals);
+        const fetchedGoals = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setGoals(fetchedGoals);
+
+        if (fetchedGoals.length > 0) {
+          setCurrentWeight(fetchedGoals[0].currentWeight);
+        }
+      } catch (error) {
+        console.error("Error fetching user goals:", error);
+      }
+    };
+
+    if (uid) {
+      fetchUserGoals();
+    }
+  }, [uid]);
 
   // Fetch linked authentication providers
   useEffect(() => {
@@ -151,30 +184,6 @@ export default function Profile() {
       console.error("Error linking Google account:", error);
     }
   }
-
-  useEffect(() => {
-    async function fetchLinkedAccounts() {
-      if (currentUser?.email) {
-        try {
-          const methods = await fetchSignInMethodsForEmail(
-            auth,
-            currentUser.email
-          );
-          setLinkedAccounts(methods);
-        } catch (error) {
-          console.error("Error fetching sign-in methods:", error);
-        }
-      }
-    }
-
-    fetchLinkedAccounts();
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (currentUser) {
-      setLinkedAccounts(currentUser.providerData.map((p) => p.providerId));
-    }
-  }, [currentUser]);
 
   return (
     <>

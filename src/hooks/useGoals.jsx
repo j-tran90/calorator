@@ -1,127 +1,111 @@
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db, auth } from "../config/Firebase";
+import { auth } from "../config/Firebase";
+
+const db = getFirestore();
 
 export default function useGoals() {
   const [calorieTarget, setCalorieTarget] = useState(0);
   const [proteinTarget, setProteinTarget] = useState(0);
+  const [createdDate, setCreateDate] = useState(null);
+  const [targetDate, setTargetDate] = useState(null);
+  const [remainingDays, setRemainingDays] = useState(0);
+  const [differenceInDays, setDifferenceInDays] = useState(0);
+  const [calorieTotal, setCalorieTotal] = useState(0);
   const [currentWeight, setCurrentWeight] = useState(0);
   const [weightTarget, setWeightTarget] = useState(0);
-  const [targetDate, setTargetDate] = useState(null);
-  const [createdDate, setCreatedDate] = useState(new Date());
-  const [differenceInDays, setDifferenceInDays] = useState(null);
-  const [remainingDays, setRemainingDays] = useState(0);
-  const { uid } = auth.currentUser;
 
-  // Fetch user goals from localStorage first, fallback to Firestore if not available
-  const loadGoalsFromLocalStorage = () => {
-    const storedGoals = localStorage.getItem("userGoals");
-    if (storedGoals) {
-      console.log("Data fetched from localStorage"); // Log when data is loaded from localStorage
-      const goalsData = JSON.parse(storedGoals);
-      setCalorieTarget(goalsData.dailyCalorieTarget);
-      setProteinTarget(goalsData.dailyProteinTarget);
-      setTargetDate(goalsData.targetDate);
-      setCreatedDate(goalsData.createdDate);
-      setCurrentWeight(goalsData.currentWeight);
-      setWeightTarget(goalsData.weightTarget);
-    } else {
-      console.log("No data found in localStorage, fetching from Firestore"); // Log if localStorage is empty
-      fetchUserGoalsFromFirestore();
-    }
+  // Function to calculate remaining days
+  const calculateRemainingDays = (targetDate) => {
+    if (!targetDate) return 0; // If no target date, return 0
+    const today = new Date();
+    const target = new Date(targetDate);
+    const differenceInTime = target - today; // Difference in milliseconds
+    const differenceInDays = Math.ceil(
+      differenceInTime / (1000 * 60 * 60 * 24)
+    ); // Convert to days
+    return differenceInDays > 0 ? differenceInDays : 0; // Return 0 if the target date has passed
   };
 
-  // Fetch user goals from Firestore
-  const fetchUserGoalsFromFirestore = async () => {
+  const calculateDifferenceInDays = (createdDate, targetDate) => {
+    if (!createdDate || !targetDate) return 0; // Return 0 if either date is missing
+
+    // Convert Firestore Timestamps to JavaScript Date objects if necessary
+    const start = createdDate.toDate
+      ? createdDate.toDate()
+      : new Date(createdDate);
+    const target = targetDate.toDate
+      ? targetDate.toDate()
+      : new Date(targetDate);
+
+    // Calculate the difference in milliseconds
+    const differenceInTime = target - start;
+
+    // Convert milliseconds to days
+    return Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
+  };
+
+  const checkUserData = async () => {
     try {
-      const querySnapshot = await getDoc(doc(db, "userGoals/" + uid));
-      const data = querySnapshot.data();
+      const uid = auth.currentUser?.uid;
+      if (!uid) {
+        console.error("No user is authenticated.");
+        return;
+      }
 
-      if (data) {
-        console.log("Data fetched from Firestore"); // Log when data is loaded from Firestore
-        // Save the data in localStorage for future use
-        localStorage.setItem("userGoals", JSON.stringify(data));
+      // Fetch the document directly using the UID as the document ID
+      const userGoalsRef = doc(db, "userGoals", uid);
+      const userGoalsDoc = await getDoc(userGoalsRef);
 
-        setCalorieTarget(data.dailyCalorieTarget);
-        setProteinTarget(data.dailyProteinTarget);
-        setTargetDate(data.targetDate);
-        setCreatedDate(data.createdDate);
-        setCurrentWeight(data.currentWeight);
-        setWeightTarget(data.weightTarget);
+      if (userGoalsDoc.exists()) {
+        const userData = userGoalsDoc.data();
+
+        // Set the fetched fields
+        setCalorieTarget(userData.dailyCalorieTarget || 0);
+        setProteinTarget(userData.dailyProteinTarget || 0);
+        setCreateDate(userData.createdDate || null);
+        setTargetDate(userData.targetDate || null);
+        setCurrentWeight(userData.currentWeight || 0);
+        setWeightTarget(userData.weightTarget || 0);
+
+        // Calculate difference in days and remaining days
+        const totalDays = calculateDifferenceInDays(
+          userData.createdDate,
+          userData.targetDate
+        );
+        const daysRemaining = calculateRemainingDays(userData.targetDate);
+
+        setDifferenceInDays(totalDays);
+        setRemainingDays(daysRemaining);
       } else {
-        console.warn("No user goals found in Firestore.");
+        console.warn("No user goals found for the current user.");
+        setCalorieTarget(2000); // Default calorie target
+        setProteinTarget(50); // Default protein target
+        setCreateDate(null);
+        setTargetDate(null);
+        setCurrentWeight(0);
+        setWeightTarget(0);
+        setDifferenceInDays(0); // Default difference in days
+        setRemainingDays(0); // Default remaining days
       }
     } catch (error) {
-      console.error("Error fetching user goals from Firestore: ", error);
+      console.error("Error checking user data:", error);
     }
   };
-
-  const calculateRemainingDays = (targetDate) => {
-    if (targetDate) {
-      const currentDate = new Date();
-      const targetDateObj = new Date(targetDate);
-
-      // Reset time portions to 00:00:00 for accurate day comparison
-      currentDate.setHours(0, 0, 0, 0);
-      targetDateObj.setHours(0, 0, 0, 0);
-
-      const timeDifference = targetDateObj - currentDate;
-      const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
-
-      return daysRemaining > 0 ? daysRemaining : 0; // Ensure no negative days
-    }
-    return 0;
-  };
-
-  const calculateTargetLength = (createdDate, targetDate) => {
-    const created = new Date(createdDate);
-    const target = new Date(targetDate);
-
-    const differenceInMilliseconds = target - created;
-    const differenceInDays = Math.ceil(
-      differenceInMilliseconds / (1000 * 60 * 60 * 24)
-    );
-
-    return differenceInDays;
-  };
-
-  const programType =
-    currentWeight > weightTarget
-      ? "Weight Loss"
-      : currentWeight < weightTarget
-      ? "Weight Gain"
-      : currentWeight === weightTarget
-      ? "Weight Maintain"
-      : "None";
 
   useEffect(() => {
-    loadGoalsFromLocalStorage(); // Check and load goals from localStorage first
+    checkUserData();
   }, []);
-
-  // Recalculate remaining days whenever the targetDate changes
-  useEffect(() => {
-    if (targetDate) {
-      const days = calculateRemainingDays(targetDate);
-      setRemainingDays(days);
-    }
-  }, [targetDate]);
-
-  useEffect(() => {
-    if (targetDate && createdDate) {
-      const dayLength = calculateTargetLength(createdDate, targetDate);
-      setDifferenceInDays(dayLength); // Set the value to differenceInDays
-    }
-  }, [targetDate, createdDate]);
 
   return {
     calorieTarget,
     proteinTarget,
+    createdDate,
     targetDate,
     remainingDays,
-    createdDate,
     differenceInDays,
+    calorieTotal,
     currentWeight,
     weightTarget,
-    programType,
   };
 }

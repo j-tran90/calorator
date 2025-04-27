@@ -1,6 +1,7 @@
 import React from "react";
 import { ButtonBase, Box, Typography, styled } from "@mui/material";
-import { db, auth, timestamp } from "../../../config/Firebase";
+import { db, auth } from "../../../config/Firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 // Styled ButtonBase component
 const ComplexButton = styled(ButtonBase)(({ theme }) => ({
@@ -27,14 +28,21 @@ const ComplexButton = styled(ButtonBase)(({ theme }) => ({
 
 const FoodCategory = ({ items, sumEntry, updateTotal }) => {
   const addToJournal = async (kcal, protein, name) => {
-    const uid = auth.currentUser.uid;
+    const uid = auth.currentUser?.uid;
+
+    if (!uid) {
+      console.error("No authenticated user.");
+      return;
+    }
 
     try {
-      await db.collection("journal").doc(uid).collection("entries").doc().set({
+      // Use modular Firestore syntax
+      const journalEntriesRef = collection(db, "journal", uid, "entries");
+      await addDoc(journalEntriesRef, {
         calories: kcal,
         protein: protein,
         food: name,
-        createdAt: timestamp,
+        createdAt: serverTimestamp(), // Use serverTimestamp for createdAt
       });
 
       sumEntry();

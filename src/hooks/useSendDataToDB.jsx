@@ -1,5 +1,19 @@
-import { db, auth } from "../config/Firebase";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  updateDoc,
+  getDocs,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import dayjs from "dayjs";
+import app from "../config/Firebase"; // Ensure app is imported if needed
+
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 const SendDataToDB = async () => {
   const { uid } = auth.currentUser || {};
@@ -26,41 +40,41 @@ const SendDataToDB = async () => {
 
   try {
     console.log("Sending data to Firestore...");
-    const batch = db.batch();
+    const batch = writeBatch(db);
 
     // Check if user profile already exists
-    const userProfileRef = db.collection("userProfile").doc(uid);
-    const userProfileDoc = await userProfileRef.get();
+    const userProfileRef = doc(db, "userProfile", uid);
+    const userProfileDoc = await getDoc(userProfileRef);
 
     // If the profile exists, do not overwrite existing fields
     const userProfileData = {
       dob: calorieData.dob || userProfileDoc.data()?.dob || "",
-      height: parseFloat(calorieData.height) || userProfileDoc.data()?.height || 0,
+      height:
+        parseFloat(calorieData.height) || userProfileDoc.data()?.height || 0,
       gender: calorieData.gender || userProfileDoc.data()?.gender || "",
-      joinDate: userProfileDoc.exists ? userProfileDoc.data()?.joinDate : currentDate, // Only set joinDate if the profile doesn't exist
+      joinDate: userProfileDoc.exists()
+        ? userProfileDoc.data()?.joinDate
+        : currentDate, // Only set joinDate if the profile doesn't exist
     };
 
     // Update user profile if necessary
-    if (!userProfileDoc.exists) {
+    if (!userProfileDoc.exists()) {
       batch.set(userProfileRef, userProfileData); // Only set if profile doesn't exist
     }
 
     // Update user goals and goal history
-    const userGoalsRef = db.collection("userGoals").doc(uid);
+    const userGoalsRef = doc(db, "userGoals", uid);
     batch.set(userGoalsRef, userGoalData);
 
-    const goalsHistoryRef = db
-      .collection("userGoals")
-      .doc(uid)
-      .collection("goalsHistory");
-    const snapshot = await goalsHistoryRef.get();
-    snapshot.forEach((doc) => {
-      const docRef = goalsHistoryRef.doc(doc.id);
+    const goalsHistoryRef = collection(db, "userGoals", uid, "goalsHistory");
+    const snapshot = await getDocs(goalsHistoryRef);
+    snapshot.forEach((docSnapshot) => {
+      const docRef = doc(goalsHistoryRef, docSnapshot.id);
       batch.update(docRef, { status: "completed" });
     });
 
     // Add new goal to goals history
-    const newGoalRef = goalsHistoryRef.doc();
+    const newGoalRef = doc(goalsHistoryRef);
     batch.set(newGoalRef, userGoalData);
 
     await batch.commit();

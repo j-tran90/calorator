@@ -44,12 +44,9 @@ export default function Goals() {
   const { targetDate, createdDate, remainingDays } = useGoals(0);
 
   const boxStyles = {
-    //backgroundColor: "#f5f5f5",
     textAlign: "left",
     p: 2,
-    //  height: "100px",
     borderRadius: "8px",
-    //boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     overflow: "hidden",
   };
 

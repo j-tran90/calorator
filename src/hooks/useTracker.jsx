@@ -9,9 +9,9 @@ import {
   query,
   sum,
   where,
+  getDocs,
 } from "firebase/firestore";
 import useGoals from "./useGoals";
-import useCollectionData from "./useFetch";
 
 export default function useTracker() {
   const { uid } = auth.currentUser;
@@ -25,8 +25,6 @@ export default function useTracker() {
   startOfToday.setHours(0, 0, 0, 0);
   endOfToday.setDate(startOfToday.getDate() + 1);
 
-  // Query userProfiles collection to fetch currentWeight and targetWeight
-
   const entryCollectionRef = query(
     collection(db, "journal", uid, "entries"),
     orderBy("createdAt", "asc"),
@@ -34,24 +32,40 @@ export default function useTracker() {
     where("createdAt", "<", endOfToday)
   );
 
-  const { data: entries, getData: getEntries } =
-    useCollectionData(entryCollectionRef);
-
+  const [entries, setEntries] = useState([]);
   const [calorieTotal, setNewTotalCals] = useState(0);
   const [proteinTotal, setNewTotalProtein] = useState(0);
   const [caloriePercent, setCaloriePercent] = useState(0);
   const [proteinPercent, setProteinPercent] = useState(0);
 
+  const fetchEntries = async () => {
+    try {
+      const querySnapshot = await getDocs(entryCollectionRef);
+      const fetchedEntries = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEntries(fetchedEntries);
+    } catch (error) {
+      console.error("Error fetching entries:", error);
+    }
+  };
+
   const sumEntry = async () => {
-    const snapshot = await getAggregateFromServer(entryCollectionRef, {
-      totalCalories: sum("calories"),
-      proteinTotal: sum("protein"),
-    });
-    setNewTotalCals(snapshot.data().totalCalories || 0);
-    setNewTotalProtein(snapshot.data().proteinTotal || 0);
+    try {
+      const snapshot = await getAggregateFromServer(entryCollectionRef, {
+        totalCalories: sum("calories"),
+        proteinTotal: sum("protein"),
+      });
+      setNewTotalCals(snapshot.data().totalCalories || 0);
+      setNewTotalProtein(snapshot.data().proteinTotal || 0);
+    } catch (error) {
+      console.error("Error calculating totals:", error);
+    }
   };
 
   useEffect(() => {
+    fetchEntries();
     sumEntry();
   }, []);
 
@@ -90,9 +104,13 @@ export default function useTracker() {
   }, [calorieTotal, proteinTotal, calorieTarget, proteinTarget]);
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(db, "journal", uid, "entries", id));
-    getEntries();
-    sumEntry();
+    try {
+      await deleteDoc(doc(db, "journal", uid, "entries", id));
+      await fetchEntries();
+      await sumEntry();
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+    }
   };
 
   return {
@@ -106,7 +124,7 @@ export default function useTracker() {
     updateTotal,
     entries,
     getDailyCalorieTarget,
-    getEntries,
+    fetchEntries,
     caloriePercent,
     proteinPercent,
     handleDelete,
