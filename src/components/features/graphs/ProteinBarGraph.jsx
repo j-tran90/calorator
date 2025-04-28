@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { db, auth } from "../../../config/Firebase";
+import { db, auth } from "../../../config/Firebase"; // Ensure auth is imported
 import {
   collection,
   query,
@@ -20,6 +20,8 @@ import {
   Legend,
 } from "chart.js";
 import dayjs from "dayjs";
+import { saveData, getData } from "../../../utils/indexedDB"; // Import IndexedDB utilities
+import useGoals from "../../../hooks/useGoals";
 
 // Register Chart.js components
 ChartJS.register(
@@ -32,126 +34,211 @@ ChartJS.register(
 );
 
 const ProteinBarGraph = () => {
-  const [totalProteinByDay, setTotalProteinByDay] = useState({});
-  const [proteinTarget, setProteinTarget] = useState(0);
+  const {
+    createdDate, // Retrieve createdDate from useGoals
+    proteinTarget,
+  } = useGoals();
+
+  const [uid, setUid] = useState(null); // State to store the user's UID
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { uid } = auth.currentUser;
+  const [totalProteinByDay, setTotalProteinByDay] = useState({});
+
+  useEffect(() => {
+    // Retrieve the UID from Firebase Auth
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      console.log("User authenticated. UID:", currentUser.uid);
+      setUid(currentUser.uid);
+    } else {
+      console.error("No user is authenticated.");
+      setError("User not authenticated.");
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchUserGoal = async () => {
-      if (!uid) {
-        setError("User not authenticated");
-        setLoading(false);
-        return;
-      }
-
-      const storedData = JSON.parse(localStorage.getItem(`proteinData-${uid}`));
-      const currentDate = dayjs().format("YYYY-MM-DD"); // Declare here
-
-      if (storedData && storedData.date === currentDate) {
-        setTotalProteinByDay(storedData.totalProteinByDay);
-        setProteinTarget(storedData.proteinTarget);
+      if (!uid || !createdDate) {
+        console.warn("UID or createdDate is missing. Skipping fetch.");
         setLoading(false);
         return;
       }
 
       try {
-        const userGoalQuery = query(
-          collection(db, "userGoals", uid, "goalsHistory"),
-          where("status", "==", "in progress")
+        console.log(
+          `[${new Date().toISOString()}] Fetching data for UID:`,
+          uid
         );
 
-        const querySnapshot = await getDocs(userGoalQuery);
+        // Retrieve the last known date and cached data from IndexedDB
+        const cachedData = await getData(`proteinData-${uid}`);
+        console.log(
+          `[${new Date().toISOString()}] Cached data from IndexedDB:`,
+          cachedData
+        );
 
-        if (querySnapshot.empty) {
-          setError("No user goal found with status 'in progress'");
+        // Ensure lastKnownDate is properly initialized
+        const lastKnownDate = cachedData?.lastKnownDate
+          ? Timestamp.fromDate(new Date(cachedData.lastKnownDate))
+          : Timestamp.fromDate(new Date(createdDate)); // Fallback to createdDate
+        console.log(
+          `[${new Date().toISOString()}] Retrieved lastKnownDate:`,
+          lastKnownDate.toDate()
+        );
+
+        // Fetch the latestCreatedAt from the latestEntries collection
+        const latestEntryDoc = await getDoc(doc(db, "latestEntries", uid));
+        if (!latestEntryDoc.exists()) {
+          console.log(
+            `[${new Date().toISOString()}] No latest entry found for UID:`,
+            uid
+          );
           setLoading(false);
           return;
         }
 
-        const goalDoc = querySnapshot.docs[0].data();
-        const startDate = goalDoc.createdDate;
+        const latestEntryData = latestEntryDoc.data();
+        console.log(
+          `[${new Date().toISOString()}] Latest entry document data:`,
+          latestEntryData
+        );
 
-        if (!startDate) {
-          setError("Created date not found in user goal data.");
+        // Ensure latestCreatedAt exists
+        if (!latestEntryData?.latestCreatedAt) {
+          console.error(
+            `[${new Date().toISOString()}] latestCreatedAt is missing in latestEntries document.`
+          );
           setLoading(false);
           return;
         }
 
-        await fetchProteinData(startDate, currentDate); // Pass currentDate
+        const latestCreatedAt = latestEntryData.latestCreatedAt.toDate();
+        console.log(
+          `[${new Date().toISOString()}] Latest createdAt from Firestore:`,
+          latestCreatedAt
+        );
+
+        // Normalize both dates to milliseconds for comparison
+        const lastKnownDateMillis = lastKnownDate.toMillis();
+        const latestCreatedAtMillis =
+          Timestamp.fromDate(latestCreatedAt).toMillis();
+
+        console.log(
+          `[${new Date().toISOString()}] Normalized lastKnownDate (ms):`,
+          lastKnownDateMillis
+        );
+        console.log(
+          `[${new Date().toISOString()}] Normalized latestCreatedAt (ms):`,
+          latestCreatedAtMillis
+        );
+
+        // Compare latestCreatedAt with lastKnownDate
+        if (latestCreatedAtMillis <= lastKnownDateMillis) {
+          console.log(`[${new Date().toISOString()}] No new entries to fetch.`);
+          setLoading(false);
+          return;
+        }
+
+        // Query Firestore for entries with createdAt >= lastKnownDate
+        const createdAtQuery = query(
+          collection(db, `journal/${uid}/entries`),
+          where("createdAt", ">=", lastKnownDate)
+        );
+
+        console.log(
+          `[${new Date().toISOString()}] Executing Firestore query with lastKnownDate:`,
+          lastKnownDate.toDate()
+        );
+
+        // Fetch the query
+        const createdAtSnapshot = await getDocs(createdAtQuery);
+        console.log(
+          `[${new Date().toISOString()}] Number of entries fetched by createdAt:`,
+          createdAtSnapshot.docs.length
+        );
+
+        if (createdAtSnapshot.empty) {
+          console.log(
+            `[${new Date().toISOString()}] No entries found in Firestore.`
+          );
+          setLoading(false);
+          return;
+        }
+
+        // Map the fetched entries
+        const newEntries = createdAtSnapshot.docs.map((doc) => doc.data());
+        console.log(
+          `[${new Date().toISOString()}] Fetched entries from Firestore:`,
+          newEntries
+        );
+
+        // Merge new data with cached data
+        const proteinByDay = { ...cachedData?.totalProteinByDay }; // Start with cached data
+        console.log(
+          `[${new Date().toISOString()}] Protein data before merging:`,
+          proteinByDay
+        );
+
+        // Add protein data from new entries
+        newEntries.forEach((entry) => {
+          const entryDate = dayjs(entry.createdAt.toDate()).format("MMM DD");
+          if (!proteinByDay[entryDate]) {
+            proteinByDay[entryDate] = 0;
+          }
+          proteinByDay[entryDate] += entry.protein || 0;
+        });
+
+        console.log(
+          `[${new Date().toISOString()}] Protein data after merging:`,
+          proteinByDay
+        );
+
+        setTotalProteinByDay(proteinByDay);
+
+        // Calculate the most recent date from the fetched entries
+        const mostRecentDate = newEntries.reduce((latest, entry) => {
+          const entryDate = entry.createdAt.toDate();
+          return entryDate > latest ? entryDate : latest;
+        }, lastKnownDate.toDate());
+
+        console.log(
+          `[${new Date().toISOString()}] Calculated mostRecentDate:`,
+          mostRecentDate
+        );
+
+        // Save updated data and the new lastKnownDate to IndexedDB
+        await saveData(`proteinData-${uid}`, {
+          totalProteinByDay: proteinByDay,
+          lastKnownDate: mostRecentDate, // Save the most recent date
+        });
+
+        console.log(
+          `[${new Date().toISOString()}] Updated lastKnownDate saved to IndexedDB:`,
+          mostRecentDate
+        );
+
+        // Retrieve lastKnownDate from IndexedDB to confirm it was updated
+        const updatedCachedData = await getData(`proteinData-${uid}`);
+        console.log(
+          `[${new Date().toISOString()}] Retrieved updated lastKnownDate from IndexedDB:`,
+          updatedCachedData?.lastKnownDate
+        );
       } catch (error) {
-        console.error("Error fetching user goal:", error);
-        setError("Failed to fetch user goal data.");
+        console.error(
+          `[${new Date().toISOString()}] Error fetching protein entries:`,
+          error
+        );
+        setError(error.message);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchUserGoal();
-  }, [uid]);
-
-  const fetchProteinData = async (startDate, currentDate) => {
-    // Accept currentDate
-    if (!uid) {
-      setError("User not authenticated");
-      setLoading(false);
-      return;
+    if (uid && createdDate) {
+      fetchUserGoal();
     }
-
-    try {
-      const startOfPeriod = new Date(startDate);
-      const endOfPeriod = new Date();
-
-      const startOfPeriodTimestamp = Timestamp.fromDate(startOfPeriod);
-      const endOfPeriodTimestamp = Timestamp.fromDate(endOfPeriod);
-
-      const proteinQuery = query(
-        collection(db, "journal/" + uid + "/entries"),
-        where("createdAt", ">=", startOfPeriodTimestamp),
-        where("createdAt", "<=", endOfPeriodTimestamp)
-      );
-
-      const querySnapshot = await getDocs(proteinQuery);
-
-      if (querySnapshot.empty) {
-        setError("No entries found for this period.");
-        setLoading(false);
-        return;
-      }
-
-      const entries = querySnapshot.docs.map((doc) => doc.data());
-
-      const proteinByDay = {};
-      entries.forEach((entry) => {
-        const entryDate = dayjs(entry.createdAt.toDate()).format("MMM DD");
-        if (!proteinByDay[entryDate]) {
-          proteinByDay[entryDate] = 0;
-        }
-        proteinByDay[entryDate] += entry.protein || 0;
-      });
-
-      setTotalProteinByDay(proteinByDay);
-
-      const userProfileDocRef = doc(db, "userGoals", uid);
-      const userProfileDoc = await getDoc(userProfileDocRef);
-      const target = userProfileDoc.data()?.dailyProteinTarget || null;
-      setProteinTarget(target);
-
-      localStorage.setItem(
-        `proteinData-${uid}`,
-        JSON.stringify({
-          date: currentDate, // Now properly passed
-          totalProteinByDay: proteinByDay,
-          proteinTarget: target,
-        })
-      );
-    } catch (error) {
-      console.error("Error fetching protein entries:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [uid, createdDate]); // Add createdDate as a dependency
 
   if (loading) {
     return <p>Loading...</p>;
@@ -165,17 +252,14 @@ const ProteinBarGraph = () => {
   const proteins = Object.values(totalProteinByDay);
   const targetLine = new Array(dates.length).fill(proteinTarget);
 
-  // Gradient for the protein bars
-  const gradientColor = "linear-gradient(90deg, #FFD700, #4FC483)";
-
   const data = {
     labels: dates,
     datasets: [
       {
         label: "Protein",
         data: proteins,
-        backgroundColor: gradientColor,
-        borderColor: "#4FC483",
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
         barThickness: 10,
         fill: true,

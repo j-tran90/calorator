@@ -182,7 +182,7 @@ export default function Dashboard() {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Protein Bar Graph</Typography>
-              {showGraphs ? (
+              {!showGraphs ? (
                 <ProteinBarGraph />
               ) : (
                 <Typography variant='body2' sx={{ textAlign: "center" }}>
