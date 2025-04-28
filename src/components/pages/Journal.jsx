@@ -86,16 +86,30 @@ export default function Journal() {
 
   const handleEntryDelete = async () => {
     try {
-      if (deleteId) {
-        await deleteDoc(doc(db, `journal/${uid}/entries`, deleteId));
-        setData(data.filter((entry) => entry.id !== deleteId));
-        setDeleteId(null); // Clear the delete ID after deletion
+      if (!deleteId) {
+        console.warn("No entry selected for deletion.");
+        return;
       }
+
+      console.log(
+        `[${new Date().toISOString()}] Deleting entry with ID:`,
+        deleteId
+      );
+
+      // Delete the entry from Firestore
+      await deleteDoc(doc(db, `journal/${uid}/entries`, deleteId));
+
+      // Update the state to remove the deleted entry
+      setData((prevData) => prevData.filter((entry) => entry.id !== deleteId));
+
+      console.log(`[${new Date().toISOString()}] Entry deleted successfully.`);
+
+      // Clear the delete ID after deletion
+      setDeleteId(null);
     } catch (error) {
-      console.error("Error deleting entry: ", error);
+      console.error("Error deleting entry:", error);
     }
   };
-
   const handleMenuOpen = (event, id) => {
     setAnchorEl(event.currentTarget);
     setDeleteId(id); // Store the ID of the entry to delete
