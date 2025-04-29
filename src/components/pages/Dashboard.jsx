@@ -41,11 +41,12 @@ export default function Dashboard() {
       <Box sx={{ p: 1 }}>
         <Grid2 container spacing={{ xs: 1, md: 3 }}>
           <Grid2 size={{ xs: 6, md: 3 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Program</Typography>
-              <Typography variant='h4'>{programType}</Typography>
+            <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
+              <Typography variant='h6' sx={{pb: 1}}>Program</Typography>
+
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
+                <Typography variant='body2'>{programType}Weight Gain</Typography>
                   <Typography variant='body2' sx={{ fontWeight: "bold" }}>
                     {dayjs(createdDate).format("MMM DD")} to{" "}
                     {dayjs(targetDate).format("MMM DD")}
@@ -54,18 +55,23 @@ export default function Dashboard() {
                     In Progress
                   </Typography>
                   <Typography variant='body2'>
-                    Starting Weight {currentWeight} lbs
+                    Starting  {currentWeight} lbs
                   </Typography>
                   <Typography variant='body2'>
-                    Desired Weight {weightTarget} lbs
+                    Desired {weightTarget} lbs
                   </Typography>
                 </Stack>
               </Box>
             </Card>
           </Grid2>
           <Grid2 size={{ xs: 6, md: 3 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Calorie Target</Typography>
+            <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
+              <Typography variant='h6'>
+                Calorie{" "}
+                <Typography variant='caption' sx={{ fontStyle: "italic" }}>
+                  Target
+                </Typography>
+              </Typography>
               <Typography variant='h2'>{calorieTarget}</Typography>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
@@ -77,9 +83,16 @@ export default function Dashboard() {
             </Card>
           </Grid2>
           <Grid2 size={{ xs: 6, md: 3 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Protein Target</Typography>
-              <Typography variant='h2'>{proteinTarget}g</Typography>
+            <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
+              <Typography variant='h6'>
+                Protein{" "}
+                <Typography variant='caption' sx={{ fontStyle: "italic" }}>
+                  Target
+                </Typography>
+              </Typography>
+              <Typography variant='h2' sx={{ pb: 2 }}>
+                {proteinTarget}g
+              </Typography>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
                   <Typography variant='body2' component='div'>
@@ -96,11 +109,7 @@ export default function Dashboard() {
             </Card>
           </Grid2>
           <Grid2 size={{ xs: 6, md: 3 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Other Contents (WIP)</Typography>
-              <Typography variant='caption' sx={{ fontStyle: "italic" }}>
-                Consumed Today
-              </Typography>
+            <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
                   <ProgressBar
@@ -136,9 +145,12 @@ export default function Dashboard() {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6' sx={{ pb: 2 }}>
-                Today's Calorie
+                Calories{" "}
+                <Typography variant='caption' sx={{ fontStyle: "italic" }}>
+                  Today
+                </Typography>
               </Typography>
-              {showGraphs ? (
+              {!showGraphs ? (
                 <ProgressCircle
                   value={caloriePercent}
                   gradientId='greenYellow'

@@ -57,8 +57,12 @@ export default function useTracker() {
         totalCalories: sum("calories"),
         proteinTotal: sum("protein"),
       });
-      setNewTotalCals(snapshot.data().totalCalories || 0);
-      setNewTotalProtein(snapshot.data().proteinTotal || 0);
+      setNewTotalCals(
+        parseFloat(snapshot.data().totalCalories || 0).toFixed(2)
+      );
+      setNewTotalProtein(
+        parseFloat(snapshot.data().proteinTotal || 0).toFixed(2)
+      );
     } catch (error) {
       console.error("Error calculating totals:", error);
     }
