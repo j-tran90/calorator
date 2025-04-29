@@ -14,11 +14,9 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../../config/Firebase";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // 3 vertical dots icon
-import useTracker from "../../hooks/useTracker";
 import {
   Grid2,
   Box,
-  Typography,
   Button,
   Table,
   TableBody,
@@ -34,7 +32,6 @@ import Header from "../navigation/Header";
 import { Restore } from "@mui/icons-material";
 
 export default function Journal() {
-  const { calorieTarget, calorieTotal } = useTracker(0);
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [data, setData] = useState([]);
@@ -104,19 +101,23 @@ export default function Journal() {
 
       console.log(`[${new Date().toISOString()}] Entry deleted successfully.`);
 
-      // Clear the delete ID after deletion
-      setDeleteId(null);
+      // Clear the delete ID and close the menu
+      handleMenuClose(); // Ensure the menu is closed after deletion
     } catch (error) {
       console.error("Error deleting entry:", error);
     }
   };
   const handleMenuOpen = (event, id) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget); // Set the anchor element to the button that triggered the menu
     setDeleteId(id); // Store the ID of the entry to delete
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    if (anchorEl) {
+      anchorEl.focus(); // Return focus to the button that triggered the menu
+    }
+    setAnchorEl(null); // Reset the anchor element
+    setDeleteId(null); // Clear the delete ID
   };
 
   return (
@@ -247,13 +248,19 @@ export default function Journal() {
                       <TableCell>{entry.protein} g</TableCell>
                       <TableCell
                         sx={{ display: { xs: "none", md: "table-cell" } }}
-                      ></TableCell>
+                      >
+                        {entry.sugar}
+                      </TableCell>
                       <TableCell
                         sx={{ display: { xs: "none", md: "table-cell" } }}
-                      ></TableCell>
+                      >
+                        {entry.carbs}
+                      </TableCell>
                       <TableCell
                         sx={{ display: { xs: "none", md: "table-cell" } }}
-                      ></TableCell>
+                      >
+                        {entry.fats}
+                      </TableCell>
                       <TableCell>
                         <IconButton
                           onClick={(event) => handleMenuOpen(event, entry.id)}
@@ -262,11 +269,22 @@ export default function Journal() {
                         </IconButton>
                         <Menu
                           anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={handleMenuClose}
+                          open={Boolean(anchorEl)} // Only open the menu if anchorEl is valid
+                          onClose={handleMenuClose} // Close the menu and reset focus
+                          anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
                         >
                           <MenuItem
-                            onClick={handleEntryDelete}
+                            onClick={() => {
+                              handleEntryDelete();
+                              handleMenuClose(); // Ensure the menu is closed after deletion
+                            }}
                             sx={{ color: "red" }}
                           >
                             Delete Entry

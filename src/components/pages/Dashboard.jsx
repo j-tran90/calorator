@@ -42,11 +42,15 @@ export default function Dashboard() {
         <Grid2 container spacing={{ xs: 1, md: 3 }}>
           <Grid2 size={{ xs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
-              <Typography variant='h6' sx={{pb: 1}}>Program</Typography>
+              <Typography variant='h6' sx={{ pb: 1 }}>
+                Gain{" "}
+                <Typography variant='caption' sx={{ fontStyle: "italic" }}>
+                  Program
+                </Typography>
+              </Typography>
 
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
-                <Typography variant='body2'>{programType}Weight Gain</Typography>
                   <Typography variant='body2' sx={{ fontWeight: "bold" }}>
                     {dayjs(createdDate).format("MMM DD")} to{" "}
                     {dayjs(targetDate).format("MMM DD")}
@@ -55,7 +59,7 @@ export default function Dashboard() {
                     In Progress
                   </Typography>
                   <Typography variant='body2'>
-                    Starting  {currentWeight} lbs
+                    Starting {currentWeight} lbs
                   </Typography>
                   <Typography variant='body2'>
                     Desired {weightTarget} lbs
