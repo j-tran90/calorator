@@ -15,7 +15,6 @@ import Header from "../navigation/Header";
 const SearchResults = () => {
   const location = useLocation();
   const searchQuery = location.state?.query;
-
   const [foodData, setFoodData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +28,7 @@ const SearchResults = () => {
 
       try {
         const response = await fetch(
-          `https://api.nal.usda.gov/fdc/v1/foods/search?query=${searchQuery}&pageSize=5&api_key=${apiKey}`
+          `https://api.nal.usda.gov/fdc/v1/foods/search?query=${searchQuery}&pageSize=25&api_key=${apiKey}`
         );
 
         if (!response.ok) {
@@ -38,43 +37,60 @@ const SearchResults = () => {
 
         const data = await response.json();
 
-        const formattedData = data.foods.map((food) => {
-          const energyNutrient = food.foodNutrients.find(
-            (nutrient) =>
-              nutrient.nutrientName === "Energy" ||
-              nutrient.nutrientName === "Calories"
-          );
+        // Log the raw API response to inspect the fields
+        console.log("API Response:", data);
 
-          const proteinNutrient = food.foodNutrients.find(
-            (nutrient) => nutrient.nutrientName === "Protein"
-          );
+        // Use a Set to track unique food names
+        const uniqueNames = new Set();
 
-          const sugarNutrient = food.foodNutrients.find(
-            (nutrient) =>
-              nutrient.nutrientName === "Sugars, total" ||
-              nutrient.nutrientName === "Total Sugars"
-          );
+        const formattedData = data.foods
+          .map((food) => {
+            const energyNutrient = food.foodNutrients.find(
+              (nutrient) =>
+                nutrient.nutrientName === "Energy" ||
+                nutrient.nutrientName === "Calories"
+            );
 
-          const carbsNutrient = food.foodNutrients.find(
-            (nutrient) =>
-              nutrient.nutrientName === "Carbohydrate, by difference"
-          );
+            const proteinNutrient = food.foodNutrients.find(
+              (nutrient) => nutrient.nutrientName === "Protein"
+            );
 
-          const totalLipidsNutrient = food.foodNutrients.find(
-            (nutrient) => nutrient.nutrientName === "Total lipid (fat)"
-          );
+            const sugarNutrient = food.foodNutrients.find(
+              (nutrient) =>
+                nutrient.nutrientName === "Sugars, total" ||
+                nutrient.nutrientName === "Total Sugars"
+            );
 
-          return {
-            name: food.description,
-            energy: energyNutrient ? `${energyNutrient.value} kcal` : "N/A",
-            protein: proteinNutrient ? `${proteinNutrient.value} g` : "N/A",
-            sugar: sugarNutrient ? `${sugarNutrient.value} g` : "N/A",
-            carbs: carbsNutrient ? `${carbsNutrient.value} g` : "N/A",
-            totalLipids: totalLipidsNutrient
-              ? `${totalLipidsNutrient.value} g`
-              : "N/A",
-          };
-        });
+            const carbsNutrient = food.foodNutrients.find(
+              (nutrient) =>
+                nutrient.nutrientName === "Carbohydrate, by difference"
+            );
+
+            const totalLipidsNutrient = food.foodNutrients.find(
+              (nutrient) => nutrient.nutrientName === "Total lipid (fat)"
+            );
+
+            // Clean up the food description
+            const cleanedName = cleanFoodDescription(food.description);
+
+            // Skip duplicates
+            if (uniqueNames.has(cleanedName)) {
+              return null;
+            }
+            uniqueNames.add(cleanedName);
+
+            return {
+              name: cleanedName,
+              energy: energyNutrient ? `${energyNutrient.value} kcal` : "N/A",
+              protein: proteinNutrient ? `${proteinNutrient.value} g` : "N/A",
+              sugar: sugarNutrient ? `${sugarNutrient.value} g` : "N/A",
+              carbs: carbsNutrient ? `${carbsNutrient.value} g` : "N/A",
+              totalLipids: totalLipidsNutrient
+                ? `${totalLipidsNutrient.value} g`
+                : "N/A",
+            };
+          })
+          .filter((item) => item !== null); // Remove null values from the array
 
         setFoodData(formattedData); // Set the food data
       } catch (error) {
@@ -86,13 +102,6 @@ const SearchResults = () => {
 
     fetchFoodData();
   }, [searchQuery]); // Fetch whenever searchQuery changes
-
-  function capitalizeWords(input) {
-    return input
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-  }
 
   return (
     <>
@@ -154,9 +163,12 @@ const SearchResults = () => {
                         food={item.name}
                         calories={parseFloat(item.energy)}
                         protein={parseFloat(item.protein)}
-                        // sugar={parseFloat(item.sugar)}
-                        // carbs={parseFloat(item.carbs)}
-                        // fats={parseFloat(item.totalLipids)}
+                        sugar={parseFloat(item.sugar)}
+                        carbs={parseFloat(item.carbs)}
+                        fats={parseFloat(item.totalLipids)}
+                        onAdd={() => {
+                          console.log("Added to journal:", item.name);
+                        }}
                       />
                     </TableCell>
                   </TableRow>
@@ -169,5 +181,45 @@ const SearchResults = () => {
     </>
   );
 };
+
+// Function to clean up the food description
+function cleanFoodDescription(description, keywordsToRemove = []) {
+  let cleanedDescription = description;
+
+  // Remove everything before the last comma
+  if (cleanedDescription.includes(",")) {
+    cleanedDescription = cleanedDescription
+      .substring(cleanedDescription.lastIndexOf(",") + 1)
+      .trim();
+  }
+
+  // Remove all occurrences of unwanted keywords
+  keywordsToRemove.forEach((keyword) => {
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+    cleanedDescription = cleanedDescription.replace(regex, "").trim();
+  });
+
+  // Remove commas and extra spaces
+  cleanedDescription = cleanedDescription
+    .replace(/,/g, "") // Remove all commas
+    .replace(/\s+/g, " ") // Replace multiple spaces with a single space
+    .trim();
+
+  // Capitalize the first letter of each word
+  cleanedDescription = cleanedDescription
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+
+  return cleanedDescription;
+}
+
+// Function to capitalize the first letter of each word
+function capitalizeWords(str) {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
 
 export default SearchResults;

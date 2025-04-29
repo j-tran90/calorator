@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 
-const AddToJournalButton = ({ calories, protein, food, onAdd }) => {
+const AddToJournalButton = ({ calories, protein, food, sugar, carbs, fats, onAdd }) => {
   const navigate = useNavigate();
   const { handleAdd } = useAdd({ sumEntry: () => {}, updateTotal: () => {} });
   const [isSuccess, setIsSuccess] = useState(false);
@@ -17,11 +17,13 @@ const AddToJournalButton = ({ calories, protein, food, onAdd }) => {
     setIsDisabled(true);
 
     try {
-      await handleAdd(calories, protein, food);
+      console.log("Adding entry:", { calories, protein, food }); // Log input data
+      await handleAdd(calories, protein, food, sugar, carbs, fats);
       setIsSuccess(true);
       if (onAdd) onAdd();
       navigate("/today");
     } catch (error) {
+      console.error("Error in handleAdd:", error); // Log the error
       setHasError(true);
     } finally {
       setIsDisabled(false);
