@@ -27,6 +27,8 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Header from "../navigation/Header";
 import { Restore } from "@mui/icons-material";
@@ -37,6 +39,7 @@ export default function Journal() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteId, setDeleteId] = useState(null); // ID for the entry to delete
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar state
   const uid = auth.currentUser?.uid;
 
   useEffect(() => {
@@ -101,6 +104,9 @@ export default function Journal() {
 
       console.log(`[${new Date().toISOString()}] Entry deleted successfully.`);
 
+      // Show the success snackbar
+      setSnackbarOpen(true);
+
       // Clear the delete ID and close the menu
       handleMenuClose(); // Ensure the menu is closed after deletion
     } catch (error) {
@@ -118,6 +124,10 @@ export default function Journal() {
     }
     setAnchorEl(null); // Reset the anchor element
     setDeleteId(null); // Clear the delete ID
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); // Close the snackbar
   };
 
   return (
@@ -144,7 +154,7 @@ export default function Journal() {
             onClick={handleTodayButtonClick}
             sx={{ borderColor: "#000", padding: 0 }}
           >
-            <Restore sx={{fontSize: 40}}/>
+            <Restore sx={{ fontSize: 40 }} />
           </Button>
         </Grid2>
       </Grid2>
@@ -284,6 +294,11 @@ export default function Journal() {
                             vertical: "top",
                             horizontal: "right",
                           }}
+                          sx={{
+                            "& .MuiPaper-root": {
+                              borderRadius: "20px", // Add border radius to the menu
+                            },
+                          }}
                         >
                           <MenuItem
                             onClick={() => {
@@ -304,6 +319,22 @@ export default function Journal() {
           </Table>
         </Paper>
       </Box>
+
+      {/* Snackbar for successful delete */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "buttom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity='success'
+          sx={{ width: "100%" }}
+        >
+          Entry deleted successfully!
+        </Alert>
+      </Snackbar>
     </>
   );
 }

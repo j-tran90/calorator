@@ -58,6 +58,21 @@ const ThemeProviderComponent = ({ children }) => {
               },
             },
           },
+          MuiSnackbar: {
+            styleOverrides: {
+              root: {
+                borderRadius: "20px", // Add border radius to Snackbar
+                overflow: "hidden", // Ensure content stays within the border radius
+              },
+            },
+          },
+          MuiAlert: {
+            styleOverrides: {
+              root: {
+                borderRadius: "20px", // Add border radius to Alert inside Snackbar
+              },
+            },
+          },
         },
         breakpoints: {
           values: {

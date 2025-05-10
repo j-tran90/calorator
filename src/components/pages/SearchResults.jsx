@@ -105,10 +105,15 @@ const SearchResults = () => {
 
   return (
     <>
-      <Box sx={{ pb: 2, pl: 2 }}>
+      <Box
+        display='flex'
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ m: 2, height: "50px" }}
+      >
         <Header headText={`Searched for: ${capitalizeWords(searchQuery)}`} />
       </Box>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ borderRadius: "20px" }}>
         {loading ? (
           <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
         ) : (
@@ -118,13 +123,13 @@ const SearchResults = () => {
                 <TableCell>Food Name</TableCell>
                 <TableCell>Calories (kcal)</TableCell>
                 <TableCell>Protein (g)</TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", sm: "table-cell" } }}>
                   Sugar (g)
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", sm: "table-cell" } }}>
                   Carbs (g)
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", sm: "table-cell" } }}>
                   Fats (g)
                 </TableCell>
                 <TableCell></TableCell>
@@ -144,17 +149,17 @@ const SearchResults = () => {
                     <TableCell>{item.energy}</TableCell>
                     <TableCell>{item.protein}</TableCell>
                     <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                      sx={{ display: { xxs: "none", sm: "table-cell" } }}
                     >
                       {item.sugar}
                     </TableCell>
                     <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                      sx={{ display: { xxs: "none", sm: "table-cell" } }}
                     >
                       {item.carbs}
                     </TableCell>
                     <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                      sx={{ display: { xxs: "none", sm: "table-cell" } }}
                     >
                       {item.totalLipids}
                     </TableCell>
