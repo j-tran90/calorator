@@ -9,7 +9,7 @@ function App() {
   const location = useLocation();
 
   // Define routes where the drawer should be excluded
-  const excludedRoutes = ["/profile"];
+  const excludedRoutes = ["/profile", "/login", "/register"];
 
   // Check if the screen size is mobile
   const isMobile = useMediaQuery("(max-width:600px)");

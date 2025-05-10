@@ -37,7 +37,6 @@ export default function ProviderLogin() {
               color: prefersDarkMode ? "#fff" : "#000",
               height: "56px",
               borderRadius: "20px",
-              border: prefersDarkMode ? "1px solid #fff" : "1px solid black",
               backgroundColor: prefersDarkMode ? "#333" : "#fff",
               "&:hover": {
                 backgroundColor: prefersDarkMode ? "#555" : "#f1f1f1",
@@ -60,7 +59,6 @@ export default function ProviderLogin() {
               color: prefersDarkMode ? "#fff" : "#000",
               height: "56px",
               borderRadius: "20px",
-              border: prefersDarkMode ? "1px solid #fff" : "1px solid black",
               backgroundColor: prefersDarkMode ? "#333" : "#fff",
               "&:hover": {
                 backgroundColor: prefersDarkMode ? "#555" : "#f1f1f1",
