@@ -79,7 +79,7 @@ function ResponsiveDrawer(props) {
       <Divider sx={{ width: "100%" }} />
       <Box>
         <Typography variant='caption' sx={{ fontStyle: "italic" }}>
-          Version 0.8.9
+          Version 0.8.945
         </Typography>
       </Box>
     </Box>

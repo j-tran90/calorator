@@ -10,6 +10,7 @@ import {
   Grid2,
   Divider,
   Stack,
+  Paper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import SetTargetButton from "../buttons/SetTargetButton";
@@ -46,7 +47,6 @@ export default function Goals() {
   const boxStyles = {
     textAlign: "left",
     p: 2,
-    borderRadius: "8px",
     overflow: "hidden",
   };
 
@@ -147,7 +147,7 @@ export default function Goals() {
       <Box sx={{ pb: 2 }}>
         <Grid2 container>
           <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
-            <Header headText='Your Targets' />
+            <Header headText='Your Plans' />
           </Grid2>
           <Grid2
             size={{ xs: 6 }}
@@ -174,6 +174,8 @@ export default function Goals() {
       ) : (
         <>
           <Stack
+            component={Paper}
+            sx={{ borderRadius: "20px", m: 1, p: { xs: 1, md: 2 } }}
             divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
             spacing={0}
           >

@@ -1,14 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Button, Typography, Box, Stack } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Switch,
+  Snackbar,
+  Alert,
+  Paper,
+} from "@mui/material";
+import { ThemeContext } from "../../contexts/ThemeContext"; // Import ThemeContext
+import SettingsIcon from "@mui/icons-material/Settings";
+import DeleteIcon from "@mui/icons-material/Delete";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 function Settings() {
   const { logout, deleteAccount } = useAuth();
+  const { mode, setMode } = useContext(ThemeContext); // Access ThemeContext
   const [error, setError] = useState("");
+  const [confirmClear, setConfirmClear] = useState(false); // State to toggle confirmation buttons
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  }); // Snackbar state
   const redirect = useNavigate();
-  const theme = useTheme();
 
   async function handleLogout() {
     setError("");
@@ -21,22 +41,60 @@ function Settings() {
     }
   }
 
-  const clearLocalStorage = () => {
-    // Show confirmation prompt
-    const confirmClear = window.confirm(
-      "Are you sure you want to clear all localStorage data? This action cannot be undone."
-    );
+  const clearIndexedDB = async () => {
+    // Open the IndexedDB database
+    const request = indexedDB.open("caloratorDB");
 
-    if (confirmClear) {
-      // Clear only specific items
-      localStorage.removeItem(`proteinData-${uid}`);
-      localStorage.removeItem(`calorieData-${uid}`);
-      // Add any other localStorage keys you need to clear
+    request.onsuccess = (event) => {
+      const db = event.target.result;
 
-      alert("LocalStorage has been cleared.");
-    } else {
-      alert("Clear action canceled.");
-    }
+      // Check if there are any object stores
+      if (db.objectStoreNames.length === 0) {
+        setSnackbar({
+          open: true,
+          message: "No data to clear in IndexedDB.",
+          severity: "info",
+        });
+        setConfirmClear(false); // Reset button state
+        return;
+      }
+
+      // Get all object stores and clear them
+      const transaction = db.transaction(db.objectStoreNames, "readwrite");
+      db.objectStoreNames.forEach((storeName) => {
+        const objectStore = transaction.objectStore(storeName);
+        objectStore.clear();
+      });
+
+      transaction.oncomplete = () => {
+        setSnackbar({
+          open: true,
+          message: "IndexedDB data has been cleared.",
+          severity: "success",
+        });
+        setConfirmClear(false); // Reset button state
+      };
+
+      transaction.onerror = () => {
+        setSnackbar({
+          open: true,
+          message: "Failed to clear IndexedDB data.",
+          severity: "error",
+        });
+      };
+    };
+
+    request.onerror = () => {
+      setSnackbar({
+        open: true,
+        message: "Failed to open IndexedDB.",
+        severity: "error",
+      });
+    };
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   return (
@@ -44,7 +102,6 @@ function Settings() {
       sx={{
         textAlign: "center",
         padding: "20px",
-        color: theme.palette.text.primary,
       }}
     >
       <Typography variant='h4' gutterBottom>
@@ -57,34 +114,84 @@ function Settings() {
         </Typography>
       )}
 
-      <Stack>
-        <Button onClick={clearLocalStorage}>Clear Data</Button>
-        <Button
-          disabled
-          variant='contained'
-          onClick={deleteAccount}
+      {/* Settings List */}
+      <List
+        component={Paper}
+        sx={{ borderRadius: "20px", p: { xs: 1, md: 2 } }}
+      >
+        {/* Dark Mode Toggle */}
+        <ListItem
           sx={{
-            backgroundColor: theme.palette.mode === "dark" ? "darkred" : "red",
-            color: theme.palette.text.primary,
             "&:hover": {
-              backgroundColor:
-                theme.palette.mode === "dark" ? "maroon" : "darkred",
+              backgroundColor: "#f5f5f5",
             },
-            margin: "5px",
           }}
         >
-          Delete Account
-        </Button>{" "}
-        <Button
-          variant='contained'
+          <SettingsIcon sx={{ mr: 1 }} />
+          <ListItemText primary='Dark Mode' />
+          <Switch
+            checked={mode === "dark"}
+            onChange={() => setMode(mode === "light" ? "dark" : "light")}
+          />
+        </ListItem>
+
+        {/* Clear Data */}
+        <ListItem
+          onClick={() => setConfirmClear(true)}
+          sx={{
+            "&:hover": {
+              backgroundColor: "#f5f5f5",
+            },
+          }}
+        >
+          <DeleteIcon sx={{ mr: 1 }} />
+          <ListItemText primary='Clear Data' />
+        </ListItem>
+
+        {/* Delete Account */}
+        <ListItem
+          disabled
+          sx={{
+            opacity: 0.5,
+            cursor: "not-allowed",
+            "&:hover": {
+              backgroundColor: "inherit",
+            },
+          }}
+        >
+          <DeleteIcon sx={{ mr: 1 }} />
+          <ListItemText primary='Delete Account' />
+        </ListItem>
+
+        {/* Logout */}
+        <ListItem
           onClick={handleLogout}
           sx={{
-            margin: "5px",
+            "&:hover": {
+              backgroundColor: "#f5f5f5",
+            },
           }}
         >
-          Logout
-        </Button>
-      </Stack>
+          <LogoutIcon sx={{ mr: 1 }} />
+          <ListItemText primary='Logout' />
+        </ListItem>
+      </List>
+
+      {/* Snackbar for alerts */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

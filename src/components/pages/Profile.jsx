@@ -45,6 +45,7 @@ import Header from "../navigation/Header";
 import User from "../layouts/User";
 import { Type } from "react-swipeable-list";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../navigation/BackButton";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -201,7 +202,7 @@ export default function Profile() {
 
   const cardStyles = {
     borderRadius: "20px",
-    width: "115px",
+    width: { xxs: "105px", xs: "120px" },
     height: "100px",
     display: "flex",
     flexDirection: "column",
@@ -219,25 +220,33 @@ export default function Profile() {
     color: "#777777",
   };
 
+  // Shared styles for ListItem components
+  const listItemStyles = (isDisabled) => ({
+    "&:hover": {
+      backgroundColor: isDisabled ? "inherit" : "rgba(0, 0, 0, 0.08)",
+    },
+    opacity: isDisabled ? 0.5 : 1,
+    cursor: isDisabled ? "not-allowed" : "pointer",
+  });
+
   const navigate = useNavigate();
 
   return (
     <>
       <Box sx={{ pb: 2 }}>
         <Grid2 container>
-          <Grid2 size={{ xs: 8 }} sx={{ pl: 2 }}>
-            <Header headText='Profile' />
-          </Grid2>
           <Grid2
             size={{ xs: 4 }}
             sx={{
-              pr: 2,
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-              textAlign: "right",
+              flexDirection: "row",
+              justifyContent: "left",
             }}
-          ></Grid2>
+          >
+            {" "}
+            <BackButton />{" "}
+          </Grid2>{" "}
+          <Grid2 size={{ xs: 8 }} sx={{ pl: 2 }}></Grid2>
         </Grid2>
       </Box>
 
@@ -322,13 +331,13 @@ export default function Profile() {
           {/* Account Settings */}
           <ListItem
             onClick={() => navigate("/settings")}
-            sx={{
-              "&:hover": {
-                backgroundColor: "#f5f5f5",
-              },
-            }}
+            sx={listItemStyles(false)}
           >
-            <Settings sx={{ mr: 1 }} />
+            <Settings
+              sx={{
+                mr: 1,
+              }}
+            />
             <ListItemText primary='Account Settings' />
             <ListItemIcon sx={{ minWidth: "auto" }}>
               <ArrowForwardIos fontSize='small' />
@@ -377,30 +386,39 @@ export default function Profile() {
         Link Accounts
       </Typography>
       <Card sx={{ borderRadius: "20px", m: 1, p: { xs: 1, md: 2 } }}>
-        <Box sx={{ p: 2, textAlign: "center" }}>
-          <Button
-            disabled={linkedAccounts.includes("password")}
-            variant='contained'
+        <List>
+          {/* Link Email */}
+          <ListItem
             onClick={handleLinkEmail}
-            sx={{ mr: 2 }}
+            disabled={linkedAccounts.includes("password")}
+            sx={listItemStyles(linkedAccounts.includes("password"))}
           >
             <MailOutline sx={{ mr: 1 }} />
-            {linkedAccounts.includes("password")
-              ? "Linked to Email"
-              : "Link Email"}
-          </Button>
+            <ListItemText
+              primary={
+                linkedAccounts.includes("password")
+                  ? "Linked to Email"
+                  : "Link Email"
+              }
+            />
+          </ListItem>
 
-          <Button
-            disabled={linkedAccounts.includes("google.com")}
-            variant='contained'
+          {/* Link Google */}
+          <ListItem
             onClick={handleLinkGoogle}
+            disabled={linkedAccounts.includes("google.com")}
+            sx={listItemStyles(linkedAccounts.includes("google.com"))}
           >
             <Google sx={{ mr: 1 }} />
-            {linkedAccounts.includes("google.com")
-              ? "Linked to Google"
-              : "Link Google"}
-          </Button>
-        </Box>
+            <ListItemText
+              primary={
+                linkedAccounts.includes("google.com")
+                  ? "Linked to Google"
+                  : "Link Google"
+              }
+            />
+          </ListItem>
+        </List>
       </Card>
 
       <Snackbar
