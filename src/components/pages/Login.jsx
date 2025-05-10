@@ -64,12 +64,12 @@ export default function Login() {
           <Grid2 container sx={{ height: "86vh" }}>
             {/* Left Grid2 - Login Form */}
             <Grid2
-              size={{ xs: 12, md: 6 }}
+              size={{ xxs: 12, md: 6 }}
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                padding: { xs: 2, md: 8 },
+                padding: { xxs: 2, md: 8 },
               }}
             >
               <Typography
@@ -87,7 +87,7 @@ export default function Login() {
               )}
               <form onSubmit={handleLogin}>
                 <Grid2 container spacing={3}>
-                  <Grid2 size={{ xs: 12 }}>
+                  <Grid2 size={{ xxs: 12 }}>
                     <TextField
                       fullWidth
                       id='email'
@@ -98,7 +98,7 @@ export default function Login() {
                       required
                     />
                   </Grid2>
-                  <Grid2 size={{ xs: 12 }}>
+                  <Grid2 size={{ xxs: 12 }}>
                     <TextField
                       fullWidth
                       id='password'
@@ -109,7 +109,7 @@ export default function Login() {
                       required
                     />
                   </Grid2>
-                  <Grid2 size={{ xs: 12 }} textAlign='center'>
+                  <Grid2 size={{ xxs: 12 }} textAlign='center'>
                     <Button
                       type='submit'
                       variant='contained'
@@ -151,9 +151,9 @@ export default function Login() {
 
             {/* Right Grid2 - Full-size Image */}
             <Grid2
-              size={{ xs: 12, md: 6 }}
+              size={{ xxs: 12, md: 6 }}
               sx={{
-                display: { xs: "none", sm: "block" },
+                display: { xxs: "none", sm: "block" },
               }}
             >
               <Box
