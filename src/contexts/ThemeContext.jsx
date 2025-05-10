@@ -27,6 +27,17 @@ const ThemeProviderComponent = ({ children }) => {
             primary: mode === "dark" ? "#d5cece" : "#000",
           },
         },
+        components: {
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                borderRadius: "20px", // Global border radius
+                height: "48px", // Uniform height
+                textTransform: "none", // Optional: Disable uppercase text
+              },
+            },
+          },
+        },
       }),
     [mode]
   );

@@ -130,10 +130,10 @@ function ResponsiveDrawer(props) {
             </IconButton>
             <SearchBar />
           </Stack>{" "}
-          <Box sx={{pr:{ xs: 1, md: 2}}}>
+          <Box sx={{ pr: { xs: 1, md: 2 } }}>
             <DarkModeToggle />
           </Box>
-          <User />
+          <User photoWidth={"40px"} />
         </Toolbar>
       </AppBar>
       <Box
