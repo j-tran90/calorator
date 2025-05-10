@@ -30,17 +30,20 @@ export default function Dashboard() {
 
   return (
     <>
-      {" "}
-      <Box sx={{ pb: 2 }}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
-            <Header headText='Dashboard' />
-          </Grid2>
+      <Grid2
+        container
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ m: 2, height: "50px" }}
+      >
+        <Grid2 size={{ xxs: 6 }}>
+          <Header headText='Dashboard' />
         </Grid2>
-      </Box>
+      </Grid2>
+
       <Box sx={{ p: 1 }}>
-        <Grid2 container spacing={{ xs: 1, md: 3 }}>
-          <Grid2 size={{ xs: 6, md: 3 }}>
+        <Grid2 container spacing={{ xxs: 1, md: 3 }}>
+          <Grid2 size={{ xxs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
               <Typography variant='h6' sx={{ pb: 1 }}>
                 Gain{" "}
@@ -68,7 +71,7 @@ export default function Dashboard() {
               </Box>
             </Card>
           </Grid2>
-          <Grid2 size={{ xs: 6, md: 3 }}>
+          <Grid2 size={{ xxs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
               <Typography variant='h6'>
                 Calorie{" "}
@@ -86,7 +89,7 @@ export default function Dashboard() {
               </Box>
             </Card>
           </Grid2>
-          <Grid2 size={{ xs: 6, md: 3 }}>
+          <Grid2 size={{ xxs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
               <Typography variant='h6'>
                 Protein{" "}
@@ -112,7 +115,7 @@ export default function Dashboard() {
               </Box>
             </Card>
           </Grid2>
-          <Grid2 size={{ xs: 6, md: 3 }}>
+          <Grid2 size={{ xxs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
@@ -146,7 +149,7 @@ export default function Dashboard() {
               </Box>
             </Card>
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6' sx={{ pb: 2 }}>
                 Calories{" "}
@@ -169,7 +172,7 @@ export default function Dashboard() {
             </Card>
           </Grid2>
 
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Calorie Calendar</Typography>
               {showGraphs ? (
@@ -182,7 +185,7 @@ export default function Dashboard() {
             </Card>
           </Grid2>
 
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Calorie Line Graph</Typography>
               {showGraphs ? (
@@ -195,7 +198,7 @@ export default function Dashboard() {
             </Card>
           </Grid2>
 
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Protein Bar Graph</Typography>
               {showGraphs ? (

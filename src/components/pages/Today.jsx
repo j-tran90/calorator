@@ -103,29 +103,31 @@ export default function Today() {
 
   return (
     <>
-      <Box sx={{ pb: 2 }}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 8 }} sx={{ pl: 2 }}>
-            <Header headText='Today' />
-          </Grid2>
-          <Grid2
-            size={{ xs: 4 }}
-            sx={{
-              pr: 2,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-              textAlign: "right",
-            }}
-          >
-            <ProgressBar
-              currentValue={caloriePercent}
-              targetValue={100}
-              barHeading={"Progress"}
-            />
-          </Grid2>
+      <Grid2
+        container
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ m: 2, height: "50px" }}
+      >
+        <Grid2 size={{ xxs: 8 }}>
+          <Header headText='Today' />
         </Grid2>
-      </Box>
+        <Grid2
+          size={{ xxs: 4 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            textAlign: "right",
+          }}
+        >
+          <ProgressBar
+            currentValue={caloriePercent}
+            targetValue={100}
+            barHeading={"Progress"}
+          />
+        </Grid2>
+      </Grid2>
 
       <Stack
         divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
@@ -160,11 +162,11 @@ export default function Today() {
                 sx={isExpanded ? expandedBoxStyles : boxStyles}
               >
                 <Grid2 container alignItems='center' spacing={2}>
-                  <Grid2 size={{ xs: 2, md: 1 }}>
+                  <Grid2 size={{ xxs: 2, md: 1 }}>
                     {categoryIcons[foodCategory] || <Restaurant />}
                   </Grid2>
 
-                  <Grid2 size={{ xs: 7 }}>
+                  <Grid2 size={{ xxs: 7 }}>
                     <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
                       {isExpanded ? entry.food : foodText}
                     </Typography>
@@ -181,7 +183,7 @@ export default function Today() {
                       </Typography>
                     </Box>
                   </Grid2>
-                  <Grid2 size={{ xs: 3 }} textAlign='right'>
+                  <Grid2 size={{ xxs: 3 }} textAlign='right'>
                     <Typography variant='caption'>
                       {dayjs(entry.createdAt.toDate()).format("h:mm A")}
                     </Typography>

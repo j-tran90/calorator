@@ -110,10 +110,10 @@ function Settings() {
     <Box
       sx={{
         textAlign: "center",
-        padding: "20px",
+        m: 1,
       }}
     >
-      <Typography variant='h4' gutterBottom>
+      <Typography variant='h5' gutterBottom>
         Account Settings
       </Typography>
 
@@ -126,7 +126,7 @@ function Settings() {
       {/* Settings List */}
       <List
         component={Paper}
-        sx={{ borderRadius: "20px", p: { xs: 1, md: 2 } }}
+        sx={{ borderRadius: "20px", p: { xxs: 1, md: 2 } }}
       >
         {/* Dark Mode Toggle */}
         <ListItem>

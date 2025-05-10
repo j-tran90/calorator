@@ -63,15 +63,17 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
         flexWrap: "wrap",
         gap: 2,
         justifyContent: "center",
-        p: 2,
+        m: 2,
       }}
     >
       {items.map((item) => (
         <ComplexButton
           key={item.id}
           onClick={() => addToJournal(item.kcal, item.protein, item.name)}
-          style={{
+          sx={{
             backgroundImage: getButtonBackground(item.icon),
+            height: { xxs: "100px", xs: "120px" },
+            width: { xxs: "100px", xs: "120px" },
           }}
         >
           <Typography

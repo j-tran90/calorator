@@ -112,9 +112,10 @@ export default function Overview() {
     <>
       <Card
         sx={{
-          border: "1px solid #9999",
           borderRadius: "20px",
           m: 1,
+          mb: 2,
+          mt: 2,
           boxShadow: "none",
         }}
       >
@@ -131,15 +132,15 @@ export default function Overview() {
                 sx={{
                   position: "absolute",
                   top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
+                  right: 10, // Align to the far right
+                  transform: "translateY(-50%)", // Only vertically center the element
                   fontWeight: "bold",
                 }}
               >
                 {remainingDays >= 0 ? (
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     {remainingDays}{" "}
-                    <Typography variant='caption'> Days Left</Typography>{" "}
+                    <Typography variant='caption'>Days Left</Typography>{" "}
                     <FlagCircle />
                   </Box>
                 ) : (
@@ -158,17 +159,10 @@ export default function Overview() {
       <Card
         sx={{
           m: 1,
-          border: "1px solid #9999",
           borderRadius: "20px",
-          bgcolor: "",
-          p: { xxs: 3, md: 5 },
-          boxShadow: "none",
+          p: { xxs: 3, xs: 5 },
         }}
       >
-        <Typography variant='h5' gutterBottom>
-          Calories
-        </Typography>
-
         <Box onClick={handleClick}>
           <ProgressCircle
             value={caloriePercent}

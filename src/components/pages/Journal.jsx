@@ -122,29 +122,34 @@ export default function Journal() {
 
   return (
     <>
-      <Box sx={{ pb: 2 }}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
-            <Header headText='Journal' />
-          </Grid2>
-          <Grid2
-            size={{ xs: 6 }}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button
-              variant='link'
-              onClick={handleTodayButtonClick}
-              sx={{ borderColor: "#000" }}
-            >
-              <Restore />
-            </Button>
-          </Grid2>
+      <Grid2
+        container
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ m: 2, height: "50px" }}
+      >
+        <Grid2 size={{ xxs: 6 }}>
+          <Header headText='Journal' />
         </Grid2>
-      </Box>
-      <Box sx={{ p: { xs: 1, md: 2 } }}>
+
+        <Grid2
+          size={{ xxs: 6 }}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button
+            variant='link'
+            onClick={handleTodayButtonClick}
+            sx={{ borderColor: "#000", padding: 0 }}
+          >
+            <Restore sx={{fontSize: 40}}/>
+          </Button>
+        </Grid2>
+      </Grid2>
+
+      <Box sx={{ p: { xxs: 1, md: 2 } }}>
         <Grid2
           container
           spacing={2}
@@ -157,7 +162,7 @@ export default function Journal() {
                 label='Start Date'
                 value={startDate}
                 onChange={(date) => handleStartDateChange(date)}
-                sx={{ width: { xs: "163.5px", md: "259px" } }}
+                sx={{ width: { xxs: "163.5px", md: "259px" } }}
               />
             </LocalizationProvider>
           </Grid2>
@@ -167,7 +172,7 @@ export default function Journal() {
                 label='End Date'
                 value={endDate}
                 onChange={(date) => handleEndDateChange(date)}
-                sx={{ width: { xs: "163.5px", md: "259px" } }}
+                sx={{ width: { xxs: "163.5px", md: "259px" } }}
               />
             </LocalizationProvider>
           </Grid2>
@@ -181,13 +186,13 @@ export default function Journal() {
                 <TableCell>Food</TableCell>
                 <TableCell>Calories</TableCell>
                 <TableCell>Protein</TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", md: "table-cell" } }}>
                   Sugar
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", md: "table-cell" } }}>
                   Carbs
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", md: "table-cell" } }}>
                   Fats
                 </TableCell>
                 <TableCell></TableCell>
@@ -247,17 +252,17 @@ export default function Journal() {
                       <TableCell>{entry.calories}</TableCell>
                       <TableCell>{entry.protein} g</TableCell>
                       <TableCell
-                        sx={{ display: { xs: "none", md: "table-cell" } }}
+                        sx={{ display: { xxs: "none", md: "table-cell" } }}
                       >
                         {entry.sugar}
                       </TableCell>
                       <TableCell
-                        sx={{ display: { xs: "none", md: "table-cell" } }}
+                        sx={{ display: { xxs: "none", md: "table-cell" } }}
                       >
                         {entry.carbs}
                       </TableCell>
                       <TableCell
-                        sx={{ display: { xs: "none", md: "table-cell" } }}
+                        sx={{ display: { xxs: "none", md: "table-cell" } }}
                       >
                         {entry.fats}
                       </TableCell>
