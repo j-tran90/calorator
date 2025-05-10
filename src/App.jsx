@@ -14,13 +14,16 @@ function App() {
   // Check if the screen size is mobile
   const isMobile = useMediaQuery("(max-width:600px)");
 
+  // Determine if the current route is excluded
+  const isExcludedRoute = excludedRoutes.includes(location.pathname);
+
   return (
     <AuthProvider>
-      {/* Render the drawer only if the current route is not excluded and the view is mobile */}
-      {isMobile && !excludedRoutes.includes(location.pathname) && (
-        <ResponsiveDrawer />
-      )}
-      <RouteSwitch />
+      <div className={`app-container ${isExcludedRoute ? "no-drawer" : ""}`}>
+        {/* Render the drawer only if the current route is not excluded and the view is mobile */}
+        {isMobile && !isExcludedRoute && <ResponsiveDrawer />}
+        <RouteSwitch />
+      </div>
     </AuthProvider>
   );
 }

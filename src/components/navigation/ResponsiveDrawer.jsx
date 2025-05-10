@@ -110,7 +110,7 @@ function ResponsiveDrawer(props) {
           sx={{
             boxShadow: "none",
             pt: { xs: 1 },
-            pb: { xs: 0, md: 1 },
+            pb: { xxs: 0, xs: 1 },
           }}
         >
           <Stack
@@ -133,7 +133,7 @@ function ResponsiveDrawer(props) {
           <Box sx={{ pr: { xs: 1, md: 2 } }}>
             <DarkModeToggle />
           </Box>
-          <User photoWidth={"40px"} />
+          <User photoWidth={"30px"} />
         </Toolbar>
       </AppBar>
       <Box
@@ -168,7 +168,7 @@ function ResponsiveDrawer(props) {
         <Drawer
           variant='permanent'
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xxs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -182,14 +182,14 @@ function ResponsiveDrawer(props) {
           {drawer}
         </Drawer>
       </Box>
-      <Box
+      {/* <Box
         component='main'
         sx={{
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
-      ></Box>
+      ></Box> */}
     </Box>
   );
 }

@@ -97,6 +97,15 @@ function Settings() {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  const listItemStyles = (isDisabled) => ({
+    "&:hover": {
+      backgroundColor: isDisabled ? "inherit" : "rgba(0, 0, 0, 0.08)",
+      borderRadius: "10px",
+    },
+    opacity: isDisabled ? 0.5 : 1,
+    cursor: isDisabled ? "not-allowed" : "pointer",
+  });
+
   return (
     <Box
       sx={{
@@ -120,13 +129,7 @@ function Settings() {
         sx={{ borderRadius: "20px", p: { xs: 1, md: 2 } }}
       >
         {/* Dark Mode Toggle */}
-        <ListItem
-          sx={{
-            "&:hover": {
-              backgroundColor: "#f5f5f5",
-            },
-          }}
-        >
+        <ListItem>
           <SettingsIcon sx={{ mr: 1 }} />
           <ListItemText primary='Dark Mode' />
           <Switch
@@ -137,15 +140,69 @@ function Settings() {
 
         {/* Clear Data */}
         <ListItem
-          onClick={() => setConfirmClear(true)}
+          onClick={() => setConfirmClear(!confirmClear)}
           sx={{
-            "&:hover": {
-              backgroundColor: "#f5f5f5",
-            },
+            ...listItemStyles(false),
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            cursor: "pointer",
           }}
         >
-          <DeleteIcon sx={{ mr: 1 }} />
-          <ListItemText primary='Clear Data' />
+          {/* Clear Data Text */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <DeleteIcon sx={{ mr: 1 }} />
+            <ListItemText primary='Clear Data' />
+          </Box>
+
+          {/* Confirm and Cancel Buttons */}
+          {confirmClear && (
+            <Box sx={{ display: "flex", gap: 1 }}>
+              {/* Confirm Button */}
+              <Box
+                component='button'
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering the ListItem's onClick
+                  clearIndexedDB();
+                }}
+                sx={{
+                  backgroundColor: "green",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "darkgreen",
+                  },
+                }}
+              >
+                Confirm
+              </Box>
+
+              {/* Cancel Button */}
+              <Box
+                component='button'
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering the ListItem's onClick
+                  setConfirmClear(false);
+                }}
+                sx={{
+                  backgroundColor: "gray",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "darkgray",
+                  },
+                }}
+              >
+                Cancel
+              </Box>
+            </Box>
+          )}
         </ListItem>
 
         {/* Delete Account */}
@@ -167,12 +224,11 @@ function Settings() {
         <ListItem
           onClick={handleLogout}
           sx={{
-            "&:hover": {
-              backgroundColor: "#f5f5f5",
-            },
+            ...listItemStyles(false),
+            color: "red",
           }}
         >
-          <LogoutIcon sx={{ mr: 1 }} />
+          <LogoutIcon sx={{ mr: 1, color: "red" }} />
           <ListItemText primary='Logout' />
         </ListItem>
       </List>

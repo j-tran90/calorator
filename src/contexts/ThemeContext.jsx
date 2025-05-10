@@ -31,9 +31,30 @@ const ThemeProviderComponent = ({ children }) => {
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: "20px", // Global border radius
+                borderRadius: "20px", // Global border radius for buttons
                 height: "48px", // Uniform height
                 textTransform: "none", // Optional: Disable uppercase text
+              },
+            },
+          },
+          MuiOutlinedInput: {
+            styleOverrides: {
+              root: {
+                borderRadius: "20px", // Global border radius for input fields
+              },
+            },
+          },
+          MuiFilledInput: {
+            styleOverrides: {
+              root: {
+                borderRadius: "20px", // Global border radius for filled input fields
+              },
+            },
+          },
+          MuiInputBase: {
+            styleOverrides: {
+              root: {
+                borderRadius: "20px", // Global border radius for base input fields
               },
             },
           },

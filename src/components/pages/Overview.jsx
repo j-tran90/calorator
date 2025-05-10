@@ -7,7 +7,7 @@ import useTracker from "../../hooks/useTracker";
 import useGoals from "../../hooks/useGoals";
 import ProgressLegend from "../features/graphs/ProgressLegend";
 import FoodCategoriesTabs from "../features/quickfood/FoodCategoriesTab";
-import { Box, Card, Grid2, Typography } from "@mui/material";
+import { Box, Card, Grid2, Paper, Typography } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import ProgressBar from "../features/graphs/ProgressBar";
 import { FlagCircle } from "@mui/icons-material";
@@ -138,7 +138,9 @@ export default function Overview() {
               >
                 {remainingDays >= 0 ? (
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {remainingDays} Days Remaining <FlagCircle />
+                    {remainingDays}{" "}
+                    <Typography variant='caption'> Days Left</Typography>{" "}
+                    <FlagCircle />
                   </Box>
                 ) : (
                   "No Target Set"
@@ -159,7 +161,7 @@ export default function Overview() {
           border: "1px solid #9999",
           borderRadius: "20px",
           bgcolor: "",
-          p: { xs: 3, md: 5 },
+          p: { xxs: 3, md: 5 },
           boxShadow: "none",
         }}
       >
@@ -175,9 +177,39 @@ export default function Overview() {
             targetValue={100}
           />
         </Box>
-        <ProgressLegend total={calorieTotal} remaining={calorieRemaning} />
-        <Grid2 container rowSpacing={1} columnSpacing={{ xs: 4, md: 10 }}>
-          <Grid2 size={{ xs: 6, md: 6 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+          <Grid2
+            sx={{ xxs: 12, md: 12 }}
+            container
+            rowSpacing={1}
+            columnSpacing={2}
+          >
+            <Card
+              sx={{
+                border: "1px solid #9999",
+                borderRadius: "20px",
+                boxShadow: "none",
+                p: 2,
+              }}
+            >
+              <Typography variant='body2'>Consumed</Typography>
+              <Typography variant='caption'>{calorieTotal} </Typography>
+            </Card>
+            <Card
+              sx={{
+                border: "1px solid #9999",
+                borderRadius: "20px",
+                boxShadow: "none",
+                p: 2,
+              }}
+            >
+              <Typography variant='body2'>Remaining</Typography>
+              <Typography variant='caption'>{calorieRemaning} </Typography>
+            </Card>
+          </Grid2>
+        </Box>
+        <Grid2 container rowSpacing={1} columnSpacing={{ xxs: 4, md: 10 }}>
+          <Grid2 size={{ xxs: 6, md: 6 }}>
             <ProgressBar
               gradientType='purple'
               barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
@@ -187,7 +219,7 @@ export default function Overview() {
               marginTop={2}
             />
           </Grid2>
-          <Grid2 size={{ xs: 6, md: 6 }}>
+          <Grid2 size={{ xxs: 6, md: 6 }}>
             <ProgressBar
               gradientType='yellowGreen'
               barHeading={`Sugar (WIP)`}
@@ -197,7 +229,7 @@ export default function Overview() {
               marginTop={2}
             />
           </Grid2>
-          <Grid2 size={{ xs: 6, md: 6 }}>
+          <Grid2 size={{ xxs: 6, md: 6 }}>
             <ProgressBar
               gradientType='orangeRed'
               barHeading={"Carbs (WIP)"}
@@ -207,7 +239,7 @@ export default function Overview() {
               marginTop={2}
             />
           </Grid2>
-          <Grid2 size={{ xs: 6, md: 6 }}>
+          <Grid2 size={{ xxs: 6, md: 6 }}>
             <ProgressBar
               gradientType='lightBlueBlue'
               barHeading={`Fats (WIP)`}

@@ -24,6 +24,10 @@ const User = ({ photoWidth }) => {
             width: photoWidth,
             objectFit: "cover",
             transition: "width 0.3s ease, height 0.3s ease",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: 1,
           }}
         />
       </Link>

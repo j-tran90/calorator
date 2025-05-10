@@ -224,6 +224,7 @@ export default function Profile() {
   const listItemStyles = (isDisabled) => ({
     "&:hover": {
       backgroundColor: isDisabled ? "inherit" : "rgba(0, 0, 0, 0.08)",
+      borderRadius: "10px",
     },
     opacity: isDisabled ? 0.5 : 1,
     cursor: isDisabled ? "not-allowed" : "pointer",
@@ -251,7 +252,15 @@ export default function Profile() {
       </Box>
 
       <Box sx={{ borderRadius: "20px", mb: 1 }}>
-        <Box sx={{ p: 2 }}>
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <User photoWidth='100px' />
           <Stack>
             <Typography variant='h6'>
