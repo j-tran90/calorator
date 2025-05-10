@@ -41,9 +41,7 @@ import {
   ArrowForwardIos,
 } from "@mui/icons-material";
 import { Alert, Snackbar } from "@mui/material";
-import Header from "../navigation/Header";
 import User from "../layouts/User";
-import { Type } from "react-swipeable-list";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../navigation/BackButton";
 
@@ -268,7 +266,10 @@ export default function Profile() {
             </Typography>
           </Stack>
           <Stack>
-            <Typography variant='body2' sx={{ color: "#777777" }}>
+            <Typography
+              variant='body2'
+              sx={{ color: "#777777", textDecoration: "none" }}
+            >
               {currentUser.email}
             </Typography>
           </Stack>
