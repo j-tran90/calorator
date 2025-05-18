@@ -11,6 +11,7 @@ import WeightGoalForm from "../features/BMIcalc/WeightGoalForm";
 import UserProfileForm from "../features/BMIcalc/UserProfileForm";
 import Results from "../features/BMIcalc/Results";
 import SendDataToDB from "../../hooks/useSendDataToDB";
+import { getData, saveData, deleteData } from "../../utils/indexedDB";
 
 function CreateGoal() {
   const [activeStep, setActiveStep] = useState(0);
@@ -19,21 +20,24 @@ function CreateGoal() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Load data from localStorage on component mount
+  // Load data from IndexedDB on component mount
   useEffect(() => {
-    const storedWeightGoal = localStorage.getItem("weightGoal");
-    const storedCalorieData = localStorage.getItem("calorieData");
+    const fetchData = async () => {
+      const storedWeightGoalObj = await getData("weightGoal");
+      const storedCalorieDataObj = await getData("calorieData");
 
-    if (storedWeightGoal) setWeightGoal(JSON.parse(storedWeightGoal));
-    if (storedCalorieData) setCalorieData(JSON.parse(storedCalorieData));
+      if (storedWeightGoalObj?.data) setWeightGoal(storedWeightGoalObj.data);
+      if (storedCalorieDataObj?.data) setCalorieData(storedCalorieDataObj.data);
+    };
+    fetchData();
   }, []);
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem("weightGoal");
-    localStorage.removeItem("calorieData");
+  const clearIndexedDB = async () => {
+    await deleteData("weightGoal");
+    await deleteData("calorieData");
   };
 
-  const handleWeightGoalSubmit = (data) => {
+  const handleWeightGoalSubmit = async (data) => {
     const currentDate = new Date().toISOString().split("T")[0];
 
     const updatedData = {
@@ -44,18 +48,18 @@ function CreateGoal() {
     };
 
     setWeightGoal(updatedData);
-    localStorage.setItem("weightGoal", JSON.stringify(updatedData));
+    await saveData("weightGoal", updatedData);
     setActiveStep((prevStep) => prevStep + 1);
   };
 
-  const handleCalorieCalculatorNext = (data) => {
+  const handleCalorieCalculatorNext = async (data) => {
     if (data.step === 1) {
       // Navigate to step 1 explicitly
       setActiveStep(1);
     } else {
       // Save data and proceed to the next step
       setCalorieData(data);
-      localStorage.setItem("calorieData", JSON.stringify(data));
+      await saveData("calorieData", data);
       setActiveStep((prevStep) => prevStep + 1);
     }
   };
@@ -74,8 +78,8 @@ function CreateGoal() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    clearLocalStorage();
+  const handleReset = async () => {
+    await clearIndexedDB();
     setActiveStep(0);
     setIsFormValid(false);
   };
@@ -112,11 +116,9 @@ function CreateGoal() {
         );
       case 2:
         return (
-          <div>
-            <Box sx={{ mt: 10, mb: 10 }}>
-              <Results />
-            </Box>
-            <Box display='flex' justifyContent='space-between'>
+          <Box>
+            <Results />
+            <Box display='flex' justifyContent='space-between' sx={{ p: 2 }}>
               <Button onClick={handleReset}>Reset</Button>
               <Button
                 variant='contained'
@@ -130,7 +132,7 @@ function CreateGoal() {
                 )}
               </Button>
             </Box>
-          </div>
+          </Box>
         );
       default:
         return "Unknown step";
@@ -140,12 +142,10 @@ function CreateGoal() {
   return (
     <Box
       sx={{
-        p: 2,
-        mr: "auto",
-        ml: "auto",
-        mt: 6,
-        maxWidth: { md: "1280px" },
-        overflow: { xs: "hidden", md: "auto" },
+        p: { xxs: 1, md: 3 },
+        mt: 3,
+        mb: 3,
+        overflow: { xxs: "hidden", md: "auto" },
       }}
     >
       <Stepper

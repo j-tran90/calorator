@@ -147,7 +147,7 @@ const CalorieLineGraph = () => {
 
       // 4. If no new data, use cached
       if (latestCreatedAtMillis <= lastKnownDateMillis) {
-        console.log(`[${new Date().toISOString()}] No new entries to fetch.`);
+        console.log(`[${new Date().toISOString()}] No new entries to fetch. Skipping Firestore fetch.`);
         setTotalCaloriesByDay(cachedData.totalCaloriesByDay || {});
         setCalorieTarget(cachedData.calorieTarget || 2000);
         setLoading(false);

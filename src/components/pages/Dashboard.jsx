@@ -151,13 +151,13 @@ export default function Dashboard() {
           </Grid2>
           <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6' sx={{ pb: 2 }}>
+              <Typography variant='h6'>
                 Calories{" "}
                 <Typography variant='caption' sx={{ fontStyle: "italic" }}>
                   Today
                 </Typography>
               </Typography>
-              {!showGraphs ? (
+              {showGraphs ? (
                 <ProgressCircle
                   value={caloriePercent}
                   gradientId='greenYellow'
@@ -199,7 +199,7 @@ export default function Dashboard() {
 
           <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: { xxs: 2, md: 3 } }}>
-              {showGraphs ? (
+              {!showGraphs ? (
                 <ProteinBarGraph />
               ) : (
                 <Typography variant='body2' sx={{ textAlign: "center" }}>

@@ -41,7 +41,10 @@ function Settings() {
     }
   }
 
-  const clearIndexedDB = async () => {
+  const clearIndexedDBAndLocalStorage = async () => {
+    // Clear localStorage
+    localStorage.clear();
+
     // Open the IndexedDB database
     const request = indexedDB.open("caloratorDB");
 
@@ -52,7 +55,7 @@ function Settings() {
       if (db.objectStoreNames.length === 0) {
         setSnackbar({
           open: true,
-          message: "No data to clear in IndexedDB.",
+          message: "No data to clear in IndexedDB or Local Storage.",
           severity: "info",
         });
         setConfirmClear(false); // Reset button state
@@ -69,7 +72,7 @@ function Settings() {
       transaction.oncomplete = () => {
         setSnackbar({
           open: true,
-          message: "IndexedDB data has been cleared.",
+          message: "IndexedDB and Local Storage data have been cleared.",
           severity: "success",
         });
         setConfirmClear(false); // Reset button state
@@ -162,8 +165,8 @@ function Settings() {
               <Box
                 component='button'
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent triggering the ListItem's onClick
-                  clearIndexedDB();
+                  e.stopPropagation();
+                  clearIndexedDBAndLocalStorage();
                 }}
                 sx={{
                   backgroundColor: "green",
