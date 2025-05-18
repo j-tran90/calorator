@@ -1,3 +1,12 @@
+/**
+ * ProteinBarGraph.jsx
+ * Version 1 - IndexedDB caching for reduced Firestore reads.
+ * - Only fetches new entries if Firestore has newer data than IndexedDB.
+ * - Merges and displays cached + new data.
+ * - Designed for Calorator graph features.
+ * Last updated: 2025-05-16
+ */
+
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../../../config/Firebase"; // Ensure auth is imported
 import {
@@ -48,10 +57,10 @@ const ProteinBarGraph = () => {
     // Retrieve the UID from Firebase Auth
     const currentUser = auth.currentUser;
     if (currentUser) {
-      console.log("User authenticated. UID:", currentUser.uid);
+      // console.log("User authenticated. UID:", currentUser.uid);
       setUid(currentUser.uid);
     } else {
-      console.error("No user is authenticated.");
+      // console.error("No user is authenticated.");
       setError("User not authenticated.");
       setLoading(false);
     }
@@ -60,82 +69,84 @@ const ProteinBarGraph = () => {
   useEffect(() => {
     const fetchUserGoal = async () => {
       if (!uid || !createdDate) {
-        console.warn("UID or createdDate is missing. Skipping fetch.");
+        // console.warn("UID or createdDate is missing. Skipping fetch.");
         setLoading(false);
         return;
       }
 
       try {
-        console.log(
-          `[${new Date().toISOString()}] Fetching data for UID:`,
-          uid
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Fetching data for UID:`,
+        //   uid
+        // );
 
         // Retrieve the last known date and cached data from IndexedDB
-        const cachedData = await getData(`proteinData-${uid}`);
-        console.log(
-          `[${new Date().toISOString()}] Cached data from IndexedDB:`,
-          cachedData
-        );
+        const cachedDataObj = await getData(`proteinData-${uid}`);
+        const cachedData = cachedDataObj?.data || {};
+        // console.log(
+        //   `[${new Date().toISOString()}] Cached data from IndexedDB:`,
+        //   cachedData
+        // );
 
         // Ensure lastKnownDate is properly initialized
-        const lastKnownDate = cachedData?.lastKnownDate
+        const lastKnownDate = cachedData.lastKnownDate
           ? Timestamp.fromDate(new Date(cachedData.lastKnownDate))
           : Timestamp.fromDate(new Date(createdDate)); // Fallback to createdDate
-        console.log(
-          `[${new Date().toISOString()}] Retrieved lastKnownDate:`,
-          lastKnownDate.toDate()
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Retrieved lastKnownDate:`,
+        //   lastKnownDate.toDate()
+        // );
 
         // Fetch the latestCreatedAt from the latestEntries collection
         const latestEntryDoc = await getDoc(doc(db, "latestEntries", uid));
         if (!latestEntryDoc.exists()) {
-          console.log(
-            `[${new Date().toISOString()}] No latest entry found for UID:`,
-            uid
-          );
+          // console.log(
+          //   `[${new Date().toISOString()}] No latest entry found for UID:",
+          //   uid
+          // );
           setLoading(false);
           return;
         }
 
         const latestEntryData = latestEntryDoc.data();
-        console.log(
-          `[${new Date().toISOString()}] Latest entry document data:`,
-          latestEntryData
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Latest entry document data:`,
+        //   latestEntryData
+        // );
 
         // Ensure latestCreatedAt exists
         if (!latestEntryData?.latestCreatedAt) {
-          console.error(
-            `[${new Date().toISOString()}] latestCreatedAt is missing in latestEntries document.`
-          );
+          // console.error(
+          //   `[${new Date().toISOString()}] latestCreatedAt is missing in latestEntries document.`
+          // );
           setLoading(false);
           return;
         }
 
         const latestCreatedAt = latestEntryData.latestCreatedAt.toDate();
-        console.log(
-          `[${new Date().toISOString()}] Latest createdAt from Firestore:`,
-          latestCreatedAt
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Latest createdAt from Firestore:`,
+        //   latestCreatedAt
+        // );
 
         // Normalize both dates to milliseconds for comparison
         const lastKnownDateMillis = lastKnownDate.toMillis();
         const latestCreatedAtMillis =
           Timestamp.fromDate(latestCreatedAt).toMillis();
 
-        console.log(
-          `[${new Date().toISOString()}] Normalized lastKnownDate (ms):`,
-          lastKnownDateMillis
-        );
-        console.log(
-          `[${new Date().toISOString()}] Normalized latestCreatedAt (ms):`,
-          latestCreatedAtMillis
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Normalized lastKnownDate (ms):`,
+        //   lastKnownDateMillis
+        // );
+        // console.log(
+        //   `[${new Date().toISOString()}] Normalized latestCreatedAt (ms):`,
+        //   latestCreatedAtMillis
+        // );
 
         // Compare latestCreatedAt with lastKnownDate
         if (latestCreatedAtMillis <= lastKnownDateMillis) {
-          console.log(`[${new Date().toISOString()}] No new entries to fetch.`);
+          // console.log(`[${new Date().toISOString()}] No new entries to fetch.`);
+          setTotalProteinByDay(cachedData.totalProteinByDay || {}); // <-- Add this line
           setLoading(false);
           return;
         }
@@ -146,39 +157,39 @@ const ProteinBarGraph = () => {
           where("createdAt", ">=", lastKnownDate)
         );
 
-        console.log(
-          `[${new Date().toISOString()}] Executing Firestore query with lastKnownDate:`,
-          lastKnownDate.toDate()
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Executing Firestore query with lastKnownDate:`,
+        //   lastKnownDate.toDate()
+        // );
 
         // Fetch the query
         const createdAtSnapshot = await getDocs(createdAtQuery);
-        console.log(
-          `[${new Date().toISOString()}] Number of entries fetched by createdAt:`,
-          createdAtSnapshot.docs.length
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Number of entries fetched by createdAt:`,
+        //   createdAtSnapshot.docs.length
+        // );
 
         if (createdAtSnapshot.empty) {
-          console.log(
-            `[${new Date().toISOString()}] No entries found in Firestore.`
-          );
+          // console.log(
+          //   `[${new Date().toISOString()}] No entries found in Firestore.`
+          // );
           setLoading(false);
           return;
         }
 
         // Map the fetched entries
         const newEntries = createdAtSnapshot.docs.map((doc) => doc.data());
-        console.log(
-          `[${new Date().toISOString()}] Fetched entries from Firestore:`,
-          newEntries
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Fetched entries from Firestore:`,
+        //   newEntries
+        // );
 
         // Merge new data with cached data
         const proteinByDay = { ...cachedData?.totalProteinByDay }; // Start with cached data
-        console.log(
-          `[${new Date().toISOString()}] Protein data before merging:`,
-          proteinByDay
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Protein data before merging:`,
+        //   proteinByDay
+        // );
 
         // Add protein data from new entries
         newEntries.forEach((entry) => {
@@ -189,10 +200,10 @@ const ProteinBarGraph = () => {
           proteinByDay[entryDate] += entry.protein || 0;
         });
 
-        console.log(
-          `[${new Date().toISOString()}] Protein data after merging:`,
-          proteinByDay
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Protein data after merging:`,
+        //   proteinByDay
+        // );
 
         setTotalProteinByDay(proteinByDay);
 
@@ -202,33 +213,37 @@ const ProteinBarGraph = () => {
           return entryDate > latest ? entryDate : latest;
         }, lastKnownDate.toDate());
 
-        console.log(
-          `[${new Date().toISOString()}] Calculated mostRecentDate:`,
-          mostRecentDate
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Calculated mostRecentDate:`,
+        //   mostRecentDate
+        // );
 
         // Save updated data and the new lastKnownDate to IndexedDB
         await saveData(`proteinData-${uid}`, {
           totalProteinByDay: proteinByDay,
-          lastKnownDate: mostRecentDate, // Save the most recent date
+          lastKnownDate: mostRecentDate.toISOString(), // Save as ISO string
         });
 
-        console.log(
-          `[${new Date().toISOString()}] Updated lastKnownDate saved to IndexedDB:`,
-          mostRecentDate
-        );
+        // console.log(
+        //   `[${new Date().toISOString()}] Updated lastKnownDate saved to IndexedDB:`,
+        //   mostRecentDate
+        // );
+        // console.log(
+        //   "Saved lastKnownDate to IndexedDB:",
+        //   mostRecentDate.toISOString()
+        // );
 
         // Retrieve lastKnownDate from IndexedDB to confirm it was updated
-        const updatedCachedData = await getData(`proteinData-${uid}`);
-        console.log(
-          `[${new Date().toISOString()}] Retrieved updated lastKnownDate from IndexedDB:`,
-          updatedCachedData?.lastKnownDate
-        );
+        // const updatedCachedData = await getData(`proteinData-${uid}`);
+        // console.log(
+        //   `[${new Date().toISOString()}] Retrieved updated lastKnownDate from IndexedDB:`,
+        //   updatedCachedData?.lastKnownDate
+        // );
       } catch (error) {
-        console.error(
-          `[${new Date().toISOString()}] Error fetching protein entries:`,
-          error
-        );
+        // console.error(
+        //   `[${new Date().toISOString()}] Error fetching protein entries:`,
+        //   error
+        // );
         setError(error.message);
       } finally {
         setLoading(false);
@@ -279,7 +294,6 @@ const ProteinBarGraph = () => {
 
   return (
     <div>
-      <h3>Total Protein from Start Date to Today</h3>
       {Object.keys(totalProteinByDay).length === 0 ? (
         <p>No data found for this period.</p>
       ) : (

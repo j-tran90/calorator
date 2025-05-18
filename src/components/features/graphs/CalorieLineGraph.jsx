@@ -22,6 +22,7 @@ import {
   Filler,
 } from "chart.js";
 import dayjs from "dayjs";
+import { saveData, getData } from "../../../utils/indexedDB";
 
 // Register Chart.js components
 ChartJS.register(
@@ -41,142 +42,160 @@ const CalorieLineGraph = () => {
   const [calorieTarget, setCalorieTarget] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { uid } = auth.currentUser;
+  const [uid, setUid] = useState(null);
 
   useEffect(() => {
-    const fetchUserGoal = async () => {
-      if (!uid) {
-        setError("User not authenticated");
-        setLoading(false);
-        return;
-      }
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUid(currentUser.uid);
+    } else {
+      setError("User not authenticated");
+      setLoading(false);
+    }
+  }, []);
 
+  // Fetch createdDate (goal start)
+  useEffect(() => {
+    if (!uid) return;
+    const fetchUserGoal = async () => {
       try {
         const userGoalQuery = query(
           collection(db, "userGoals", uid, "goalsHistory"),
           where("status", "==", "in progress")
         );
-
         const querySnapshot = await getDocs(userGoalQuery);
-
         if (querySnapshot.empty) {
           setError("No user goal found with status 'in progress'");
           setLoading(false);
           return;
         }
-
         const goalDoc = querySnapshot.docs[0].data();
         const startDate = goalDoc.createdDate;
-
         if (!startDate) {
           setError("Created date not found in user goal data.");
           setLoading(false);
           return;
         }
-
         setCreatedDate(startDate);
       } catch (error) {
-        console.error("Error fetching user goal:", error);
         setError("Failed to fetch user goal data.");
         setLoading(false);
       }
     };
-
     fetchUserGoal();
   }, [uid]);
 
+  // Main graph data logic with IndexedDB caching
   useEffect(() => {
-    if (!createdDate) {
-      return;
-    }
+    if (!createdDate || !uid) return;
 
-    // Check if it's time to fetch the data
-    const currentTime = new Date();
-    const nextMidnight = new Date(currentTime);
-    nextMidnight.setHours(24, 0, 0, 0); // Set to next midnight (12:00 AM)
+    const fetchData = async () => {
+      setLoading(true);
 
-    const timeUntilMidnight = nextMidnight.getTime() - currentTime.getTime();
-
-    const fetchDataAtMidnight = () => {
-      fetchCalorieData(); // Fetch data when it reaches midnight
-    };
-
-    // Set a timeout to trigger data fetch at midnight
-    if (timeUntilMidnight > 0) {
-      setTimeout(fetchDataAtMidnight, timeUntilMidnight);
-    }
-
-    // Check if data is available in localStorage and it's still valid
-    const lastFetchedTime = localStorage.getItem("calorieDataLastFetched");
-    if (
-      !lastFetchedTime ||
-      new Date().getTime() - lastFetchedTime > timeUntilMidnight
-    ) {
-      fetchCalorieData();
-    } else {
-      const storedCalories = JSON.parse(localStorage.getItem("calorieData"));
-      const storedTarget = localStorage.getItem("calorieTarget");
-      if (storedCalories) {
-        setTotalCaloriesByDay(storedCalories);
-      }
-      if (storedTarget) {
-        setCalorieTarget(Number(storedTarget));
-      }
-      setLoading(false);
-    }
-  }, [createdDate, uid]);
-
-  const fetchCalorieData = async () => {
-    if (!uid) {
-      setError("User not authenticated");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      // Get the start date (from createdDate) and end date (today)
-      const startOfPeriod = new Date(createdDate);
-      const endOfPeriod = new Date(); // Today
-
-      // Convert to Firestore Timestamp objects
-      const startOfPeriodTimestamp = Timestamp.fromDate(startOfPeriod);
-      const endOfPeriodTimestamp = Timestamp.fromDate(endOfPeriod);
-
-      // Query the "entries" collection for the date range from createdDate to today
-      const calorieQuery = query(
-        collection(db, "journal/" + uid + "/entries"),
-        where("createdAt", ">=", startOfPeriodTimestamp),
-        where("createdAt", "<=", endOfPeriodTimestamp)
+      // 1. Get cached data from IndexedDB
+      const cachedDataObj = await getData(`calorieLineData-${uid}`);
+      const cachedData = cachedDataObj?.data || {};
+      console.log(
+        `[${new Date().toISOString()}] Cached data from IndexedDB:`,
+        cachedData
       );
 
-      // Fetch the data from Firestore
-      const querySnapshot = await getDocs(calorieQuery);
+      // 2. Determine lastKnownDate
+      const lastKnownDate = cachedData.lastKnownDate
+        ? Timestamp.fromDate(new Date(cachedData.lastKnownDate))
+        : Timestamp.fromDate(new Date(createdDate));
+      console.log(
+        `[${new Date().toISOString()}] Retrieved lastKnownDate:`,
+        lastKnownDate.toDate()
+      );
 
-      if (querySnapshot.empty) {
-        setError("No calorie entries found.");
+      // 3. Get latestCreatedAt from Firestore
+      const latestEntryDoc = await getDoc(doc(db, "latestEntries", uid));
+      if (!latestEntryDoc.exists()) {
+        setTotalCaloriesByDay(cachedData.totalCaloriesByDay || {});
+        setLoading(false);
+        return;
+      }
+      const latestEntryData = latestEntryDoc.data();
+      console.log(
+        `[${new Date().toISOString()}] Latest entry document data:`,
+        latestEntryData
+      );
+      if (!latestEntryData?.latestCreatedAt) {
+        setTotalCaloriesByDay(cachedData.totalCaloriesByDay || {});
+        setLoading(false);
+        return;
+      }
+      const latestCreatedAt = latestEntryData.latestCreatedAt.toDate();
+      console.log(
+        `[${new Date().toISOString()}] Latest createdAt from Firestore:`,
+        latestCreatedAt
+      );
+
+      // Normalize both dates to milliseconds for comparison
+      const lastKnownDateMillis = lastKnownDate.toMillis();
+      const latestCreatedAtMillis =
+        Timestamp.fromDate(latestCreatedAt).toMillis();
+      console.log(
+        `[${new Date().toISOString()}] Normalized lastKnownDate (ms):`,
+        lastKnownDateMillis
+      );
+      console.log(
+        `[${new Date().toISOString()}] Normalized latestCreatedAt (ms):`,
+        latestCreatedAtMillis
+      );
+
+      // 4. If no new data, use cached
+      if (latestCreatedAtMillis <= lastKnownDateMillis) {
+        console.log(`[${new Date().toISOString()}] No new entries to fetch.`);
+        setTotalCaloriesByDay(cachedData.totalCaloriesByDay || {});
+        setCalorieTarget(cachedData.calorieTarget || 2000);
         setLoading(false);
         return;
       }
 
-      // Extract the data from the querySnapshot
-      const entries = querySnapshot.docs.map((doc) => doc.data());
+      // 5. Fetch new entries, merge, and save
+      const createdAtQuery = query(
+        collection(db, "journal/" + uid + "/entries"),
+        where("createdAt", ">", lastKnownDate)
+      );
+      console.log(
+        `[${new Date().toISOString()}] Executing Firestore query with lastKnownDate:`,
+        lastKnownDate.toDate()
+      );
+      const createdAtSnapshot = await getDocs(createdAtQuery);
+      console.log(
+        `[${new Date().toISOString()}] Number of entries fetched by createdAt:`,
+        createdAtSnapshot.docs.length
+      );
 
-      // Sum the calories for each day in the date range
-      const caloriesByDay = {};
-      entries.forEach((entry) => {
+      if (createdAtSnapshot.empty) {
+        setLoading(false);
+        return;
+      }
+
+      // Map the fetched entries
+      const newEntries = createdAtSnapshot.docs.map((doc) => doc.data());
+      console.log(
+        `[${new Date().toISOString()}] Fetched entries from Firestore:`,
+        newEntries
+      );
+
+      // Merge new data with cached data
+      const caloriesByDay = { ...cachedData.totalCaloriesByDay };
+      newEntries.forEach((entry) => {
         const entryDate = dayjs(entry.createdAt.toDate()).format("MMM DD");
         if (!caloriesByDay[entryDate]) {
           caloriesByDay[entryDate] = 0;
         }
         caloriesByDay[entryDate] += entry.calories || 0;
       });
-
-      // Store the data in localStorage
-      localStorage.setItem("calorieData", JSON.stringify(caloriesByDay));
-      localStorage.setItem(
-        "calorieDataLastFetched",
-        new Date().getTime().toString()
+      console.log(
+        `[${new Date().toISOString()}] Calories data after merging:`,
+        caloriesByDay
       );
+
+      setTotalCaloriesByDay(caloriesByDay);
 
       // Fetch the calorie target from Firestore
       const userProfileDocRef = doc(db, "users", uid);
@@ -184,17 +203,43 @@ const CalorieLineGraph = () => {
       const target = userProfileDoc.data()?.calorieTarget || 2000;
       setCalorieTarget(target);
 
-      // Store the calorie target in localStorage
-      localStorage.setItem("calorieTarget", target.toString());
+      // Find most recent date
+      const mostRecentDate = newEntries.reduce((latest, entry) => {
+        const entryDate = entry.createdAt.toDate();
+        return entryDate > latest ? entryDate : latest;
+      }, lastKnownDate.toDate());
+      console.log(
+        `[${new Date().toISOString()}] Calculated mostRecentDate:`,
+        mostRecentDate
+      );
 
-      setTotalCaloriesByDay(caloriesByDay);
-    } catch (error) {
-      console.error("Error fetching calorie entries:", error);
-      setError(error.message);
-    } finally {
+      // Save to IndexedDB
+      await saveData(`calorieLineData-${uid}`, {
+        totalCaloriesByDay: caloriesByDay,
+        calorieTarget: target,
+        lastKnownDate: mostRecentDate.toISOString(),
+      });
+      // console.log(
+      //   `[${new Date().toISOString()}] Updated lastKnownDate saved to IndexedDB:`,
+      //   mostRecentDate
+      // );
+      // console.log(
+      //   "Saved lastKnownDate to IndexedDB:",
+      //   mostRecentDate.toISOString()
+      // );
+
+      // Retrieve lastKnownDate from IndexedDB to confirm it was updated
+      // const updatedCachedData = await getData(`calorieLineData-${uid}`);
+      // console.log(
+      //   `[${new Date().toISOString()}] Retrieved updated lastKnownDate from IndexedDB:`,
+      //   updatedCachedData?.lastKnownDate
+      // );
+
       setLoading(false);
-    }
-  };
+    };
+
+    fetchData();
+  }, [createdDate, uid]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -235,9 +280,6 @@ const CalorieLineGraph = () => {
 
   return (
     <div>
-      <h3>
-        Total Calories from {dayjs(createdDate).format("MMM DD, YYYY")} to Today
-      </h3>
       {Object.keys(totalCaloriesByDay).length === 0 ? (
         <p>No data found for this period.</p>
       ) : (

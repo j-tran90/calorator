@@ -167,9 +167,8 @@ export default function Dashboard() {
           </Grid2>
 
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Calorie Line Graph</Typography>
-              {showGraphs ? (
+            <Card sx={{ borderRadius: "20px", p: { xxs: 2, md: 3 } }}>
+              {!showGraphs ? (
                 <CalorieLineGraph />
               ) : (
                 <Typography variant='body2' sx={{ textAlign: "center" }}>
@@ -180,8 +179,7 @@ export default function Dashboard() {
           </Grid2>
 
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>Protein Bar Graph</Typography>
+            <Card sx={{ borderRadius: "20px", p: { xxs: 2, md: 3 } }}>
               {!showGraphs ? (
                 <ProteinBarGraph />
               ) : (
