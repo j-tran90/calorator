@@ -10,15 +10,17 @@ import {
 } from "firebase/firestore";
 import dayjs from "dayjs";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
   Paper,
   Box,
   Button,
   Grid2,
+  Card,
+  Stack,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from "@mui/material";
 import SetTargetButton from "../buttons/SetTargetButton";
 import {
@@ -29,8 +31,19 @@ import {
   fetchSignInMethodsForEmail,
   browserPopupRedirectResolver,
 } from "firebase/auth";
-import { Google, MailOutline } from "@mui/icons-material";
+import {
+  Edit,
+  Google,
+  MailOutline,
+  Settings,
+  PrivacyTip,
+  HelpOutline,
+  ArrowForwardIos,
+} from "@mui/icons-material";
 import { Alert, Snackbar } from "@mui/material";
+import User from "../layouts/User";
+import { useNavigate } from "react-router-dom";
+import BackButton from "../navigation/BackButton";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -185,94 +198,239 @@ export default function Profile() {
     }
   }
 
+  const cardStyles = {
+    borderRadius: "20px",
+    width: { xxs: "105px", xs: "120px" },
+    height: "100px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  };
+
+  // Shared styles for Typography
+  const sectionTitleStyles = {
+    m: 1,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "left",
+    color: "#777777",
+  };
+
+  // Shared styles for ListItem components
+  const listItemStyles = (isDisabled) => ({
+    "&:hover": {
+      backgroundColor: isDisabled ? "inherit" : "rgba(0, 0, 0, 0.08)",
+      borderRadius: "10px",
+    },
+    opacity: isDisabled ? 0.5 : 1,
+    cursor: isDisabled ? "not-allowed" : "pointer",
+  });
+
+  const navigate = useNavigate();
+
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <strong>Name</strong>
-              </TableCell>
-              <TableCell>{currentUser.displayName || "Guest User"}</TableCell>
-            </TableRow>
-            {profile.map((showProfile) => (
-              <React.Fragment key={showProfile.id}>
-                <TableRow>
-                  <TableCell>
-                    <strong>Date of Birth</strong>
-                  </TableCell>
-                  <TableCell>{formatDate(showProfile.dob)}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <strong>Age</strong>
-                  </TableCell>
-                  <TableCell>{age}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <strong>Gender</strong>
-                  </TableCell>
-                  <TableCell>{showProfile.gender}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <strong>Height</strong>
-                  </TableCell>
-                  <TableCell>{showProfile.height} cm</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <strong>Current Weight</strong>
-                  </TableCell>
-                  <TableCell>
-                    <Grid2 container spacing={2}>
-                      <Grid2>{currentWeight} lbs</Grid2>
-                      <Grid2>
-                        <SetTargetButton buttonText='New' buttonHeight='20px' />
-                      </Grid2>
-                    </Grid2>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <strong>Account Created</strong>
-                  </TableCell>
-                  <TableCell sx={{ fontStyle: "italic" }}>
-                    {formatDate(showProfile.joinDate)}
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Box sx={{ p: 2, textAlign: "center" }}>
-        <Button
-          disabled={linkedAccounts.includes("password")}
-          variant='contained'
-          onClick={handleLinkEmail}
-          sx={{ mr: 2 }}
-        >
-          <MailOutline sx={{ mr: 1 }} />
-          {linkedAccounts.includes("password")
-            ? "Linked to Email"
-            : "Link Email"}
-        </Button>
-
-        <Button
-          disabled={linkedAccounts.includes("google.com")}
-          variant='contained'
-          onClick={handleLinkGoogle}
-        >
-          <Google sx={{ mr: 1 }} />
-          {linkedAccounts.includes("google.com")
-            ? "Linked to Google"
-            : "Link Google"}
-        </Button>
+      <Box sx={{ pb: 2 }}>
+        <Grid2 container>
+          <Grid2
+            size={{ xs: 4 }}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "left",
+            }}
+          >
+            {" "}
+            <BackButton />{" "}
+          </Grid2>{" "}
+          <Grid2 size={{ xs: 8 }} sx={{ pl: 2 }}></Grid2>
+        </Grid2>
       </Box>
+
+      <Box sx={{ borderRadius: "20px", mb: 1 }}>
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <User photoWidth='100px' />
+          <Stack>
+            <Typography variant='h6'>
+              {currentUser.displayName || "Guest User"}
+            </Typography>
+          </Stack>
+          <Stack>
+            <Typography
+              variant='body2'
+              sx={{ color: "#777777", textDecoration: "none" }}
+            >
+              {currentUser.email}
+            </Typography>
+          </Stack>
+        </Box>
+      </Box>
+
+      <Button variant='contained' disabled onClick={() => {}}>
+        <Edit sx={{ mr: 1 }} /> Edit Profile
+      </Button>
+
+      <Typography variant='caption' sx={sectionTitleStyles}>
+        Personal Details
+      </Typography>
+      <Grid2
+        container
+        spacing={2}
+        sx={{
+          p: 1,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          textAlign: "center",
+        }}
+        xs={12}
+        md={6}
+      >
+        {profile.map((showProfile) => (
+          <React.Fragment key={showProfile.id}>
+            <Card sx={cardStyles}>
+              <Typography variant='h6'>Age</Typography>
+              <Typography variant='body2'>{age}</Typography>
+            </Card>
+            <Card sx={cardStyles}>
+              <Typography variant='h6'>Gender</Typography>
+              <Typography variant='body2'>{showProfile.gender}</Typography>
+            </Card>
+            <Card sx={cardStyles}>
+              <Typography variant='h6'>Height</Typography>
+              <Typography variant='body2'>{showProfile.height} cm</Typography>
+            </Card>
+            <Card sx={cardStyles}>
+              <Typography variant='h6'>Weight</Typography>
+              <Typography variant='body2'>{currentWeight} lbs</Typography>
+            </Card>
+            <Card sx={cardStyles}>
+              <Typography variant='h6'>Plan</Typography>
+              <Typography variant='body2'>Active</Typography>
+            </Card>
+            <Card sx={cardStyles}>
+              <Typography variant='h6'>Finished</Typography>
+              <Typography variant='body2'>0</Typography>
+            </Card>
+          </React.Fragment>
+        ))}
+      </Grid2>
+
+      <Typography variant='caption' sx={sectionTitleStyles}>
+        Preference
+      </Typography>
+      <Box
+        component={Paper}
+        sx={{
+          borderRadius: "20px",
+          m: 1,
+          p: { xs: 1, md: 2 },
+        }}
+      >
+        <List>
+          {/* Account Settings */}
+          <ListItem
+            onClick={() => navigate("/settings")}
+            sx={listItemStyles(false)}
+          >
+            <Settings
+              sx={{
+                mr: 1,
+              }}
+            />
+            <ListItemText primary='Account Settings' />
+            <ListItemIcon sx={{ minWidth: "auto" }}>
+              <ArrowForwardIos fontSize='small' />
+            </ListItemIcon>
+          </ListItem>
+
+          {/* Privacy Settings (Disabled with Hover Effect) */}
+          <ListItem
+            disabled
+            sx={{
+              opacity: 0.5,
+              cursor: "not-allowed",
+              "&:hover": {
+                backgroundColor: "inherit",
+              },
+            }}
+          >
+            <PrivacyTip sx={{ mr: 1 }} />
+            <ListItemText primary='Privacy Settings' />
+            <ListItemIcon sx={{ minWidth: "auto" }}>
+              <ArrowForwardIos fontSize='small' />
+            </ListItemIcon>
+          </ListItem>
+
+          {/* Help & Support (Disabled with Hover Effect) */}
+          <ListItem
+            disabled
+            sx={{
+              opacity: 0.5,
+              cursor: "not-allowed",
+              "&:hover": {
+                backgroundColor: "inherit",
+              },
+            }}
+          >
+            <HelpOutline sx={{ mr: 1 }} />
+            <ListItemText primary='Help & Support' />
+            <ListItemIcon sx={{ minWidth: "auto" }}>
+              <ArrowForwardIos fontSize='small' />
+            </ListItemIcon>
+          </ListItem>
+        </List>
+      </Box>
+
+      <Typography variant='caption' sx={sectionTitleStyles}>
+        Link Accounts
+      </Typography>
+      <Card sx={{ borderRadius: "20px", m: 1, p: { xs: 1, md: 2 } }}>
+        <List>
+          {/* Link Email */}
+          <ListItem
+            onClick={handleLinkEmail}
+            disabled={linkedAccounts.includes("password")}
+            sx={listItemStyles(linkedAccounts.includes("password"))}
+          >
+            <MailOutline sx={{ mr: 1 }} />
+            <ListItemText
+              primary={
+                linkedAccounts.includes("password")
+                  ? "Linked to Email"
+                  : "Link Email"
+              }
+            />
+          </ListItem>
+
+          {/* Link Google */}
+          <ListItem
+            onClick={handleLinkGoogle}
+            disabled={linkedAccounts.includes("google.com")}
+            sx={listItemStyles(linkedAccounts.includes("google.com"))}
+          >
+            <Google sx={{ mr: 1 }} />
+            <ListItemText
+              primary={
+                linkedAccounts.includes("google.com")
+                  ? "Linked to Google"
+                  : "Link Google"
+              }
+            />
+          </ListItem>
+        </List>
+      </Card>
+
       <Snackbar
         open={alert.open}
         autoHideDuration={4000}

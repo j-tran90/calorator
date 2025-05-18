@@ -14,11 +14,9 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../../config/Firebase";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // 3 vertical dots icon
-import useTracker from "../../hooks/useTracker";
 import {
   Grid2,
   Box,
-  Typography,
   Button,
   Table,
   TableBody,
@@ -29,17 +27,19 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Header from "../navigation/Header";
 import { Restore } from "@mui/icons-material";
 
 export default function Journal() {
-  const { calorieTarget, calorieTotal } = useTracker(0);
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteId, setDeleteId] = useState(null); // ID for the entry to delete
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar state
   const uid = auth.currentUser?.uid;
 
   useEffect(() => {
@@ -86,50 +86,80 @@ export default function Journal() {
 
   const handleEntryDelete = async () => {
     try {
-      if (deleteId) {
-        await deleteDoc(doc(db, `journal/${uid}/entries`, deleteId));
-        setData(data.filter((entry) => entry.id !== deleteId));
-        setDeleteId(null); // Clear the delete ID after deletion
+      if (!deleteId) {
+        console.warn("No entry selected for deletion.");
+        return;
       }
+
+      console.log(
+        `[${new Date().toISOString()}] Deleting entry with ID:`,
+        deleteId
+      );
+
+      // Delete the entry from Firestore
+      await deleteDoc(doc(db, `journal/${uid}/entries`, deleteId));
+
+      // Update the state to remove the deleted entry
+      setData((prevData) => prevData.filter((entry) => entry.id !== deleteId));
+
+      console.log(`[${new Date().toISOString()}] Entry deleted successfully.`);
+
+      // Show the success snackbar
+      setSnackbarOpen(true);
+
+      // Clear the delete ID and close the menu
+      handleMenuClose(); // Ensure the menu is closed after deletion
     } catch (error) {
-      console.error("Error deleting entry: ", error);
+      console.error("Error deleting entry:", error);
     }
   };
-
   const handleMenuOpen = (event, id) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget); // Set the anchor element to the button that triggered the menu
     setDeleteId(id); // Store the ID of the entry to delete
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    if (anchorEl) {
+      anchorEl.focus(); // Return focus to the button that triggered the menu
+    }
+    setAnchorEl(null); // Reset the anchor element
+    setDeleteId(null); // Clear the delete ID
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); // Close the snackbar
   };
 
   return (
     <>
-      <Box sx={{ pb: 2 }}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
-            <Header headText='Journal' />
-          </Grid2>
-          <Grid2
-            size={{ xs: 6 }}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button
-              variant='link'
-              onClick={handleTodayButtonClick}
-              sx={{ borderColor: "#000" }}
-            >
-              <Restore />
-            </Button>
-          </Grid2>
+      <Grid2
+        container
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ m: 2, height: "50px" }}
+      >
+        <Grid2 size={{ xxs: 6 }}>
+          <Header headText='Journal' />
         </Grid2>
-      </Box>
-      <Box sx={{ p: { xs: 1, md: 2 } }}>
+
+        <Grid2
+          size={{ xxs: 6 }}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button
+            variant='link'
+            onClick={handleTodayButtonClick}
+            sx={{ borderColor: "#000", padding: 0 }}
+          >
+            <Restore sx={{ fontSize: 40 }} />
+          </Button>
+        </Grid2>
+      </Grid2>
+
+      <Box sx={{ p: { xxs: 1, md: 2 } }}>
         <Grid2
           container
           spacing={2}
@@ -142,7 +172,7 @@ export default function Journal() {
                 label='Start Date'
                 value={startDate}
                 onChange={(date) => handleStartDateChange(date)}
-                sx={{ width: { xs: "163.5px", md: "259px" } }}
+                sx={{ width: { xxs: "163.5px", md: "259px" } }}
               />
             </LocalizationProvider>
           </Grid2>
@@ -152,7 +182,7 @@ export default function Journal() {
                 label='End Date'
                 value={endDate}
                 onChange={(date) => handleEndDateChange(date)}
-                sx={{ width: { xs: "163.5px", md: "259px" } }}
+                sx={{ width: { xxs: "163.5px", md: "259px" } }}
               />
             </LocalizationProvider>
           </Grid2>
@@ -166,13 +196,13 @@ export default function Journal() {
                 <TableCell>Food</TableCell>
                 <TableCell>Calories</TableCell>
                 <TableCell>Protein</TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", md: "table-cell" } }}>
                   Sugar
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", md: "table-cell" } }}>
                   Carbs
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                <TableCell sx={{ display: { xxs: "none", md: "table-cell" } }}>
                   Fats
                 </TableCell>
                 <TableCell></TableCell>
@@ -232,14 +262,20 @@ export default function Journal() {
                       <TableCell>{entry.calories}</TableCell>
                       <TableCell>{entry.protein} g</TableCell>
                       <TableCell
-                        sx={{ display: { xs: "none", md: "table-cell" } }}
-                      ></TableCell>
+                        sx={{ display: { xxs: "none", md: "table-cell" } }}
+                      >
+                        {entry.sugar}
+                      </TableCell>
                       <TableCell
-                        sx={{ display: { xs: "none", md: "table-cell" } }}
-                      ></TableCell>
+                        sx={{ display: { xxs: "none", md: "table-cell" } }}
+                      >
+                        {entry.carbs}
+                      </TableCell>
                       <TableCell
-                        sx={{ display: { xs: "none", md: "table-cell" } }}
-                      ></TableCell>
+                        sx={{ display: { xxs: "none", md: "table-cell" } }}
+                      >
+                        {entry.fats}
+                      </TableCell>
                       <TableCell>
                         <IconButton
                           onClick={(event) => handleMenuOpen(event, entry.id)}
@@ -248,11 +284,27 @@ export default function Journal() {
                         </IconButton>
                         <Menu
                           anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={handleMenuClose}
+                          open={Boolean(anchorEl)} // Only open the menu if anchorEl is valid
+                          onClose={handleMenuClose} // Close the menu and reset focus
+                          anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          sx={{
+                            "& .MuiPaper-root": {
+                              borderRadius: "20px", // Add border radius to the menu
+                            },
+                          }}
                         >
                           <MenuItem
-                            onClick={handleEntryDelete}
+                            onClick={() => {
+                              handleEntryDelete();
+                              handleMenuClose(); // Ensure the menu is closed after deletion
+                            }}
                             sx={{ color: "red" }}
                           >
                             Delete Entry
@@ -267,6 +319,22 @@ export default function Journal() {
           </Table>
         </Paper>
       </Box>
+
+      {/* Snackbar for successful delete */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "buttom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity='success'
+          sx={{ width: "100%" }}
+        >
+          Entry deleted successfully!
+        </Alert>
+      </Snackbar>
     </>
   );
 }

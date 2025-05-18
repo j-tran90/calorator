@@ -10,6 +10,7 @@ import {
   Grid2,
   Divider,
   Stack,
+  Paper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import SetTargetButton from "../buttons/SetTargetButton";
@@ -46,7 +47,6 @@ export default function Goals() {
   const boxStyles = {
     textAlign: "left",
     p: 2,
-    borderRadius: "8px",
     overflow: "hidden",
   };
 
@@ -144,23 +144,25 @@ export default function Goals() {
 
   return (
     <>
-      <Box sx={{ pb: 2 }}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 6 }} sx={{ pl: 2 }}>
-            <Header headText='Your Targets' />
-          </Grid2>
-          <Grid2
-            size={{ xs: 6 }}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              pr: 2,
-            }}
-          >
-            <SetTargetButton />
-          </Grid2>
+      <Grid2
+        container
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ m: 2, height: "50px" }}
+      >
+        <Grid2 size={{ xxs: 6 }}>
+          <Header headText='Your Plans' />
         </Grid2>
-      </Box>
+        <Grid2
+          size={{ xxs: 6 }}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <SetTargetButton buttonSize={40}/>
+        </Grid2>
+      </Grid2>
 
       {loading ? (
         <Box
@@ -174,19 +176,21 @@ export default function Goals() {
       ) : (
         <>
           <Stack
+            component={Paper}
+            sx={{ borderRadius: "20px", m: 1, p: { xxs: 1, md: 2 } }}
             divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
             spacing={0}
           >
             {paginatedData.map((goal) => (
               <Box sx={boxStyles} key={goal.id}>
                 <Grid2 container>
-                  <Grid2 size={{ xs: 9 }}>
+                  <Grid2 size={{ xxs: 9 }}>
                     <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
                       {formatDate(goal.createdDate)} to{" "}
                       {formatDate(goal.targetDate)}
                     </Typography>
                   </Grid2>
-                  <Grid2 size={{ xs: 3 }} textAlign='right'>
+                  <Grid2 size={{ xxs: 3 }} textAlign='right'>
                     <Typography variant='caption' sx={{ fontStyle: "italic" }}>
                       {goal.status.charAt(0).toUpperCase() +
                         goal.status.slice(1)}
@@ -194,7 +198,7 @@ export default function Goals() {
                   </Grid2>
                 </Grid2>
                 <Grid2 container alignItems='center'>
-                  <Grid2 size={{ xs: 9 }}>
+                  <Grid2 size={{ xxs: 9 }}>
                     <Stack>
                       <Typography variant='caption'>
                         {goal.weightTarget > goal.currentWeight ? (
@@ -248,7 +252,7 @@ export default function Goals() {
                       </Typography>
                     </Stack>
                   </Grid2>
-                  <Grid2 size={{ xs: 3 }} textAlign='right'>
+                  <Grid2 size={{ xxs: 3 }} textAlign='right'>
                     {goal.status === "completed" ? (
                       <CheckCircle sx={{ color: "#4caf50" }} />
                     ) : (

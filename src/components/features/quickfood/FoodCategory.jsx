@@ -1,5 +1,12 @@
-import React from "react";
-import { ButtonBase, Box, Typography, styled } from "@mui/material";
+import React, { useState } from "react";
+import {
+  ButtonBase,
+  Box,
+  Typography,
+  styled,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { db, auth } from "../../../config/Firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
@@ -27,6 +34,8 @@ const ComplexButton = styled(ButtonBase)(({ theme }) => ({
 }));
 
 const FoodCategory = ({ items, sumEntry, updateTotal }) => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar state
+
   const addToJournal = async (kcal, protein, name) => {
     const uid = auth.currentUser?.uid;
 
@@ -47,9 +56,16 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
 
       sumEntry();
       updateTotal();
+
+      // Show the success snackbar
+      setSnackbarOpen(true);
     } catch (error) {
       console.error("Error adding entry to journal:", error);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); // Close the snackbar
   };
 
   const getButtonBackground = (iconUrl) => {
@@ -57,49 +73,69 @@ const FoodCategory = ({ items, sumEntry, updateTotal }) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 2,
-        justifyContent: "center",
-        p: 2,
-      }}
-    >
-      {items.map((item) => (
-        <ComplexButton
-          key={item.id}
-          onClick={() => addToJournal(item.kcal, item.protein, item.name)}
-          style={{
-            backgroundImage: getButtonBackground(item.icon),
-          }}
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
+          justifyContent: "center",
+          m: 2,
+        }}
+      >
+        {items.map((item) => (
+          <ComplexButton
+            key={item.id}
+            onClick={() => addToJournal(item.kcal, item.protein, item.name)}
+            sx={{
+              backgroundImage: getButtonBackground(item.icon),
+              height: { xxs: "100px", xs: "120px" },
+              width: { xxs: "100px", xs: "120px" },
+            }}
+          >
+            <Typography
+              variant='body2'
+              sx={{
+                position: "absolute",
+                top: "50%",
+                transform: "translateY(-50%)",
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              {item.name}
+            </Typography>
+            <Typography
+              variant='caption'
+              sx={{
+                position: "absolute",
+                bottom: 10,
+                fontSize: "10px",
+                textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              +{item.kcal} kcal
+            </Typography>
+          </ComplexButton>
+        ))}
+      </Box>
+
+      {/* Snackbar for successful add */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity='success'
+          sx={{ width: "100%" }}
         >
-          <Typography
-            variant='body2'
-            sx={{
-              position: "absolute",
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontWeight: "bold",
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            {item.name}
-          </Typography>
-          <Typography
-            variant='caption'
-            sx={{
-              position: "absolute",
-              bottom: 10,
-              fontSize: "10px",
-              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            +{item.kcal} kcal
-          </Typography>
-        </ComplexButton>
-      ))}
-    </Box>
+          Entry added successfully!
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

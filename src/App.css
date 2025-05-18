@@ -39,16 +39,31 @@ body {
   overflow: auto;
 }
 
+svg {
+  color: var(--mui-text);
+}
+
+.app-container {
+  padding-top: 64px;
+}
+
+.app-container.no-drawer {
+  padding-top: 0;
+}
+
 @media (max-width: 600px) {
   #main-layout.drawer-open {
     padding-left: 0;
-    padding-top: 40px;
   }
   #main-layout > .content {
     flex-grow: 1;
     padding: 0;
     width: 100%;
     text-align: center;
+  }
+
+  .app-container {
+    padding-top: 56px;
   }
 }
 
@@ -60,6 +75,6 @@ body {
   }
 }
 
-svg {
-  color: var(--mui-text);
-}
+/* * {
+  border: 1px solid red;
+} */

@@ -79,7 +79,7 @@ function ResponsiveDrawer(props) {
       <Divider sx={{ width: "100%" }} />
       <Box>
         <Typography variant='caption' sx={{ fontStyle: "italic" }}>
-          Version 0.8.9
+          Version 0.8.952
         </Typography>
       </Box>
     </Box>
@@ -110,7 +110,7 @@ function ResponsiveDrawer(props) {
           sx={{
             boxShadow: "none",
             pt: { xs: 1 },
-            pb: { xs: 0, md: 1 },
+            pb: { xxs: 0, xs: 1 },
           }}
         >
           <Stack
@@ -130,10 +130,10 @@ function ResponsiveDrawer(props) {
             </IconButton>
             <SearchBar />
           </Stack>{" "}
-          <Box sx={{pr:{ xs: 1, md: 2}}}>
+          <Box sx={{ pr: { xs: 1, md: 2 } }}>
             <DarkModeToggle />
           </Box>
-          <User />
+          <User photoWidth={"30px"} />
         </Toolbar>
       </AppBar>
       <Box
@@ -168,7 +168,7 @@ function ResponsiveDrawer(props) {
         <Drawer
           variant='permanent'
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xxs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -182,14 +182,14 @@ function ResponsiveDrawer(props) {
           {drawer}
         </Drawer>
       </Box>
-      <Box
+      {/* <Box
         component='main'
         sx={{
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
-      ></Box>
+      ></Box> */}
     </Box>
   );
 }
