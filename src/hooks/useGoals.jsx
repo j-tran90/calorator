@@ -1,6 +1,7 @@
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { auth } from "../config/Firebase";
+import { getData, saveData } from "../utils/indexedDB";
 
 const db = getFirestore();
 
@@ -14,6 +15,7 @@ export default function useGoals() {
   const [calorieTotal, setCalorieTotal] = useState(0);
   const [currentWeight, setCurrentWeight] = useState(0);
   const [weightTarget, setWeightTarget] = useState(0);
+  const [programStatus, setProgramStatus] = useState("in progress");
 
   // Function to calculate remaining days
   const calculateRemainingDays = (targetDate) => {
@@ -53,22 +55,57 @@ export default function useGoals() {
         return;
       }
 
-      // Fetch the document directly using the UID as the document ID
+      // 1. Try to get cached data from IndexedDB
+      const cachedDataObj = await getData(`userGoals-${uid}`);
+      const cachedData = cachedDataObj?.data || {};
+      const cachedCreatedDate = cachedData.createdDate
+        ? new Date(cachedData.createdDate)
+        : null;
+
+      // 2. Fetch Firestore doc to check for new data
       const userGoalsRef = doc(db, "userGoals", uid);
       const userGoalsDoc = await getDoc(userGoalsRef);
 
       if (userGoalsDoc.exists()) {
         const userData = userGoalsDoc.data();
+        const firestoreCreatedDate = userData.createdDate
+          ? new Date(userData.createdDate)
+          : null;
 
-        // Set the fetched fields
+        // If we have cached data and no new data, use cached
+        if (
+          cachedCreatedDate &&
+          firestoreCreatedDate &&
+          firestoreCreatedDate.getTime() === cachedCreatedDate.getTime()
+        ) {
+          setCalorieTarget(cachedData.dailyCalorieTarget || 0);
+          setProteinTarget(cachedData.dailyProteinTarget || 0);
+          setCreateDate(cachedData.createdDate || null);
+          setTargetDate(cachedData.targetDate || null);
+          setCurrentWeight(cachedData.currentWeight || 0);
+          setWeightTarget(cachedData.weightTarget || 0);
+          setProgramStatus(cachedData.programStatus || "in progress");
+
+          const totalDays = calculateDifferenceInDays(
+            cachedData.createdDate,
+            cachedData.targetDate
+          );
+          const daysRemaining = calculateRemainingDays(cachedData.targetDate);
+
+          setDifferenceInDays(totalDays);
+          setRemainingDays(daysRemaining);
+          return;
+        }
+
+        // Otherwise, use Firestore data and update IndexedDB
         setCalorieTarget(userData.dailyCalorieTarget || 0);
         setProteinTarget(userData.dailyProteinTarget || 0);
         setCreateDate(userData.createdDate || null);
         setTargetDate(userData.targetDate || null);
         setCurrentWeight(userData.currentWeight || 0);
         setWeightTarget(userData.weightTarget || 0);
+        setProgramStatus(userData.status || "in progress");
 
-        // Calculate difference in days and remaining days
         const totalDays = calculateDifferenceInDays(
           userData.createdDate,
           userData.targetDate
@@ -77,7 +114,37 @@ export default function useGoals() {
 
         setDifferenceInDays(totalDays);
         setRemainingDays(daysRemaining);
+
+        // Save to IndexedDB
+        await saveData(`userGoals-${uid}`, {
+          dailyCalorieTarget: userData.dailyCalorieTarget || 0,
+          dailyProteinTarget: userData.dailyProteinTarget || 0,
+          createdDate: userData.createdDate || null,
+          targetDate: userData.targetDate || null,
+          currentWeight: userData.currentWeight || 0,
+          weightTarget: userData.weightTarget || 0,
+          programStatus: userData.status || "in progress",
+        });
+      } else if (cachedData && cachedData.createdDate) {
+        // If Firestore doc doesn't exist but we have cached data
+        setCalorieTarget(cachedData.dailyCalorieTarget || 0);
+        setProteinTarget(cachedData.dailyProteinTarget || 0);
+        setCreateDate(cachedData.createdDate || null);
+        setTargetDate(cachedData.targetDate || null);
+        setCurrentWeight(cachedData.currentWeight || 0);
+        setWeightTarget(cachedData.weightTarget || 0);
+        setProgramStatus(cachedData.programStatus || "in progress");
+
+        const totalDays = calculateDifferenceInDays(
+          cachedData.createdDate,
+          cachedData.targetDate
+        );
+        const daysRemaining = calculateRemainingDays(cachedData.targetDate);
+
+        setDifferenceInDays(totalDays);
+        setRemainingDays(daysRemaining);
       } else {
+        // No data found
         console.warn("No user goals found for the current user.");
         setCalorieTarget(2000); // Default calorie target
         setProteinTarget(50); // Default protein target
@@ -87,6 +154,7 @@ export default function useGoals() {
         setWeightTarget(0);
         setDifferenceInDays(0); // Default difference in days
         setRemainingDays(0); // Default remaining days
+        setProgramStatus("in progress");
       }
     } catch (error) {
       console.error("Error checking user data:", error);
@@ -95,7 +163,18 @@ export default function useGoals() {
 
   useEffect(() => {
     checkUserData();
+    // eslint-disable-next-line
   }, []);
+
+  // Determine program type
+  let programType = "";
+  if (weightTarget > currentWeight) {
+    programType = "Gain";
+  } else if (weightTarget < currentWeight) {
+    programType = "Lose";
+  } else {
+    programType = "Maintain";
+  }
 
   return {
     calorieTarget,
@@ -107,5 +186,7 @@ export default function useGoals() {
     calorieTotal,
     currentWeight,
     weightTarget,
+    programType,
+    programStatus, // <-- Exported here
   };
 }

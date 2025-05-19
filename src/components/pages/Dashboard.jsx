@@ -18,8 +18,14 @@ export default function Dashboard() {
     calorieTarget,
     caloriePercent,
   } = useTracker(0);
-  const { createdDate, targetDate, currentWeight, weightTarget, programType } =
-    useGoals(0);
+  const {
+    createdDate,
+    targetDate,
+    currentWeight,
+    weightTarget,
+    programType,
+    programStatus,
+  } = useGoals(0);
 
   //PLACEHOLDER DELETE WHEN REPLACE
   const placeholder1 = 10;
@@ -46,7 +52,7 @@ export default function Dashboard() {
           <Grid2 size={{ xxs: 6, md: 3 }}>
             <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
               <Typography variant='h6' sx={{ pb: 1 }}>
-                Gain{" "}
+                {programType}{" "}
                 <Typography variant='caption' sx={{ fontStyle: "italic" }}>
                   Program
                 </Typography>
@@ -59,7 +65,7 @@ export default function Dashboard() {
                     {dayjs(targetDate).format("MMM DD")}
                   </Typography>
                   <Typography variant='body2' sx={{ fontStyle: "italic" }}>
-                    In Progress
+                    {programStatus}
                   </Typography>
                   <Typography variant='body2'>
                     Starting {currentWeight} lbs

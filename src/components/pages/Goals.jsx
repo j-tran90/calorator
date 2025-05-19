@@ -1,5 +1,4 @@
 import { db, auth } from "../../config/Firebase";
-
 import {
   Typography,
   Box,
@@ -26,10 +25,10 @@ import {
   Remove,
   Scale,
 } from "@mui/icons-material";
-
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import useGoals from "../../hooks/useGoals";
 import Header from "../navigation/Header";
+import { getData, saveData } from "../../utils/indexedDB";
 
 export default function Goals() {
   const [entries, setEntries] = useState([]);
@@ -49,6 +48,90 @@ export default function Goals() {
     p: 2,
     overflow: "hidden",
   };
+
+  // --- IndexedDB caching for goalHistory ---
+  useEffect(() => {
+    if (!uid) return;
+
+    const fetchGoalHistory = async () => {
+      setLoading(true);
+      setError(null);
+
+      // 1. Try to get cached data from IndexedDB
+      const cachedDataObj = await getData(`goalHistory-${uid}`);
+      const cachedData = cachedDataObj?.data || {};
+      const lastKnownDate = cachedData.lastKnownDate
+        ? dayjs(cachedData.lastKnownDate)
+        : null;
+
+      // 2. Get the most recent goal from Firestore
+      const goalHistoryRef = collection(db, "userGoals", uid, "goalsHistory");
+      const q = query(goalHistoryRef, orderBy("createdDate", "desc"));
+      const querySnapshot = await getDocs(q);
+
+      // Find the most recent createdDate in Firestore
+      let mostRecentFirestoreDate = null;
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.createdDate) {
+          const docDate = dayjs(data.createdDate);
+          if (
+            !mostRecentFirestoreDate ||
+            docDate.isAfter(mostRecentFirestoreDate)
+          ) {
+            mostRecentFirestoreDate = docDate;
+          }
+        }
+      });
+
+      // 3. If no new goals, use cached data
+      if (
+        lastKnownDate &&
+        mostRecentFirestoreDate &&
+        !mostRecentFirestoreDate.isAfter(lastKnownDate)
+      ) {
+        setGoalHistory(cachedData.goalHistory || []);
+        setLoading(false);
+        return;
+      }
+
+      // 4. Otherwise, fetch and cache new data
+      try {
+        const goalData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // Sort by status: 'in progress' first, then 'complete'
+        goalData.sort((a, b) => {
+          if (a.status === "in progress" && b.status !== "in progress") {
+            return -1;
+          }
+          if (a.status !== "in progress" && b.status === "in progress") {
+            return 1;
+          }
+          return 0;
+        });
+
+        setGoalHistory(goalData);
+
+        // Save to IndexedDB
+        await saveData(`goalHistory-${uid}`, {
+          goalHistory: goalData,
+          lastKnownDate: mostRecentFirestoreDate
+            ? mostRecentFirestoreDate.toISOString()
+            : null,
+        });
+      } catch (error) {
+        setError("Error fetching goal history. Please try again.");
+        console.error("Error fetching goal history:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGoalHistory();
+  }, [uid]);
 
   useEffect(() => {
     if (!uid) return;
@@ -83,44 +166,6 @@ export default function Goals() {
     };
 
     fetchData();
-  }, [uid]);
-
-  useEffect(() => {
-    const fetchGoalHistory = async () => {
-      if (!uid) {
-        console.error("No user is authenticated.");
-        return;
-      }
-
-      const goalHistoryRef = collection(db, "userGoals", uid, "goalsHistory");
-      const q = query(goalHistoryRef);
-
-      try {
-        const querySnapshot = await getDocs(q);
-
-        const goalData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        // Sort by status: 'in progress' first, then 'complete'
-        goalData.sort((a, b) => {
-          if (a.status === "in progress" && b.status !== "in progress") {
-            return -1;
-          }
-          if (a.status !== "in progress" && b.status === "in progress") {
-            return 1;
-          }
-          return 0; // No change if both have the same status
-        });
-
-        setGoalHistory(goalData);
-      } catch (error) {
-        console.error("Error fetching goal history:", error);
-      }
-    };
-
-    fetchGoalHistory();
   }, [uid]);
 
   const handleChangePage = (event, newPage) => {
