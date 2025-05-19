@@ -35,6 +35,9 @@ export default function useTracker() {
   const [entries, setEntries] = useState([]);
   const [calorieTotal, setNewTotalCals] = useState(0);
   const [proteinTotal, setNewTotalProtein] = useState(0);
+  const [sugarTotal, setSugarTotal] = useState(0);
+  const [carbsTotal, setCarbsTotal] = useState(0);
+  const [fatsTotal, setFatsTotal] = useState(0);
   const [caloriePercent, setCaloriePercent] = useState(0);
   const [proteinPercent, setProteinPercent] = useState(0);
 
@@ -56,6 +59,9 @@ export default function useTracker() {
       const snapshot = await getAggregateFromServer(entryCollectionRef, {
         totalCalories: sum("calories"),
         proteinTotal: sum("protein"),
+        sugarTotal: sum("sugar"),
+        carbsTotal: sum("carbs"),
+        fatsTotal: sum("fats"),
       });
       setNewTotalCals(
         parseFloat(snapshot.data().totalCalories || 0).toFixed(2)
@@ -63,6 +69,9 @@ export default function useTracker() {
       setNewTotalProtein(
         parseFloat(snapshot.data().proteinTotal || 0).toFixed(2)
       );
+      setSugarTotal(parseFloat(snapshot.data().sugarTotal || 0).toFixed(2));
+      setCarbsTotal(parseFloat(snapshot.data().carbsTotal || 0).toFixed(2));
+      setFatsTotal(parseFloat(snapshot.data().fatsTotal || 0).toFixed(2));
     } catch (error) {
       console.error("Error calculating totals:", error);
     }
@@ -122,6 +131,9 @@ export default function useTracker() {
     proteinTarget,
     calorieTotal,
     proteinTotal,
+    sugarTotal,
+    carbsTotal,
+    fatsTotal,
     calorieRemaning,
     proteinRemaining,
     sumEntry,

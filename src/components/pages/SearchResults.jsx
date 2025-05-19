@@ -9,8 +9,20 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddToJournalButton from "../../components/buttons/AddToJournalButton";
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  useMediaQuery,
+} from "@mui/material";
 import Header from "../navigation/Header";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -18,11 +30,42 @@ const SearchResults = () => {
   const [foodData, setFoodData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Track quantity for each row by index
+  const [quantities, setQuantities] = useState({});
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+  const handleQuantityChange = (index, value) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [index]: Math.max(1, Number(value)),
+    }));
+  };
+
+  const handleIncrement = (index) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [index]: (prev[index] || 1) + 1,
+    }));
+  };
+
+  const handleDecrement = (index) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [index]: Math.max(1, (prev[index] || 1) - 1),
+    }));
+  };
+
+  const handleExpand = (index) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
   useEffect(() => {
     const fetchFoodData = async () => {
       const apiKey = import.meta.env.VITE_FOOD_API_KEY;
 
-      if (!searchQuery) return; // Skip fetch if no search query is provided
+      if (!searchQuery) return;
 
       setLoading(true);
 
@@ -36,9 +79,6 @@ const SearchResults = () => {
         }
 
         const data = await response.json();
-
-        // Log the raw API response to inspect the fields
-        console.log("API Response:", data);
 
         // Use a Set to track unique food names
         const uniqueNames = new Set();
@@ -90,18 +130,18 @@ const SearchResults = () => {
                 : "N/A",
             };
           })
-          .filter((item) => item !== null); // Remove null values from the array
+          .filter((item) => item !== null);
 
-        setFoodData(formattedData); // Set the food data
+        setFoodData(formattedData);
       } catch (error) {
         console.error("Error fetching food data:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching is done
+        setLoading(false);
       }
     };
 
     fetchFoodData();
-  }, [searchQuery]); // Fetch whenever searchQuery changes
+  }, [searchQuery]);
 
   return (
     <>
@@ -121,63 +161,201 @@ const SearchResults = () => {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#9998" }}>
                 <TableCell>Food Name</TableCell>
-                <TableCell>Calories (kcal)</TableCell>
-                <TableCell>Protein (g)</TableCell>
-                <TableCell sx={{ display: { xxs: "none", sm: "table-cell" } }}>
-                  Sugar (g)
-                </TableCell>
-                <TableCell sx={{ display: { xxs: "none", sm: "table-cell" } }}>
-                  Carbs (g)
-                </TableCell>
-                <TableCell sx={{ display: { xxs: "none", sm: "table-cell" } }}>
-                  Fats (g)
-                </TableCell>
-                <TableCell></TableCell>
+                {!isMobile && <TableCell>Calories (kcal)</TableCell>}
+                {!isMobile && <TableCell>Protein (g)</TableCell>}
+                {!isMobile && (
+                  <TableCell
+                    sx={{ display: { xxs: "none", sm: "table-cell" } }}
+                  >
+                    Sugar (g)
+                  </TableCell>
+                )}
+                {!isMobile && (
+                  <TableCell
+                    sx={{ display: { xxs: "none", sm: "table-cell" } }}
+                  >
+                    Carbs (g)
+                  </TableCell>
+                )}
+                {!isMobile && (
+                  <TableCell
+                    sx={{ display: { xxs: "none", sm: "table-cell" } }}
+                  >
+                    Fats (g)
+                  </TableCell>
+                )}
+                <TableCell align='center'></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {foodData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} align='center'>
+                  <TableCell colSpan={isMobile ? 2 : 7} align='center'>
                     No results found.
                   </TableCell>
                 </TableRow>
               ) : (
-                foodData.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.energy}</TableCell>
-                    <TableCell>{item.protein}</TableCell>
-                    <TableCell
-                      sx={{ display: { xxs: "none", sm: "table-cell" } }}
-                    >
-                      {item.sugar}
-                    </TableCell>
-                    <TableCell
-                      sx={{ display: { xxs: "none", sm: "table-cell" } }}
-                    >
-                      {item.carbs}
-                    </TableCell>
-                    <TableCell
-                      sx={{ display: { xxs: "none", sm: "table-cell" } }}
-                    >
-                      {item.totalLipids}
-                    </TableCell>
-                    <TableCell>
-                      <AddToJournalButton
-                        food={item.name}
-                        calories={parseFloat(item.energy)}
-                        protein={parseFloat(item.protein)}
-                        sugar={parseFloat(item.sugar)}
-                        carbs={parseFloat(item.carbs)}
-                        fats={parseFloat(item.totalLipids)}
-                        onAdd={() => {
-                          console.log("Added to journal:", item.name);
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))
+                foodData.map((item, index) => {
+                  // Parse values for calculation, fallback to 0 if N/A
+                  const calories = parseFloat(item.energy) || 0;
+                  const protein = parseFloat(item.protein) || 0;
+                  const sugar = parseFloat(item.sugar) || 0;
+                  const carbs = parseFloat(item.carbs) || 0;
+                  const fats = parseFloat(item.totalLipids) || 0;
+                  const quantity = quantities[index] || 1;
+
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Typography>{item.name}</Typography>
+                          {isMobile && (
+                            <IconButton
+                              size='small'
+                              onClick={() => handleExpand(index)}
+                              aria-label='expand'
+                            >
+                              <ExpandMoreIcon
+                                sx={{
+                                  transform:
+                                    expandedIndex === index
+                                      ? "rotate(180deg)"
+                                      : "rotate(0deg)",
+                                  transition: "transform 0.2s",
+                                }}
+                              />
+                            </IconButton>
+                          )}
+                        </Box>
+                        {isMobile && expandedIndex === index && (
+                          <Accordion
+                            expanded={true}
+                            onChange={() => handleExpand(index)}
+                            sx={{ boxShadow: "none", mt: 1, mb: 0 }}
+                          >
+                            <AccordionSummary
+                              expandIcon={null}
+                              aria-controls={`panel${index}-content`}
+                              id={`panel${index}-header`}
+                              sx={{ display: "none" }}
+                            />
+                            <AccordionDetails sx={{ p: 1 }}>
+                              <Typography variant='body2'>
+                                <strong>Calories:</strong> {item.energy}
+                              </Typography>
+                              <Typography variant='body2'>
+                                <strong>Protein:</strong> {item.protein}
+                              </Typography>
+                              <Typography variant='body2'>
+                                <strong>Sugar:</strong> {item.sugar}
+                              </Typography>
+                              <Typography variant='body2'>
+                                <strong>Carbs:</strong> {item.carbs}
+                              </Typography>
+                              <Typography variant='body2'>
+                                <strong>Fats:</strong> {item.totalLipids}
+                              </Typography>
+                            </AccordionDetails>
+                          </Accordion>
+                        )}
+                      </TableCell>
+                      {!isMobile && <TableCell>{item.energy}</TableCell>}
+                      {!isMobile && <TableCell>{item.protein}</TableCell>}
+                      {!isMobile && (
+                        <TableCell
+                          sx={{ display: { xxs: "none", sm: "table-cell" } }}
+                        >
+                          {item.sugar}
+                        </TableCell>
+                      )}
+                      {!isMobile && (
+                        <TableCell
+                          sx={{ display: { xxs: "none", sm: "table-cell" } }}
+                        >
+                          {item.carbs}
+                        </TableCell>
+                      )}
+                      {!isMobile && (
+                        <TableCell
+                          sx={{ display: { xxs: "none", sm: "table-cell" } }}
+                        >
+                          {item.totalLipids}
+                        </TableCell>
+                      )}
+                      <TableCell align='center'>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            justifyContent: "center",
+                          }}
+                        >
+                          <IconButton
+                            size='small'
+                            onClick={() => handleDecrement(index)}
+                            aria-label='decrement'
+                            sx={{ "& svg": { fontSize: "1.8rem" } }} // 20% bigger
+                          >
+                            <ArrowLeftIcon />
+                          </IconButton>
+                          <TextField
+                            type='number'
+                            size='small'
+                            value={quantity}
+                            variant='standard'
+                            InputProps={{
+                              disableUnderline: true, // <-- Remove underline
+                            }}
+                            inputProps={{
+                              min: 1,
+                              style: {
+                                textAlign: "center",
+                                width: 32,
+                                border: "none",
+                                background: "none",
+                              },
+                            }}
+                            onChange={(e) =>
+                              handleQuantityChange(index, e.target.value)
+                            }
+                            sx={{
+                              width: 48,
+                              "& .MuiInputBase-root:before": {
+                                borderBottom: "none",
+                              },
+                              "& .MuiInputBase-root:after": {
+                                borderBottom: "none",
+                              },
+                              "& .MuiInputBase-root:hover:not(.Mui-disabled):before":
+                                { borderBottom: "none" },
+                              background: "none",
+                            }}
+                          />
+                          <IconButton
+                            size='small'
+                            onClick={() => handleIncrement(index)}
+                            aria-label='increment'
+                            sx={{ "& svg": { fontSize: "1.8rem" } }} // 20% bigger
+                          >
+                            <ArrowRightIcon />
+                          </IconButton>
+                          <AddToJournalButton
+                            food={item.name}
+                            calories={calories * quantity}
+                            protein={protein * quantity}
+                            sugar={sugar * quantity}
+                            carbs={carbs * quantity}
+                            fats={fats * quantity}
+                            onAdd={() => {
+                              console.log("Added to journal:", item.name);
+                            }}
+                          />
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>

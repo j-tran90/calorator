@@ -21,14 +21,14 @@ export default function Overview() {
     updateTotal,
     sumEntry,
     proteinTotal,
+    sugarTotal,
+    carbsTotal,
+    fatsTotal,
   } = useTracker(0);
   const { proteinTarget, remainingDays, differenceInDays } = useGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true); // Start loading by default
-  const [placeholder1, setPlaceholder1] = useState(0); // For sugar
-  const [placeholder2, setPlaceholder2] = useState(0); // For carbs
-  const [placeholder3, setPlaceholder3] = useState(0); // For fats
 
   const handleClick = () => {
     navigate("/today");
@@ -85,24 +85,6 @@ export default function Overview() {
 
     checkUserData();
   }, [navigate]);
-
-  useEffect(() => {
-    const fetchAdditionalData = async () => {
-      try {
-        const sugar = 50; // Example value
-        const carbs = 200; // Example value
-        const fats = 70; // Example value
-
-        setPlaceholder1(sugar);
-        setPlaceholder2(carbs);
-        setPlaceholder3(fats);
-      } catch (error) {
-        console.error("Error fetching additional data:", error);
-      }
-    };
-
-    fetchAdditionalData();
-  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -202,48 +184,53 @@ export default function Overview() {
             </Card>
           </Grid2>
         </Box>
-        <Grid2 container rowSpacing={1} columnSpacing={{ xxs: 4, md: 10 }}>
-          <Grid2 size={{ xxs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='purple'
-              barHeading={`Protein ${proteinTotal}/${proteinTarget}g`}
-              barHeight={10}
-              currentValue={proteinTotal}
-              targetValue={proteinTarget}
-              marginTop={2}
-            />
-          </Grid2>
-          <Grid2 size={{ xxs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='yellowGreen'
-              barHeading={`Sugar (WIP)`}
-              barHeight={10}
-              currentValue={placeholder1}
-              targetValue={proteinTarget}
-              marginTop={2}
-            />
-          </Grid2>
-          <Grid2 size={{ xxs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='orangeRed'
-              barHeading={"Carbs (WIP)"}
-              barHeight={10}
-              currentValue={placeholder2}
-              targetValue={proteinTarget}
-              marginTop={2}
-            />
-          </Grid2>
-          <Grid2 size={{ xxs: 6, md: 6 }}>
-            <ProgressBar
-              gradientType='lightBlueBlue'
-              barHeading={`Fats (WIP)`}
-              barHeight={10}
-              currentValue={placeholder3}
-              targetValue={proteinTarget}
-              marginTop={2}
-            />
-          </Grid2>
-        </Grid2>
+
+        {/* Macros Row */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "1px solid #9999",
+            borderRadius: "12px",
+            overflow: "hidden",
+            mt: 3,
+            mb: 2,
+          }}
+        >
+          {/* Protein */}
+          <Box sx={{ flex: 1, textAlign: "center", py: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
+              Protein
+            </Typography>
+            <Typography variant='caption'>{proteinTotal}g</Typography>
+          </Box>
+          {/* Divider */}
+          <Box sx={{ width: "1px", bgcolor: "#9999", height: "40px" }} />
+          {/* Sugar */}
+          <Box sx={{ flex: 1, textAlign: "center", py: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
+              Sugar
+            </Typography>
+            <Typography variant='caption'>{sugarTotal}g</Typography>
+          </Box>
+          <Box sx={{ width: "1px", bgcolor: "#9999", height: "40px" }} />
+          {/* Carbs */}
+          <Box sx={{ flex: 1, textAlign: "center", py: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
+              Carbs
+            </Typography>
+            <Typography variant='caption'>{carbsTotal}g</Typography>
+          </Box>
+          <Box sx={{ width: "1px", bgcolor: "#9999", height: "40px" }} />
+          {/* Fats */}
+          <Box sx={{ flex: 1, textAlign: "center", py: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
+              Fats
+            </Typography>
+            <Typography variant='caption'>{fatsTotal}g</Typography>
+          </Box>
+        </Box>
       </Card>
       <FoodCategoriesTabs updateTotal={updateTotal} sumEntry={sumEntry} />
     </>

@@ -17,6 +17,9 @@ export default function Dashboard() {
     calorieTotal,
     calorieTarget,
     caloriePercent,
+    sugarTotal,
+    carbsTotal,
+    fatsTotal,
   } = useTracker(0);
   const {
     createdDate,
@@ -26,11 +29,6 @@ export default function Dashboard() {
     programType,
     programStatus,
   } = useGoals(0);
-
-  //PLACEHOLDER DELETE WHEN REPLACE
-  const placeholder1 = 10;
-  const placeholder2 = 55;
-  const placeholder3 = 33;
 
   const showGraphs = false; // Set to `true` to enable graphs
 
@@ -129,7 +127,7 @@ export default function Dashboard() {
                     gradientType='yellowGreen'
                     barHeading={`Sugar (g)`}
                     barHeight={10}
-                    currentValue={placeholder1}
+                    currentValue={sugarTotal}
                     targetValue={proteinTarget}
                     marginTop={2}
                   />
@@ -138,7 +136,7 @@ export default function Dashboard() {
                     gradientType='orangeRed'
                     barHeading={"Carbs (g)"}
                     barHeight={10}
-                    currentValue={placeholder2}
+                    currentValue={carbsTotal}
                     targetValue={proteinTarget}
                     marginTop={2}
                   />
@@ -147,7 +145,7 @@ export default function Dashboard() {
                     gradientType='lightBlueBlue'
                     barHeading={`Fats (g)`}
                     barHeight={10}
-                    currentValue={placeholder3}
+                    currentValue={fatsTotal}
                     targetValue={proteinTarget}
                     marginTop={2}
                   />
