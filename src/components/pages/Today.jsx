@@ -10,6 +10,7 @@ import {
   useMediaQuery,
   useTheme,
   Button,
+  Card,
 } from "@mui/material";
 import {
   Restaurant,
@@ -30,7 +31,7 @@ const boxStyles = {
   textAlign: "left",
   p: 2,
   height: "100px",
-  borderRadius: "8px",
+  // borderRadius: "8px",
   //boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   overflow: "hidden",
 };
@@ -47,7 +48,7 @@ const categoryIcons = {
   dessert: <Icecream />,
 };
 
-export default function Today() {
+export default function Today({ previewCount, hideHeader }) {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -101,38 +102,49 @@ export default function Today() {
     }));
   };
 
+  // Sort entries by createdAt descending (latest first)
+  const sortedEntries = [...entries].sort((a, b) => {
+    const aDate = a.createdAt?.toDate ? a.createdAt.toDate() : a.createdAt;
+    const bDate = b.createdAt?.toDate ? b.createdAt.toDate() : b.createdAt;
+    return bDate - aDate;
+  });
+
+  // If previewCount is set, only show that many entries
+  const displayedEntries = previewCount
+    ? sortedEntries.slice(0, previewCount)
+    : sortedEntries;
+
   return (
     <>
-      <Grid2
-        container
-        alignItems='center'
-        justifyContent='space-between'
-        sx={{ m: 2, height: "50px" }}
-      >
-        <Grid2 size={{ xxs: 8 }}>
-          <Header headText='Today' />
-        </Grid2>
+      {!hideHeader && (
         <Grid2
-          size={{ xxs: 4 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-end",
-            textAlign: "right",
-          }}
+          container
+          alignItems='center'
+          justifyContent='space-between'
+          sx={{ m: 2, height: "50px" }}
         >
-          <ProgressBar
-            currentValue={caloriePercent}
-            targetValue={100}
-            barHeading={"Progress"}
-          />
+          <Grid2 size={{ xxs: 8 }}>
+            <Header headText='Today' />
+          </Grid2>
+          <Grid2
+            size={{ xxs: 4 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              textAlign: "right",
+            }}
+          >
+            <ProgressBar
+              currentValue={caloriePercent}
+              targetValue={100}
+              barHeading={"Progress"}
+            />
+          </Grid2>
         </Grid2>
-      </Grid2>
+      )}
 
-      <Stack
-        divider={<Divider sx={{ bgcolor: "#d3d3d3", height: "1px" }} />}
-        spacing={0}
-      >
+      <Stack sx={{ p: 1, gap: 1 }}>
         {loading ? (
           <Box sx={{ textAlign: "center", p: 2 }}>
             <CircularProgress />
@@ -144,8 +156,8 @@ export default function Today() {
           >
             {error}
           </Typography>
-        ) : entries.length > 0 ? (
-          entries.map((entry) => {
+        ) : displayedEntries.length > 0 ? (
+          displayedEntries.map((entry) => {
             const isExpanded = expandedItems[entry.id];
             const foodCategory = entry.category || "food";
 
@@ -157,9 +169,13 @@ export default function Today() {
                 : entry.food;
 
             return (
-              <Box
+              <Card
                 key={entry.id}
-                sx={isExpanded ? expandedBoxStyles : boxStyles}
+                sx={{
+                  ...(isExpanded ? expandedBoxStyles : boxStyles),
+                  borderRadius: "20px",
+                  boxShadow: "none",
+                }}
               >
                 <Grid2 container alignItems='center' spacing={2}>
                   <Grid2 size={{ xxs: 2, md: 1 }}>
@@ -171,13 +187,11 @@ export default function Today() {
                       {isExpanded ? entry.food : foodText}
                     </Typography>
                     <Box>
-                      {" "}
                       <Typography variant='caption'>
                         Calories {entry.calories} kcal
                       </Typography>
                     </Box>
                     <Box>
-                      {" "}
                       <Typography variant='caption'>
                         Protein {entry.protein}g
                       </Typography>
@@ -199,7 +213,7 @@ export default function Today() {
                     )}
                   </Grid2>
                 </Grid2>
-              </Box>
+              </Card>
             );
           })
         ) : (

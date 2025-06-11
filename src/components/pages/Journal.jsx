@@ -150,7 +150,7 @@ export default function Journal() {
           }}
         >
           <Button
-            variant='link'
+            variant='ccontained'
             onClick={handleTodayButtonClick}
             sx={{ borderColor: "#000", padding: 0 }}
           >

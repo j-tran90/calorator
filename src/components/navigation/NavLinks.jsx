@@ -17,7 +17,7 @@ const NavLinks = ({ onLinkClick, isBottomLinks }) => {
 
   const topLinks = [
     { to: "/overview", text: "Overview", icon: <Home /> },
-    { to: "/today", text: "Today", icon: <TodayIcon /> },
+    // { to: "/today", text: "Today", icon: <TodayIcon /> },
     { to: "/dashboard", text: "Statistic", icon: <SpaceDashboardIcon /> },
     { to: "/journal", text: "Journal", icon: <AutoStoriesIcon /> },
     { to: "/goals", text: "Goals", icon: <OutlinedFlagIcon /> },

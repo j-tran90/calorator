@@ -287,7 +287,7 @@ const SearchResults = () => {
                           sx={{
                             display: "flex",
                             alignItems: "center",
-                            gap: 1,
+                            gap: 0,
                             justifyContent: "center",
                           }}
                         >
@@ -305,22 +305,30 @@ const SearchResults = () => {
                             value={quantity}
                             variant='standard'
                             InputProps={{
-                              disableUnderline: true, // <-- Remove underline
+                              disableUnderline: true,
                             }}
                             inputProps={{
                               min: 1,
+                              max: 99, // <-- Limit to 99
                               style: {
                                 textAlign: "center",
                                 width: 32,
                                 border: "none",
                                 background: "none",
+                                padding: 0,
+                                margin: 0,
+                                height: "100%",
                               },
                             }}
-                            onChange={(e) =>
-                              handleQuantityChange(index, e.target.value)
-                            }
+                            onChange={(e) => {
+                              let val = Math.max(
+                                1,
+                                Math.min(99, Number(e.target.value))
+                              );
+                              handleQuantityChange(index, val);
+                            }}
                             sx={{
-                              width: 48,
+                              width: "32px",
                               "& .MuiInputBase-root:before": {
                                 borderBottom: "none",
                               },
@@ -330,13 +338,24 @@ const SearchResults = () => {
                               "& .MuiInputBase-root:hover:not(.Mui-disabled):before":
                                 { borderBottom: "none" },
                               background: "none",
+                              "& input::-webkit-outer-spin-button": {
+                                WebkitAppearance: "none",
+                                margin: 0,
+                              },
+                              "& input::-webkit-inner-spin-button": {
+                                WebkitAppearance: "none",
+                                margin: 0,
+                              },
+                              "& input[type=number]": {
+                                MozAppearance: "textfield",
+                              },
                             }}
                           />
                           <IconButton
                             size='small'
                             onClick={() => handleIncrement(index)}
                             aria-label='increment'
-                            sx={{ "& svg": { fontSize: "1.8rem" } }} // 20% bigger
+                            sx={{ "& svg": { fontSize: "1.8rem" } }}
                           >
                             <ArrowRightIcon />
                           </IconButton>
@@ -384,8 +403,8 @@ function cleanFoodDescription(description, keywordsToRemove = []) {
 
   // Remove commas and extra spaces
   cleanedDescription = cleanedDescription
-    .replace(/,/g, "") // Remove all commas
-    .replace(/\s+/g, " ") // Replace multiple spaces with a single space
+    .replace(/,/g, "")
+    .replace(/\s+/g, " ")
     .trim();
 
   // Capitalize the first letter of each word

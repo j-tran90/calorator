@@ -1,13 +1,14 @@
-import { Box, Card, Grid2, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Card, Grid2, Stack, Typography, Button } from "@mui/material";
 import useTracker from "../../hooks/useTracker";
 import useGoals from "../../hooks/useGoals";
 import CalorieLineGraph from "../features/graphs/CalorieLineGraph";
-import ProgressCircle from "../features/graphs/ProgressCircle";
 import Header from "../navigation/Header";
 import ProteinBarGraph from "../features/graphs/ProteinBarGraph";
 import dayjs from "dayjs";
 import CalorieCalendar from "../CalorieCalendar";
 import ProgressBar from "../features/graphs/ProgressBar";
+import Today from "./Today";
 
 export default function Dashboard() {
   const {
@@ -30,7 +31,7 @@ export default function Dashboard() {
     programStatus,
   } = useGoals(0);
 
-  const showGraphs = false; // Set to `true` to enable graphs
+  const showGraphs = false;
 
   return (
     <>
@@ -62,10 +63,13 @@ export default function Dashboard() {
                     {dayjs(createdDate).format("MMM DD")} to{" "}
                     {dayjs(targetDate).format("MMM DD")}
                   </Typography>
-                  <Typography variant='body2' sx={{ fontStyle: "italic" }}>
+                  <Typography
+                    variant='body2'
+                    sx={{ fontStyle: "italic", pb: 1 }}
+                  >
                     {programStatus}
                   </Typography>
-                  <Typography variant='body2'>
+                  <Typography variant='body2' sx={{ pb: 1 }}>
                     Starting {currentWeight} lbs
                   </Typography>
                   <Typography variant='body2'>
@@ -83,12 +87,18 @@ export default function Dashboard() {
                   Target
                 </Typography>
               </Typography>
-              <Typography variant='h2'>{calorieTarget}</Typography>
+              <Typography variant='h2' sx={{ pb: 2 }}>
+                {calorieTarget}
+              </Typography>
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
-                  <Typography variant='body2'>
-                    Today {calorieTotal} kcals ({caloriePercent}%)
-                  </Typography>
+                  <ProgressBar
+                    gradientType='greenYellow'
+                    barHeading={`${calorieTotal}  (${caloriePercent}%)`}
+                    barHeight={10}
+                    currentValue={proteinTotal}
+                    targetValue={proteinTarget}
+                  />
                 </Stack>
               </Box>
             </Card>
@@ -109,7 +119,7 @@ export default function Dashboard() {
                   <Typography variant='body2' component='div'>
                     <ProgressBar
                       gradientType='purple'
-                      barHeading={`Today ${proteinTotal}g (${proteinPercent}%)`}
+                      barHeading={`${proteinTotal}g (${proteinPercent}%)`}
                       barHeight={10}
                       currentValue={proteinTotal}
                       targetValue={proteinTarget}
@@ -125,28 +135,28 @@ export default function Dashboard() {
                 <Stack>
                   <ProgressBar
                     gradientType='yellowGreen'
-                    barHeading={`Sugar (g)`}
+                    barHeading={`Sugar ` + `${sugarTotal}g`}
                     barHeight={10}
                     currentValue={sugarTotal}
-                    targetValue={proteinTarget}
+                    targetValue={500}
                     marginTop={2}
                   />
 
                   <ProgressBar
                     gradientType='orangeRed'
-                    barHeading={"Carbs (g)"}
+                    barHeading={"Carbs " + `${carbsTotal}g`}
                     barHeight={10}
                     currentValue={carbsTotal}
-                    targetValue={proteinTarget}
+                    targetValue={500}
                     marginTop={2}
                   />
 
                   <ProgressBar
                     gradientType='lightBlueBlue'
-                    barHeading={`Fats (g)`}
+                    barHeading={`Fats ` + `${fatsTotal}g`}
                     barHeight={10}
                     currentValue={fatsTotal}
-                    targetValue={proteinTarget}
+                    targetValue={500}
                     marginTop={2}
                   />
                 </Stack>
@@ -154,28 +164,27 @@ export default function Dashboard() {
             </Card>
           </Grid2>
           <Grid2 size={{ xxs: 12, md: 6 }}>
-            <Card sx={{ borderRadius: "20px", p: 3 }}>
-              <Typography variant='h6'>
-                Calories{" "}
-                <Typography variant='caption' sx={{ fontStyle: "italic" }}>
-                  Today
-                </Typography>
-              </Typography>
-              {showGraphs ? (
-                <ProgressCircle
-                  value={caloriePercent}
-                  gradientId='greenYellow'
-                  isPercentage={true}
-                  targetValue={100}
-                />
-              ) : (
-                <Typography variant='body2' sx={{ textAlign: "center" }}>
-                  Graph temporarily disabled
-                </Typography>
-              )}
+            <Card
+              sx={{
+                borderRadius: "20px",
+                p: 3,
+                maxHeight: "302px",
+              }}
+            >
+              <Today previewCount={2} hideHeader />
+              <Box sx={{ textAlign: "center" }}>
+                <Button
+                  variant='text'
+                  size='small'
+                  onClick={() => {
+                    window.location.href = "/today";
+                  }}
+                >
+                  See All
+                </Button>
+              </Box>
             </Card>
           </Grid2>
-
           <Grid2 size={{ xxs: 12, md: 6 }}>
             <Card sx={{ borderRadius: "20px", p: 3 }}>
               <Typography variant='h6'>Calorie Calendar</Typography>
