@@ -167,7 +167,7 @@ export default function Dashboard() {
             <Card
               sx={{
                 borderRadius: "20px",
-                p: 3,
+                p: 1,
                 maxHeight: "302px",
               }}
             >
