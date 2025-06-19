@@ -10,7 +10,7 @@ import {
   TableHead,
   Paper,
 } from "@mui/material";
-import { getData, saveData } from "../../../utils/indexedDB";
+import { getData, saveData } from "../../../utils/indexedDB"; // Already using idb helpers
 
 function Results() {
   const [weightTarget, setWeightTarget] = useState("");
@@ -31,8 +31,7 @@ function Results() {
       const calorieDataObj = await getData("calorieData");
       const calorieData = calorieDataObj?.data || {};
       if (calorieData.dob) {
-        const formattedDob = dayjs(calorieData.dob).format("MM/DD/YYYY");
-        setDob(formattedDob);
+        setDob(calorieData.dob); // Store as ISO for calculations
       } else {
         setDob("");
       }
@@ -130,7 +129,7 @@ function Results() {
   if (weightTarget > currentWeight) {
     programPlan = "Gain";
   } else if (weightTarget < currentWeight) {
-    programPlan = "Lose";
+    programPlan = "Loss";
   } else {
     programPlan = "Maintain";
   }

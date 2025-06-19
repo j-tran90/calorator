@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import CalorieCalendar from "../CalorieCalendar";
 import ProgressBar from "../features/graphs/ProgressBar";
 import Today from "./Today";
+import { formatNutritionValue } from "../../utils/formatNutritionValue";
 
 export default function Dashboard() {
   const {
@@ -94,7 +95,7 @@ export default function Dashboard() {
                 <Stack>
                   <ProgressBar
                     gradientType='greenYellow'
-                    barHeading={`${calorieTotal}  (${caloriePercent}%)`}
+                    barHeading={`${formatNutritionValue(calorieTotal)}  (${caloriePercent}%)`}
                     barHeight={10}
                     currentValue={proteinTotal}
                     targetValue={proteinTarget}
@@ -119,7 +120,7 @@ export default function Dashboard() {
                   <Typography variant='body2' component='div'>
                     <ProgressBar
                       gradientType='purple'
-                      barHeading={`${proteinTotal}g (${proteinPercent}%)`}
+                      barHeading={`${formatNutritionValue(proteinTotal)} (${proteinPercent}%)`}
                       barHeight={10}
                       currentValue={proteinTotal}
                       targetValue={proteinTarget}
@@ -135,7 +136,7 @@ export default function Dashboard() {
                 <Stack>
                   <ProgressBar
                     gradientType='yellowGreen'
-                    barHeading={`Sugar ` + `${sugarTotal}g`}
+                    barHeading={`Sugar ` + `${formatNutritionValue(sugarTotal)}`}
                     barHeight={10}
                     currentValue={sugarTotal}
                     targetValue={500}
@@ -144,7 +145,7 @@ export default function Dashboard() {
 
                   <ProgressBar
                     gradientType='orangeRed'
-                    barHeading={"Carbs " + `${carbsTotal}g`}
+                    barHeading={"Carbs " + `${formatNutritionValue(carbsTotal)}`}
                     barHeight={10}
                     currentValue={carbsTotal}
                     targetValue={500}
@@ -153,7 +154,7 @@ export default function Dashboard() {
 
                   <ProgressBar
                     gradientType='lightBlueBlue'
-                    barHeading={`Fats ` + `${fatsTotal}g`}
+                    barHeading={`Fats ` + `${formatNutritionValue(fatsTotal)}`}
                     barHeight={10}
                     currentValue={fatsTotal}
                     targetValue={500}

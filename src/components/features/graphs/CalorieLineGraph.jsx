@@ -95,17 +95,13 @@ const CalorieLineGraph = () => {
       // 1. Get cached data from IndexedDB
       const cachedDataObj = await getData(`calorieLineData-${uid}`);
       const cachedData = cachedDataObj?.data || {};
-      console.log(
-        `[${new Date().toISOString()}] Cached data from IndexedDB:`,
-        cachedData
-      );
 
       // 2. Determine lastKnownDate
       const lastKnownDate = cachedData.lastKnownDate
         ? Timestamp.fromDate(new Date(cachedData.lastKnownDate))
         : Timestamp.fromDate(new Date(createdDate));
       console.log(
-        `[${new Date().toISOString()}] Retrieved lastKnownDate:`,
+        `[${new Date().toISOString()}] No new entries to fetch. Skipping Firestore fetch. Retrieved lastKnownDate:`,
         lastKnownDate.toDate()
       );
 
@@ -117,37 +113,24 @@ const CalorieLineGraph = () => {
         return;
       }
       const latestEntryData = latestEntryDoc.data();
-      console.log(
-        `[${new Date().toISOString()}] Latest entry document data:`,
-        latestEntryData
-      );
       if (!latestEntryData?.latestCreatedAt) {
         setTotalCaloriesByDay(cachedData.totalCaloriesByDay || {});
         setLoading(false);
         return;
       }
       const latestCreatedAt = latestEntryData.latestCreatedAt.toDate();
-      console.log(
-        `[${new Date().toISOString()}] Latest createdAt from Firestore:`,
-        latestCreatedAt
-      );
 
       // Normalize both dates to milliseconds for comparison
       const lastKnownDateMillis = lastKnownDate.toMillis();
       const latestCreatedAtMillis =
         Timestamp.fromDate(latestCreatedAt).toMillis();
-      console.log(
-        `[${new Date().toISOString()}] Normalized lastKnownDate (ms):`,
-        lastKnownDateMillis
-      );
-      console.log(
-        `[${new Date().toISOString()}] Normalized latestCreatedAt (ms):`,
-        latestCreatedAtMillis
-      );
 
       // 4. If no new data, use cached
       if (latestCreatedAtMillis <= lastKnownDateMillis) {
-        console.log(`[${new Date().toISOString()}] No new entries to fetch. Skipping Firestore fetch.`);
+        console.log(
+          `[${new Date().toISOString()}] No new entries to fetch. Skipping Firestore fetch. Retrieved lastKnownDate:`,
+          lastKnownDate.toDate()
+        );
         setTotalCaloriesByDay(cachedData.totalCaloriesByDay || {});
         setCalorieTarget(cachedData.calorieTarget || 2000);
         setLoading(false);
@@ -219,21 +202,6 @@ const CalorieLineGraph = () => {
         calorieTarget: target,
         lastKnownDate: mostRecentDate.toISOString(),
       });
-      // console.log(
-      //   `[${new Date().toISOString()}] Updated lastKnownDate saved to IndexedDB:`,
-      //   mostRecentDate
-      // );
-      // console.log(
-      //   "Saved lastKnownDate to IndexedDB:",
-      //   mostRecentDate.toISOString()
-      // );
-
-      // Retrieve lastKnownDate from IndexedDB to confirm it was updated
-      // const updatedCachedData = await getData(`calorieLineData-${uid}`);
-      // console.log(
-      //   `[${new Date().toISOString()}] Retrieved updated lastKnownDate from IndexedDB:`,
-      //   updatedCachedData?.lastKnownDate
-      // );
 
       setLoading(false);
     };

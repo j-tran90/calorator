@@ -12,6 +12,7 @@ import SetTargetButton from "../buttons/SetTargetButton";
 import ProgressBar from "../features/graphs/ProgressBar";
 import { FlagCircle } from "@mui/icons-material";
 import LoadingScreen from "../layouts/LoadingScreen";
+import { formatNutritionValue } from "../../utils/formatNutritionValue";
 
 export default function Overview() {
   const {
@@ -169,7 +170,9 @@ export default function Overview() {
               }}
             >
               <Typography variant='body2'>Consumed</Typography>
-              <Typography variant='caption'>{calorieTotal} </Typography>
+              <Typography variant='caption'>
+                {formatNutritionValue(calorieTotal)}{" "}
+              </Typography>
             </Card>
             <Card
               sx={{
@@ -180,7 +183,9 @@ export default function Overview() {
               }}
             >
               <Typography variant='body2'>Remaining</Typography>
-              <Typography variant='caption'>{calorieRemaning} </Typography>
+              <Typography variant='caption'>
+                {formatNutritionValue(calorieRemaning)}{" "}
+              </Typography>
             </Card>
           </Grid2>
         </Box>
@@ -203,7 +208,9 @@ export default function Overview() {
             <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
               Protein
             </Typography>
-            <Typography variant='caption'>{proteinTotal}g</Typography>
+            <Typography variant='caption'>
+              {formatNutritionValue(proteinTotal)}
+            </Typography>
           </Box>
           {/* Divider */}
           <Box sx={{ width: "1px", bgcolor: "#9999", height: "40px" }} />
@@ -212,7 +219,9 @@ export default function Overview() {
             <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
               Sugar
             </Typography>
-            <Typography variant='caption'>{sugarTotal}g</Typography>
+            <Typography variant='caption'>
+              {formatNutritionValue(sugarTotal)}
+            </Typography>
           </Box>
           <Box sx={{ width: "1px", bgcolor: "#9999", height: "40px" }} />
           {/* Carbs */}
@@ -220,7 +229,9 @@ export default function Overview() {
             <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
               Carbs
             </Typography>
-            <Typography variant='caption'>{carbsTotal}g</Typography>
+            <Typography variant='caption'>
+              {formatNutritionValue(carbsTotal)}
+            </Typography>
           </Box>
           <Box sx={{ width: "1px", bgcolor: "#9999", height: "40px" }} />
           {/* Fats */}
@@ -228,7 +239,9 @@ export default function Overview() {
             <Typography variant='subtitle2' sx={{ fontWeight: "bold" }}>
               Fats
             </Typography>
-            <Typography variant='caption'>{fatsTotal}g</Typography>
+            <Typography variant='caption'>
+              {formatNutritionValue(fatsTotal)}
+            </Typography>
           </Box>
         </Box>
       </Card>

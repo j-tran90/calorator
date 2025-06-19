@@ -12,7 +12,9 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { auth } from "../../../config/Firebase";
-import { getFirestore, doc, getDoc } from "firebase/firestore"; // Import Firestore methods
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+// Import your IndexedDB helpers
+import { saveData, getData } from "../../../utils/indexedDB"; // Adjust path as needed
 
 function UserProfileForm({ onNext, onValidationChange }) {
   const [formData, setFormData] = useState({
@@ -49,7 +51,8 @@ function UserProfileForm({ onNext, onValidationChange }) {
             gender,
           };
 
-          localStorage.setItem("calorieData", JSON.stringify(calorieData));
+          // Save to IndexedDB instead of localStorage
+          await saveData("calorieData", calorieData);
 
           // Update formData
           setFormData({
@@ -106,7 +109,7 @@ function UserProfileForm({ onNext, onValidationChange }) {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const dobFormatted = formData.dob
       ? dayjs(formData.dob).format("YYYY-MM-DD")
@@ -118,13 +121,14 @@ function UserProfileForm({ onNext, onValidationChange }) {
       gender: formData.gender,
     };
 
-    localStorage.setItem("calorieData", JSON.stringify(dataToSave));
+    // Save to IndexedDB instead of localStorage
+    await saveData("calorieData", dataToSave);
     onNext(formData);
   };
 
   return (
     <form id='calorie-calculator-form' onSubmit={handleSubmit}>
-      <FormControl component='fieldset'             sx={{m: 1}}>
+      <FormControl component='fieldset' sx={{ m: 1 }}>
         <FormLabel component='legend'>Gender</FormLabel>
         <RadioGroup
           aria-label='gender'
