@@ -10,6 +10,7 @@ import CalorieCalendar from "../CalorieCalendar";
 import ProgressBar from "../features/graphs/ProgressBar";
 import Today from "./Today";
 import { formatNutritionValue } from "../../utils/formatNutritionValue";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const {
@@ -31,6 +32,7 @@ export default function Dashboard() {
     programType,
     programStatus,
   } = useGoals(0);
+  const navigate = useNavigate();
 
   const showGraphs = false;
 
@@ -50,11 +52,11 @@ export default function Dashboard() {
       <Box sx={{ p: 1 }}>
         <Grid2 container spacing={{ xxs: 1, md: 3 }}>
           <Grid2 size={{ xxs: 6, md: 3 }}>
-            <Card sx={{ borderRadius: "20px", p: 3, minHeight: "200px" }}>
+            <Card sx={{ borderRadius: "20px", p: 3, height: "200px" }}>
               <Typography variant='h6' sx={{ pb: 1 }}>
                 {programType}{" "}
                 <Typography variant='caption' sx={{ fontStyle: "italic" }}>
-                  Program
+                  {programStatus}
                 </Typography>
               </Typography>
 
@@ -67,16 +69,29 @@ export default function Dashboard() {
                   <Typography
                     variant='body2'
                     sx={{ fontStyle: "italic", pb: 1 }}
-                  >
-                    {programStatus}
-                  </Typography>
-                  <Typography variant='body2' sx={{ pb: 1 }}>
+                  ></Typography>
+                  <Typography variant='body2'>
                     Starting {currentWeight} lbs
                   </Typography>
                   <Typography variant='body2'>
-                    Desired {weightTarget} lbs
+                    Target {weightTarget} lbs
                   </Typography>
                 </Stack>
+
+                <Button
+                  variant='text'
+                  size='small'
+                  sx={{
+                    display: "block",
+                    mx: "auto",
+                    textAlign: "center",
+                  }}
+                  onClick={() => {
+                    navigate("/history");
+                  }}
+                >
+                  See History
+                </Button>
               </Box>
             </Card>
           </Grid2>
@@ -94,8 +109,12 @@ export default function Dashboard() {
               <Box sx={{ textAlign: "left" }}>
                 <Stack>
                   <ProgressBar
-                    gradientType='greenYellow'
-                    barHeading={`${formatNutritionValue(calorieTotal)}  (${caloriePercent}%)`}
+                    gradientType={
+                      programType === "Gain" ? "greenYellow" : "redRed"
+                    }
+                    barHeading={`${formatNutritionValue(
+                      calorieTotal
+                    )}  (${caloriePercent}%)`}
                     barHeight={10}
                     currentValue={proteinTotal}
                     targetValue={proteinTarget}
@@ -120,7 +139,9 @@ export default function Dashboard() {
                   <Typography variant='body2' component='div'>
                     <ProgressBar
                       gradientType='purple'
-                      barHeading={`${formatNutritionValue(proteinTotal)} (${proteinPercent}%)`}
+                      barHeading={`${formatNutritionValue(
+                        proteinTotal
+                      )} (${proteinPercent}%)`}
                       barHeight={10}
                       currentValue={proteinTotal}
                       targetValue={proteinTarget}
@@ -136,7 +157,9 @@ export default function Dashboard() {
                 <Stack>
                   <ProgressBar
                     gradientType='yellowGreen'
-                    barHeading={`Sugar ` + `${formatNutritionValue(sugarTotal)}`}
+                    barHeading={
+                      `Sugar ` + `${formatNutritionValue(sugarTotal)}`
+                    }
                     barHeight={10}
                     currentValue={sugarTotal}
                     targetValue={500}
@@ -145,7 +168,9 @@ export default function Dashboard() {
 
                   <ProgressBar
                     gradientType='orangeRed'
-                    barHeading={"Carbs " + `${formatNutritionValue(carbsTotal)}`}
+                    barHeading={
+                      "Carbs " + `${formatNutritionValue(carbsTotal)}`
+                    }
                     barHeight={10}
                     currentValue={carbsTotal}
                     targetValue={500}

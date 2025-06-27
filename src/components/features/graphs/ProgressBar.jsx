@@ -28,6 +28,10 @@ export default function ProgressBar({
       start: "#ADD8E6", // Light Blue
       end: "#0000FF", // Blue
     },
+    redRed: {
+      start: "#ffb3b3", // Light Red
+      end: "#ff0000", // Red
+    },
   };
 
   const selectedGradient = gradients[gradientType] || gradients.greenYellow; // Default to greenYellow

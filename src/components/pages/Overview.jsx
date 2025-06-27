@@ -26,7 +26,8 @@ export default function Overview() {
     carbsTotal,
     fatsTotal,
   } = useTracker(0);
-  const { proteinTarget, remainingDays, differenceInDays } = useGoals(0);
+  const { proteinTarget, remainingDays, differenceInDays, programType } =
+    useGoals(0);
   const [dailyCalorieTarget, setDailyCalorieTarget] = useState(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true); // Start loading by default
@@ -149,7 +150,7 @@ export default function Overview() {
         <Box onClick={handleClick}>
           <ProgressCircle
             value={caloriePercent}
-            gradientId='greenYellow'
+            gradientId={programType === "Gain" ? "greenYellow" : "redRed"}
             isPercentage={true}
             targetValue={100}
           />

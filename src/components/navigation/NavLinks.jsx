@@ -20,7 +20,7 @@ const NavLinks = ({ onLinkClick, isBottomLinks }) => {
     // { to: "/today", text: "Today", icon: <TodayIcon /> },
     { to: "/dashboard", text: "Statistic", icon: <SpaceDashboardIcon /> },
     { to: "/journal", text: "Journal", icon: <AutoStoriesIcon /> },
-    { to: "/goals", text: "Goals", icon: <OutlinedFlagIcon /> },
+    { to: "/history", text: "History", icon: <OutlinedFlagIcon /> },
     { to: "/profile", text: "Profile", icon: <AccountBoxIcon /> },
   ];
 

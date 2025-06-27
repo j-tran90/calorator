@@ -19,6 +19,10 @@ export default function ProgressCircle({
       start: "#4fc483",
       end: "#e5ff00",
     },
+    redRed: {
+      start: "#ff0000",
+      end: "#ff0000",
+    },
   };
 
   const backgroundColor = isDarkMode ? "#333" : "#9993";
@@ -129,6 +133,10 @@ export default function ProgressCircle({
             <linearGradient id='greenYellow'>
               <stop offset='0%' stopColor={gradients.greenYellow.start} />
               <stop offset='100%' stopColor={gradients.greenYellow.end} />
+            </linearGradient>
+            <linearGradient id='redRed'>
+              <stop offset='0%' stopColor={gradients.redRed.start} />
+              <stop offset='100%' stopColor={gradients.redRed.end} />
             </linearGradient>
           </defs>
           <circle

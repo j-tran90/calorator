@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import PrivateRoute from "./PrivateRoute";
-import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
@@ -10,7 +9,7 @@ import Dashboard from "../pages/Dashboard";
 import Journal from "../pages/Journal";
 import SearchResults from "../pages/SearchResults";
 import MainLayout from "../layouts/MainLayout";
-import Goals from "../pages/Goals";
+import History from "../pages/History";
 import Today from "../pages/Today";
 import Settings from "../pages/Settings";
 import Overview from "../pages/Overview";
@@ -83,10 +82,10 @@ const RouteSwitch = () => {
           }
         />
         <Route
-          path='/goals'
+          path='/history'
           element={
             <PrivateRoute>
-              <Goals />
+              <History />
             </PrivateRoute>
           }
         />

@@ -30,7 +30,7 @@ import useGoals from "../../hooks/useGoals";
 import Header from "../navigation/Header";
 import { getData, saveData } from "../../utils/indexedDB";
 
-export default function Goals() {
+export default function History() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,7 +41,7 @@ export default function Goals() {
   const [goalHistory, setGoalHistory] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { targetDate, createdDate, remainingDays } = useGoals(0);
+  const { targetDate, createdDate, remainingDays, programType } = useGoals(0);
 
   const boxStyles = {
     textAlign: "left",
@@ -196,7 +196,7 @@ export default function Goals() {
         sx={{ m: 2, height: "50px" }}
       >
         <Grid2 size={{ xxs: 6 }}>
-          <Header headText='Your Plans' />
+          <Header headText='Plan History' />
         </Grid2>
         <Grid2
           size={{ xxs: 6 }}
@@ -205,7 +205,7 @@ export default function Goals() {
             justifyContent: "flex-end",
           }}
         >
-          <SetTargetButton buttonSize={40}/>
+          <SetTargetButton buttonSize={40} />
         </Grid2>
       </Grid2>
 
@@ -246,7 +246,7 @@ export default function Goals() {
                   <Grid2 size={{ xxs: 9 }}>
                     <Stack>
                       <Typography variant='caption'>
-                        {goal.weightTarget > goal.currentWeight ? (
+                        {programType === "Gain" ? (
                           <>
                             <ArrowUpward sx={{ fontSize: "medium", mr: 1 }} />
                             Weight Gain Program Selected
